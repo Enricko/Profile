@@ -1,0 +1,47 @@
+.paw-rain {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.paw {
+  position: absolute;
+  top: 0;
+  display: block;
+  transform: translateY(-12vh);
+  animation: paw-fall linear infinite;
+  will-change: transform;
+}
+.paw svg,
+.paw img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.mode-neon .paw svg { filter: drop-shadow(0 0 6px currentColor); }
+.mode-calico .paw svg,
+.mode-faces .paw svg { filter: drop-shadow(0 0 5px rgba(255, 245, 230, 0.28)); }
+.mode-skills .paw img { filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.22)); }
+
+@keyframes paw-fall {
+  from { transform: translateY(-12vh) translateX(0) rotate(0deg); }
+  to   { transform: translateY(112vh) translateX(var(--sway, 0vw)) rotate(var(--rot, 360deg)); }
+}
+
+/* Let the rain take the stage while active */
+.rain-mode .aurora { opacity: 0.22; }
+.rain-mode .cursor-glow { opacity: 0; }
+
+/* Lighter shower on small screens */
+@media (max-width: 600px) {
+  .paw:nth-child(n + 21) { display: none; }
+}
+
+/* Under reduced motion the global override freezes animations mid-flight;
+   hide the shower entirely instead */
+@media (prefers-reduced-motion: reduce) {
+  .paw-rain { display: none; }
+}

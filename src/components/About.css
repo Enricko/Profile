@@ -1,0 +1,85 @@
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 3.5rem;
+  align-items: start;
+}
+
+.about-subtitle {
+  font-size: 1.6rem;
+  margin-bottom: 1.25rem;
+  background: linear-gradient(90deg, #fff, #b7c4d8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.about-content p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  max-width: 56ch;
+}
+
+.stats-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1.1rem 1.4rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  flex: 1;
+  min-width: 120px;
+  transition: transform 0.3s var(--ease-spring), border-color 0.3s ease;
+}
+.stat-item:hover { transform: translateY(-4px); border-color: rgba(0, 242, 254, 0.35); }
+.stat-number {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.stat-label {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin-top: 0.4rem;
+}
+
+.features-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.feature-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 1.6rem;
+}
+.feature-icon {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid rgba(0, 242, 254, 0.18);
+  transition: transform 0.4s var(--ease-spring);
+}
+.feature-card:hover .feature-icon { transform: rotate(-8deg) scale(1.08); }
+.feature-card h4 { font-size: 1.15rem; margin-bottom: 0.3rem; }
+.feature-card p { font-size: 0.92rem; }
+
+.accent-cyan   .feature-icon { color: var(--accent-primary);   background: rgba(0, 242, 254, 0.08);  border-color: rgba(0, 242, 254, 0.2); }
+.accent-pink   .feature-icon { color: var(--accent-tertiary);  background: rgba(240, 147, 251, 0.08); border-color: rgba(240, 147, 251, 0.2); }
+.accent-violet .feature-icon { color: var(--accent-violet);    background: rgba(124, 92, 255, 0.08);  border-color: rgba(124, 92, 255, 0.2); }
+
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+}
