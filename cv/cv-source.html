@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Enricko Putra Hartono — CV</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @page { size: A4; margin: 0; }
+  :root {
+    --ink: #0f172a;
+    --body: #334155;
+    --muted: #64748b;
+    --accent: #155e75;
+    --line: #e2e8f0;
+    --side-bg: #f1f5f9;
+  }
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: var(--body);
+    font-size: 10.5px;
+    line-height: 1.55;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .page { width: 210mm; height: 297mm; display: flex; flex-direction: column; }
+
+  /* ---------- Header ---------- */
+  header {
+    padding: 13mm 14mm 7mm;
+    border-bottom: 3px solid var(--accent);
+  }
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 29px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.4px;
+  }
+  .role {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 22px;
+    margin-top: 10px;
+    font-size: 9.5px;
+    color: var(--muted);
+  }
+  .contact-row span::before {
+    content: '';
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 7px;
+    vertical-align: 1px;
+  }
+
+  /* ---------- Body columns ---------- */
+  .columns { display: flex; flex: 1; }
+  main { flex: 1.9; padding: 7mm 8mm 10mm 14mm; }
+  aside {
+    flex: 1;
+    background: var(--side-bg);
+    padding: 7mm 14mm 10mm 8mm;
+    border-left: 1px solid var(--line);
+  }
+
+  h2 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--ink);
+    margin: 15px 0 9px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h2:first-child { margin-top: 0; }
+  h2::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+  .item { margin-bottom: 11px; page-break-inside: avoid; }
+  .item-title { font-weight: 700; font-size: 11.5px; color: var(--ink); }
+  .item-sub { color: var(--accent); font-weight: 600; font-size: 10.5px; }
+  .item-date {
+    display: inline-block;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 2px 0 3px;
+  }
+  .item p { color: var(--body); }
+
+  .summary { color: var(--body); text-align: justify; }
+
+  /* ---------- Sidebar ---------- */
+  aside h2::after { background: #cbd5e1; }
+  .skill-group { margin-bottom: 8px; page-break-inside: avoid; }
+  .skill-group b {
+    display: block;
+    color: var(--ink);
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 1.5px 7px;
+    font-size: 9px;
+    color: var(--body);
+  }
+
+  .side-item { margin-bottom: 10px; page-break-inside: avoid; }
+  .side-item b { display: block; color: var(--ink); font-size: 10px; }
+  .side-item .where { color: var(--body); font-size: 9.5px; }
+  .side-item .when {
+    color: var(--muted);
+    font-size: 8.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>Enricko Putra Hartono</h1>
+    <div class="role">Software Engineer &middot; Web, Mobile &amp; Desktop</div>
+    <div class="contact-row">
+      <span>+62 877-6097-0518</span>
+      <span>enricko.putra028@gmail.com</span>
+      <span>github.com/Enricko</span>
+      <span>linkedin.com/in/enricko-putra-hartono-744646233</span>
+      <span>Yogyakarta, Indonesia</span>
+    </div>
+  </header>
+
+  <div class="columns">
+    <main>
+      <h2>Profile</h2>
+      <p class="summary">
+        Passionate Software Engineer based in Indonesia, specializing in building exceptional digital
+        experiences. My journey in tech has equipped me with a versatile skill set spanning web,
+        mobile, and backend development whether architecting a robust Laravel backend, designing a
+        premium React frontend, or ensuring seamless background location tracking on Android, I
+        thrive on turning complex requirements into elegant, maintainable solutions. I care deeply
+        about clean code, user-centric design, and continuous learning.
+      </p>
+
+      <h2>Experience</h2>
+      <div class="item">
+        <div class="item-title">Freelance Software Developer</div>
+        <div class="item-sub">PT. Binav Maju Sejahtera</div>
+        <span class="item-date">Aug 2023 – Present</span>
+        <p>Providing part-time freelance software development and technical expertise to build tailored, maintainable solutions across web and mobile platforms.</p>
+      </div>
+      <div class="item">
+        <div class="item-title">App Developer</div>
+        <div class="item-sub">Cetaphil</div>
+        <span class="item-date">Dec 2024 – Jan 2026</span>
+        <p>Developed a robust mobile application focusing on high-performance dashboards, GPS mapping, coverage tracking, and remote field data synchronization.</p>
+      </div>
+      <div class="item">
+        <div class="item-title">App Developer</div>
+        <div class="item-sub">IGNICE</div>
+        <span class="item-date">Oct 2024 – Dec 2024</span>
+        <p>Built application modules for outlet coverage tracking, dynamic target-achievement dashboards, and complex database-driven outlet reporting.</p>
+      </div>
+      <div class="item">
+        <div class="item-title">Full Stack Developer (Intern)</div>
+        <div class="item-sub">PT Lauwba Techno Indonesia</div>
+        <span class="item-date">Jun 2022 – Sep 2022</span>
+        <p>Completed a comprehensive apprenticeship focused on robust web and application development, building cross-functional full-stack features.</p>
+      </div>
+
+      <h2>Education</h2>
+      <div class="item">
+        <div class="item-title">Universitas AMIKOM Yogyakarta</div>
+        <div class="item-sub">Bachelor of Informatics (Undergraduate)</div>
+        <span class="item-date">Jul 2023 – Present</span>
+        <p>Computer Programming, Specific Applications.</p>
+      </div>
+      <div class="item">
+        <div class="item-title">SMKN 1 Bantul</div>
+        <div class="item-sub">Software Engineering (Rekayasa Perangkat Lunak)</div>
+        <span class="item-date">2020 – 2023</span>
+      </div>
+    </main>
+
+    <aside>
+      <h2>Skills</h2>
+      <div class="skill-group">
+        <b>Frontend</b>
+        <div class="chips">
+          <span class="chip">React</span><span class="chip">Vue.js</span><span class="chip">TypeScript</span>
+          <span class="chip">JavaScript</span><span class="chip">Tailwind CSS</span><span class="chip">Vite</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <b>Backend</b>
+        <div class="chips">
+          <span class="chip">Laravel</span><span class="chip">PHP</span><span class="chip">Go</span>
+          <span class="chip">Node.js</span><span class="chip">Python (Flask)</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <b>Mobile &amp; Desktop</b>
+        <div class="chips">
+          <span class="chip">Flutter</span><span class="chip">React Native</span><span class="chip">Electron</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <b>Databases</b>
+        <div class="chips">
+          <span class="chip">MySQL</span><span class="chip">PostgreSQL</span>
+        </div>
+      </div>
+      <h2>Certifications</h2>
+      <div class="side-item">
+        <b>Dataslayer</b>
+        <span class="where">Institut Teknologi Telkom Purwokerto</span><br>
+        <span class="when">Jan 2025</span>
+      </div>
+      <div class="side-item">
+        <b>Back-End Engineer Career Path</b>
+        <span class="where">Codecademy</span><br>
+        <span class="when">Jul 2024</span>
+      </div>
+      <div class="side-item">
+        <b>Web Development Competition</b>
+        <span class="where">Universitas Atma Jaya Yogyakarta</span><br>
+        <span class="when">Mar 2024 &middot; ID 395.18/SF-FTI/2024</span>
+      </div>
+      <div class="side-item">
+        <b>Build Python Web Apps with Flask</b>
+        <span class="where">Codecademy</span><br>
+        <span class="when">Mar 2024</span>
+      </div>
+      <div class="side-item">
+        <b>Machine Learning &amp; AI Fundamentals</b>
+        <span class="where">Codecademy</span><br>
+        <span class="when">Nov 2023</span>
+      </div>
+
+      <h2>Languages</h2>
+      <div class="side-item">
+        <b>Indonesian</b> <span class="where">Native</span>
+      </div>
+      <div class="side-item">
+        <b>English</b> <span class="where">Professional working proficiency</span>
+      </div>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

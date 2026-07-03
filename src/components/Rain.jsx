@@ -21,7 +21,7 @@ export function rollRainMode(exclude) {
 }
 
 /* --- Neon paws (solid, glowing) ------------------------------------- */
-const NEON_COLORS = ['#00f2fe', '#4facfe', '#f093fb', '#7c5cff', '#fb7185', '#fbbf24'];
+const NEON_COLORS = ['#00f2fe', '#4facfe', '#f093fb', '#7c5cff'];
 
 /* --- Calico paws: light fur, orange/black patches, pink beans -------- */
 const FUR_BASES = ['#fbf3e6', '#f7ede0', '#d8d2de'];
@@ -243,8 +243,8 @@ export default function Rain({ mode }) {
         beans: Array.from({ length: 5 }, beanColor),
         logo: pick(SKILL_LOGOS),
         left: `${Math.random() * 100}%`,
-        size: 20 + Math.random() * 26,
-        opacity: 0.55 + Math.random() * 0.4,
+        size: 24 + Math.random() * 24,
+        opacity: 0.6 + Math.random() * 0.35,
         duration: `${7 + Math.random() * 8}s`,
         delay: `${-Math.random() * 15}s`,
         sway: `${rand(-6, 6).toFixed(1)}vw`,

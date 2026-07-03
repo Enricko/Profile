@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Sparkles, ChevronDown } from 'lucide-react';
+import { ArrowRight, Sparkles, ChevronDown, FileText } from 'lucide-react';
 import { useTilt, useTypewriter } from '../lib/useInteractions';
 import './Hero.css';
 
@@ -48,6 +48,14 @@ export default function Hero() {
             </a>
             <a href="#experience" className="btn btn-outline">
               <Sparkles size={16} /> View My Work
+            </a>
+            <a
+              href="/cv/Enricko-Putra-Hartono-CV.pdf"
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-outline"
+            >
+              <FileText size={16} /> View CV
             </a>
           </div>
         </div>

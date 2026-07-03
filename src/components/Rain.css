@@ -21,7 +21,7 @@
   height: 100%;
 }
 
-.mode-neon .paw svg { filter: drop-shadow(0 0 6px currentColor); }
+.mode-neon .paw svg { filter: drop-shadow(0 0 3px currentColor); }
 .mode-calico .paw svg,
 .mode-faces .paw svg { filter: drop-shadow(0 0 5px rgba(255, 245, 230, 0.28)); }
 .mode-skills .paw img { filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.22)); }
@@ -34,6 +34,14 @@
 /* Let the rain take the stage while active */
 .rain-mode .aurora { opacity: 0.22; }
 .rain-mode .cursor-glow { opacity: 0; }
+
+/* Keep sections trackable against the rain: dim it behind content
+   and draw a border between sections */
+.rain-mode main > section {
+  background: rgba(4, 2, 22, 0.55);
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+.rain-mode main > section:first-child { border-top: none; }
 
 /* Lighter shower on small screens */
 @media (max-width: 600px) {
