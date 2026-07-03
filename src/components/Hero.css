@@ -10,9 +10,15 @@
 
 .hero-container {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  /* minmax(0, …) lets columns shrink below the code card's intrinsic width */
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   align-items: center;
   gap: 3rem;
+}
+
+.hero-content,
+.hero-visual {
+  min-width: 0;
 }
 
 /* Left column ----------------------------------------------------------- */
@@ -192,7 +198,7 @@
 
 @media (max-width: 900px) {
   .hero { padding-bottom: 3rem; }
-  .hero-container { grid-template-columns: 1fr; gap: 3.5rem; text-align: center; }
+  .hero-container { grid-template-columns: minmax(0, 1fr); gap: 3.5rem; text-align: center; }
   .hero-badge { margin-inline: auto; }
   .hero-typer, .hero-actions { justify-content: center; }
   .hero-description { margin-inline: auto; }
@@ -202,15 +208,17 @@
 }
 
 @media (max-width: 480px) {
-  .hero-badge { font-size: 0.78rem; padding: 0.45rem 0.85rem; }
+  .hero-badge { font-size: 0.75rem; padding: 0.45rem 0.85rem; max-width: 100%; }
+  .hero-title { font-size: clamp(2rem, 9.5vw, 2.5rem); }
   .hero-description { font-size: 1rem; }
   .hero-actions { flex-direction: column; align-items: stretch; }
   .hero-actions .btn { width: 100%; }
-  .hero-typer { flex-wrap: wrap; row-gap: 0.2rem; }
-  .floater { width: 44px; height: 44px; border-radius: 12px; }
+  .hero-typer { flex-wrap: wrap; row-gap: 0.2rem; font-size: 1rem; }
+  .floater { width: 42px; height: 42px; border-radius: 12px; }
   .floater img { width: 22px; height: 22px; }
-  .floater.f2 { right: -4%; }
-  .floater.f3 { left: -4%; }
-  .code-header { padding: 0.8rem 1rem; }
-  .code-body { padding: 1.1rem; font-size: 0.8rem; line-height: 1.8; }
+  .floater.f2 { right: 0; top: -5%; }
+  .floater.f3 { left: 0; bottom: -5%; }
+  .floater.f4 { display: none; }
+  .code-header { padding: 0.75rem 1rem; }
+  .code-body { padding: 1rem 0.9rem; font-size: 0.74rem; line-height: 1.85; }
 }

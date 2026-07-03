@@ -10,7 +10,7 @@
 
 .contact-container {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
   gap: 3rem;
   align-items: flex-start;
 }
@@ -94,7 +94,7 @@
 
 @media (max-width: 968px) {
   .contact-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
   }
   .contact-info {
