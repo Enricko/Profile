@@ -95,11 +95,26 @@
 @media (max-width: 968px) {
   .contact-container {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
+  .contact-info {
+    flex-direction: row;
+  }
+  .contact-info .info-card { flex: 1; }
+  .contact-desc { margin-bottom: 3rem; }
+}
+
+@media (max-width: 640px) {
+  .contact { padding-bottom: 5rem; }
+  .contact-info { flex-direction: column; gap: 1.25rem; }
+  .info-card { padding: 1.75rem; }
+  .contact-form { padding: 2rem 1.5rem; }
 }
 
 @media (max-width: 480px) {
-  .contact-form {
-    padding: 2rem 1.5rem;
-  }
+  .info-card { padding: 1.5rem 1.25rem; }
+  .contact-form { padding: 1.5rem 1.25rem; }
+  .contact-link { font-size: 0.98rem; word-break: break-all; }
+  .form-group input,
+  .form-group textarea { padding: 0.85rem 1rem; }
 }

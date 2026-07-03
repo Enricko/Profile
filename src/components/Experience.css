@@ -79,3 +79,9 @@
   .timeline-dot { left: -2rem; }
   .timeline-header { flex-direction: column; align-items: flex-start; }
 }
+
+@media (max-width: 480px) {
+  .timeline { padding-left: 1.6rem; }
+  .timeline-dot { left: -1.6rem; width: 15px; height: 15px; }
+  .timeline-content { padding: 1.4rem 1.25rem; }
+}

@@ -103,15 +103,34 @@
   cursor: pointer;
 }
 
-@media (max-width: 768px) {
+/* Dimmed backdrop behind the mobile drawer */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1040;
+  background: rgba(3, 0, 20, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: none;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+body.menu-open { overflow: hidden; }
+
+@media (max-width: 900px) {
   .nav-links {
     position: fixed;
     top: 0;
     right: 0;
     height: 100dvh;
-    width: min(75vw, 320px);
+    width: min(78vw, 320px);
     background: rgba(8, 8, 26, 0.96);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -119,8 +138,18 @@
     transform: translateX(100%);
     transition: transform 0.45s var(--ease-spring);
     border-left: 1px solid var(--glass-border);
+    z-index: 1050;
+    padding: max(env(safe-area-inset-top), 1rem) 1rem;
+    overflow-y: auto;
   }
   .nav-links.active { transform: translateX(0); }
   .nav-links a { font-size: 1.2rem; }
   .mobile-toggle { display: block; z-index: 1100; }
+  .nav-overlay { display: block; }
+  .nav-overlay.active { opacity: 1; pointer-events: auto; }
+}
+
+@media (max-width: 400px) {
+  .logo { font-size: 1.3rem; }
+  .nav-socials { gap: 0.9rem; }
 }

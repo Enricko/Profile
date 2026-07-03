@@ -26,10 +26,30 @@ export default function Navbar({ rainActive, onRandomizeRain }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.classList.toggle('menu-open', menuOpen);
+    if (!menuOpen) return;
+    const handleKey = (e) => e.key === 'Escape' && setMenuOpen(false);
+    const handleResize = () => window.innerWidth > 900 && setMenuOpen(false);
+    window.addEventListener('keydown', handleKey);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [menuOpen]);
+
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
         <a href="#home" className="logo text-gradient">Enricko<span className="logo-dot">.</span></a>
+
+        <button
+          className={`nav-overlay ${menuOpen ? 'active' : ''}`}
+          onClick={() => setMenuOpen(false)}
+          aria-hidden={!menuOpen}
+          tabIndex={-1}
+        />
 
         <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
           {LINKS.map((link) => (
@@ -56,7 +76,7 @@ export default function Navbar({ rainActive, onRandomizeRain }) {
           </button>
           <a href="https://github.com/Enricko" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub size={20} /></a>
           <a href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedin size={20} /></a>
-          <button className="mobile-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+          <button className="mobile-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}>
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
