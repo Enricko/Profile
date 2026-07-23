@@ -1,27 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 import './Rain.css';
 
-/* Weighted pool: skills rain counts double, so it shows up most often */
-const MODES = [
-  ['none', 1],
-  ['neon', 1],
-  ['calico', 1],
-  ['faces', 1],
-  ['skills', 2],
-];
-
-export function rollRainMode(exclude) {
-  const pool = MODES.filter(([id]) => id !== exclude);
-  const total = pool.reduce((sum, [, w]) => sum + w, 0);
-  let r = Math.random() * total;
-  for (const [id, w] of pool) {
-    if ((r -= w) < 0) return id;
-  }
-  return pool[pool.length - 1][0];
-}
-
 /* --- Neon paws (solid, glowing) ------------------------------------- */
-const NEON_COLORS = ['#00f2fe', '#4facfe', '#f093fb', '#7c5cff'];
+const NEON_COLORS = ['#69c8ff', '#2d8cff', '#92ddff', '#58d8c7'];
 
 /* --- Calico paws: light fur, orange/black patches, pink beans -------- */
 const FUR_BASES = ['#fbf3e6', '#f7ede0', '#d8d2de'];
@@ -223,10 +204,8 @@ const rand = (min, max) => min + Math.random() * (max - min);
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const beanColor = () => (Math.random() < 0.68 ? pick(BEAN_PINKS) : BEAN_DARK);
 
-export default function Rain({ mode }) {
-  const items = useMemo(
-    () =>
-      Array.from({ length: ITEM_COUNT }, (_, i) => ({
+const createRainItems = () =>
+  Array.from({ length: ITEM_COUNT }, (_, i) => ({
         id: i,
         dog: Math.random() < 0.3,
         dogFace: Math.random() < 0.5,
@@ -249,9 +228,10 @@ export default function Rain({ mode }) {
         delay: `${-Math.random() * 15}s`,
         sway: `${rand(-6, 6).toFixed(1)}vw`,
         rot: `${Math.random() < 0.5 ? '' : '-'}${180 + Math.floor(Math.random() * 360)}deg`,
-      })),
-    [mode]
-  );
+      }));
+
+export default function Rain({ mode }) {
+  const [items] = useState(createRainItems);
 
   if (mode === 'none') return null;
 

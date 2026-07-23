@@ -6,19 +6,19 @@ import './About.css';
 const FEATURES = [
   {
     icon: <Code size={30} />,
-    accent: 'cyan',
+    accent: 'sky',
     title: 'Web Development',
     description: 'Building responsive, modern web applications using React, Vue, and Laravel.',
   },
   {
     icon: <MonitorSmartphone size={30} />,
-    accent: 'pink',
+    accent: 'blue',
     title: 'Mobile & Desktop',
     description: 'Creating cross-platform mobile experiences and robust desktop solutions.',
   },
   {
     icon: <Database size={30} />,
-    accent: 'violet',
+    accent: 'teal',
     title: 'Backend Engineering',
     description: 'Designing efficient database schemas, API architecture, and seamless integrations.',
   },

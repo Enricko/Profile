@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
-import Rain, { rollRainMode } from './components/Rain'
+import Rain from './components/Rain'
+import { rollRainMode } from './lib/rainModes'
 import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
@@ -37,7 +38,7 @@ function App() {
   return (
     <div className="app-container">
       <Effects />
-      <Rain mode={rainMode} />
+      <Rain key={rainMode} mode={rainMode} />
       <Navbar rainActive={rainMode !== 'none'} onRandomizeRain={() => setRainMode((m) => rollRainMode(m))} />
       <main>
         <Hero />

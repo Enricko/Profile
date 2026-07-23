@@ -16,6 +16,8 @@
   padding: 1.75rem;
   text-decoration: none;
   color: inherit;
+  min-height: 300px;
+  box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
 .project-header {
@@ -30,7 +32,7 @@
   display: grid;
   place-items: center;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
+  background: linear-gradient(145deg, rgba(var(--accent-primary-rgb), 0.12), rgba(var(--accent-secondary-rgb), 0.05));
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
   transition: transform 0.4s var(--ease-spring), color 0.3s ease;
@@ -44,7 +46,7 @@
   font-size: 0.85rem;
   color: var(--text-dim);
 }
-.star-icon { color: #fbbf24; fill: #fbbf24; }
+.star-icon { color: var(--accent-primary); fill: var(--accent-primary); }
 
 .project-title {
   font-size: 1.2rem;
@@ -72,7 +74,7 @@
   font-family: 'JetBrains Mono', monospace;
   padding: 0.25rem 0.6rem;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(var(--accent-primary-rgb), 0.055);
   border: 1px solid var(--glass-border);
   color: var(--text-secondary);
 }
@@ -87,7 +89,9 @@
   transform: translateX(-6px);
   transition: all 0.3s ease;
 }
-.project-card:hover .project-open { opacity: 1; transform: translateX(0); }
+.project-card:hover .project-open,
+.project-card:focus-visible .project-open { opacity: 1; transform: translateX(0); }
+.project-card:focus-visible { border-color: var(--accent-primary); }
 
 .projects-cta {
   display: flex;

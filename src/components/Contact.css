@@ -1,5 +1,5 @@
 .contact {
-  padding-bottom: 8rem;
+  padding-bottom: 4.5rem;
 }
 
 .contact-desc {
@@ -32,6 +32,11 @@
 .info-icon {
   color: var(--accent-primary);
   margin-bottom: 1rem;
+  box-sizing: content-box;
+  padding: 0.75rem;
+  border: 1px solid rgba(var(--accent-primary-rgb), 0.2);
+  border-radius: 15px;
+  background: rgba(var(--accent-primary-rgb), 0.08);
 }
 
 .info-card h4 {
@@ -63,13 +68,15 @@
   font-weight: 500;
   color: var(--text-primary);
 }
+.required { color: var(--accent-primary); }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
   padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 48px;
+  background: rgba(137, 196, 244, 0.045);
+  border: 1px solid rgba(var(--accent-primary-rgb), 0.15);
   border-radius: 12px;
   color: var(--text-primary);
   font-family: 'Inter', sans-serif;
@@ -81,15 +88,22 @@
 .form-group textarea:focus {
   outline: none;
   border-color: var(--accent-primary);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+  background: rgba(var(--accent-primary-rgb), 0.055);
+  box-shadow: 0 0 0 3px rgba(var(--accent-primary-rgb), 0.14);
 }
+.form-group textarea { resize: vertical; min-height: 140px; }
+
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: var(--text-dim); }
 
 .submit-btn {
   width: 100%;
   margin-top: 1rem;
   padding: 1rem;
   font-size: 1.1rem;
+}
+.submit-btn.sent {
+  background: linear-gradient(135deg, var(--accent-tertiary), #2eb9c5);
 }
 
 @media (max-width: 968px) {
@@ -105,7 +119,7 @@
 }
 
 @media (max-width: 640px) {
-  .contact { padding-bottom: 5rem; }
+  .contact { padding-bottom: 3.5rem; }
   .contact-info { flex-direction: column; gap: 1.25rem; }
   .info-card { padding: 1.75rem; }
   .contact-form { padding: 2rem 1.5rem; }

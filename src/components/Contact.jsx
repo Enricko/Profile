@@ -7,9 +7,10 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const name = e.target.name.value;
-    const email = e.target.email.value;
-    const message = e.target.message.value;
+    const form = e.currentTarget;
+    const name = form.elements.namedItem('name').value;
+    const email = form.elements.namedItem('email').value;
+    const message = form.elements.namedItem('message').value;
 
     const subject = encodeURIComponent(`Portfolio Contact from ${name}`);
     const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
@@ -50,21 +51,21 @@ export default function Contact() {
 
           <form className="glass-card contact-form reveal-on-scroll delay-300" onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <input type="text" id="name" placeholder="John Doe" required />
+              <label htmlFor="name">Name <span className="required" aria-hidden="true">*</span></label>
+              <input type="text" id="name" name="name" autoComplete="name" placeholder="John Doe" required />
             </div>
 
             <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input type="email" id="email" placeholder="john@example.com" required />
+              <label htmlFor="email">Email <span className="required" aria-hidden="true">*</span></label>
+              <input type="email" id="email" name="email" autoComplete="email" placeholder="john@example.com" required />
             </div>
 
             <div className="form-group">
-              <label htmlFor="message">Message</label>
-              <textarea id="message" rows="5" placeholder="Your message here..." required></textarea>
+              <label htmlFor="message">Message <span className="required" aria-hidden="true">*</span></label>
+              <textarea id="message" name="message" rows="5" placeholder="Your message here..." required></textarea>
             </div>
 
-            <button type="submit" className={`btn btn-primary submit-btn ${sent ? 'sent' : ''}`}>
+            <button type="submit" className={`btn btn-primary submit-btn ${sent ? 'sent' : ''}`} disabled={sent} aria-live="polite">
               {sent ? (<>Opening mail… <Check size={18} /></>) : (<>Send Message <Send size={18} /></>)}
             </button>
           </form>
