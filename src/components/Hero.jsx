@@ -14,7 +14,7 @@ const FLOATERS = [
 export default function Hero() {
   const { ref: tiltRef, onMouseMove: onTiltMove, onMouseLeave: onTiltLeave } = useTilt(14);
   const role = useTypewriter(
-    ['Web Applications', 'Mobile Apps', 'Desktop Software', 'Elegant Solutions'],
+    ['Field Applications', 'Operational Dashboards', 'Cross-platform Products', 'Elegant Solutions'],
     { typeSpeed: 80, deleteSpeed: 40, pause: 1300 }
   );
 
@@ -38,8 +38,8 @@ export default function Hero() {
           </div>
 
           <p className="hero-description animate-up delay-400">
-            A versatile Software Engineer crafting premium, high-performance applications across
-            Web, Desktop, and Mobile platforms. Turning complex problems into elegant, aesthetic solutions.
+            A Software Engineer building reliable field applications, operational dashboards, and
+            cross-platform products for Web, Desktop, and Mobile.
           </p>
 
           <div className="hero-actions animate-up delay-500">

@@ -3,6 +3,7 @@ import Navbar from './components/Navbar'
 import Rain from './components/Rain'
 import { rollRainMode } from './lib/rainModes'
 import Hero from './components/Hero'
+import FeaturedWork from './components/FeaturedWork'
 import About from './components/About'
 import Skills from './components/Skills'
 import Experience from './components/Experience'
@@ -42,6 +43,7 @@ function App() {
       <Navbar rainActive={rainMode !== 'none'} onRandomizeRain={() => setRainMode((m) => rollRainMode(m))} />
       <main>
         <Hero />
+        <FeaturedWork />
         <About />
         <Skills />
         <Experience />

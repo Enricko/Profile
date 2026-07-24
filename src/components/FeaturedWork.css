@@ -1,0 +1,138 @@
+.featured-work {
+  padding-top: 4.5rem;
+}
+
+.featured-work-intro {
+  max-width: 660px;
+  margin: -2rem auto 3rem;
+  text-align: center;
+}
+
+.case-study-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.case-study-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 345px;
+  padding: 1.5rem;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.case-study-card::after {
+  background: linear-gradient(90deg, rgba(var(--accent-primary-rgb), 0.75), rgba(var(--accent-tertiary-rgb), 0.65));
+  opacity: 0.18;
+  transform: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+}
+
+.case-study-card:hover::after,
+.case-study-card:focus-visible::after { opacity: 0.8; }
+
+.case-study-topline {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 22px;
+  color: var(--text-dim);
+}
+
+.case-study-topline svg { margin-left: auto; color: var(--accent-tertiary); }
+
+.case-study-number {
+  color: var(--accent-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.case-study-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+}
+
+.case-study-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin: 2rem 0 1.1rem;
+  place-items: center;
+  border: 1px solid rgba(var(--accent-primary-rgb), 0.2);
+  border-radius: 14px;
+  color: var(--accent-primary);
+  background: linear-gradient(145deg, rgba(var(--accent-primary-rgb), 0.12), rgba(var(--accent-secondary-rgb), 0.04));
+  transition: transform 0.3s var(--ease-spring), background 0.3s ease;
+}
+
+.case-study-card:hover .case-study-icon,
+.case-study-card:focus-visible .case-study-icon {
+  transform: translateY(-3px) rotate(-4deg);
+  background: linear-gradient(145deg, rgba(var(--accent-primary-rgb), 0.2), rgba(var(--accent-secondary-rgb), 0.09));
+}
+
+.case-study-title {
+  margin-bottom: 0.55rem;
+  font-size: 1.25rem;
+}
+
+.case-study-summary {
+  flex: 1;
+  max-width: 36ch;
+  color: var(--text-secondary);
+  font-size: 0.93rem;
+  line-height: 1.65;
+}
+
+.case-study-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1.4rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.69rem;
+}
+
+.case-study-divider {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+}
+
+.case-study-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.case-study-tags span {
+  padding: 0.28rem 0.55rem;
+  border: 1px solid rgba(var(--accent-primary-rgb), 0.14);
+  border-radius: 6px;
+  color: #9bcfff;
+  background: rgba(var(--accent-primary-rgb), 0.055);
+  font-size: 0.7rem;
+}
+
+@media (max-width: 960px) {
+  .case-study-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .case-study-card:last-child { grid-column: 1 / -1; }
+}
+
+@media (max-width: 640px) {
+  .featured-work { padding-top: 3rem; }
+  .featured-work-intro { margin-bottom: 2rem; }
+  .case-study-grid { grid-template-columns: 1fr; }
+  .case-study-card:last-child { grid-column: auto; }
+  .case-study-card { min-height: 0; }
+}

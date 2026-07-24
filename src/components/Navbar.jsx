@@ -5,6 +5,7 @@ import { useScrollSpy } from '../lib/useInteractions';
 import './Navbar.css';
 
 const LINKS = [
+  { id: 'work', label: 'Work' },
   { id: 'about', label: 'About' },
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
