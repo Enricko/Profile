@@ -4,18 +4,18 @@ import Rain from './components/Rain'
 import { rollRainMode } from './lib/rainModes'
 import { useRoute } from './lib/router'
 import Hero from './components/Hero'
-import About from './components/About'
-import SkillsCloud from './components/SkillsCloud'
+import ReelModal from './components/ReelModal'
 import ProjectGrid from './components/ProjectGrid'
-import CaseStudyPreview from './components/CaseStudyPreview'
-import OpenSource from './components/OpenSource'
-import ExperienceTimeline from './components/ExperienceTimeline'
-import ContactCTA from './components/ContactCTA'
+import About from './components/About'
+import Resources from './components/Resources'
+import Contact from './components/Contact'
+import ProjectPage from './components/ProjectPage'
 import Footer from './components/Footer'
 import Effects from './components/Effects'
 
 function App() {
   const [rainMode, setRainMode] = useState(() => rollRainMode())
+  const [reelOpen, setReelOpen] = useState(false)
   const route = useRoute()
 
   useEffect(() => {
@@ -56,19 +56,18 @@ function App() {
       <Rain key={rainMode} mode={rainMode} />
       <Navbar rainActive={rainMode !== 'none'} onRandomizeRain={() => setRainMode((m) => rollRainMode(m))} />
       {route.name === 'case-study' ? (
-        <CaseStudyPreview slug={route.slug} />
+        <ProjectPage slug={route.slug} />
       ) : (
         <main>
-          <Hero />
-          <About />
-          <SkillsCloud />
+          <Hero onOpenReel={() => setReelOpen(true)} />
           <ProjectGrid />
-          <OpenSource />
-          <ExperienceTimeline />
-          <ContactCTA />
+          <About />
+          <Resources />
+          <Contact />
         </main>
       )}
       <Footer />
+      <ReelModal open={reelOpen} onClose={() => setReelOpen(false)} />
     </div>
   )
 }

@@ -3,32 +3,32 @@
 :root {
   color-scheme: dark;
 
-  /* Midnight ocean palette — deep navy, azure, sky and restrained teal */
-  --bg-primary: #050914;
-  --bg-secondary: #08111f;
-  --bg-elevated: #0d1a2c;
-  --text-primary: #f4f9ff;
-  --text-secondary: #b6c4d7;
-  --text-dim: #8295ad;
+  /* Cinematic studio palette — near-black grade with a warm key light and cool teal rim */
+  --bg-primary: #07070a;
+  --bg-secondary: #0c0c11;
+  --bg-elevated: #131319;
+  --text-primary: #f7f3ee;
+  --text-secondary: #c9c2ba;
+  --text-dim: #8f877e;
 
-  --accent-primary: #69c8ff;
-  --accent-secondary: #2d8cff;
-  --accent-tertiary: #58d8c7;
-  --accent-deep: #155fd1;
-  --accent-contrast: #03111d;
-  --accent-primary-rgb: 105, 200, 255;
-  --accent-secondary-rgb: 45, 140, 255;
-  --accent-tertiary-rgb: 88, 216, 199;
+  --accent-primary: #ff9d5c;
+  --accent-secondary: #ff5f3d;
+  --accent-tertiary: #3ddcd0;
+  --accent-deep: #c2410c;
+  --accent-contrast: #1a0f06;
+  --accent-primary-rgb: 255, 157, 92;
+  --accent-secondary-rgb: 255, 95, 61;
+  --accent-tertiary-rgb: 61, 220, 208;
 
-  --accent-gradient: linear-gradient(135deg, #92ddff 0%, var(--accent-primary) 34%, var(--accent-secondary) 72%, #1e7ff2 100%);
-  --hero-gradient: linear-gradient(110deg, #edf9ff 0%, #92ddff 25%, #4eb4ff 52%, #2d8cff 76%, #65dfd0 100%);
+  --accent-gradient: linear-gradient(135deg, #ffd9a8 0%, var(--accent-primary) 34%, var(--accent-secondary) 72%, #d43f1f 100%);
+  --hero-gradient: linear-gradient(110deg, #fff3e0 0%, #ffd9a8 22%, #ff9d5c 48%, #ff5f3d 74%, #3ddcd0 100%);
 
-  --surface-soft: rgba(173, 218, 255, 0.05);
-  --glass-bg: rgba(9, 23, 41, 0.72);
-  --glass-gradient: linear-gradient(145deg, rgba(14, 33, 56, 0.82), rgba(7, 17, 31, 0.7));
-  --glass-border: rgba(105, 200, 255, 0.16);
-  --glass-highlight: rgba(105, 200, 255, 0.38);
-  --glass-shadow: 0 22px 60px rgba(0, 4, 12, 0.38);
+  --surface-soft: rgba(255, 157, 92, 0.05);
+  --glass-bg: rgba(19, 15, 14, 0.72);
+  --glass-gradient: linear-gradient(145deg, rgba(40, 28, 22, 0.82), rgba(12, 10, 10, 0.7));
+  --glass-border: rgba(255, 157, 92, 0.16);
+  --glass-highlight: rgba(255, 157, 92, 0.38);
+  --glass-shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
 
   --nav-height: 80px;
   --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -77,8 +77,8 @@ button { touch-action: manipulation; }
   background-image:
     radial-gradient(ellipse 78% 58% at 50% -18%, rgba(var(--accent-secondary-rgb), 0.24), transparent 70%),
     radial-gradient(circle at 85% 28%, rgba(var(--accent-tertiary-rgb), 0.07), transparent 26%),
-    linear-gradient(rgba(105, 200, 255, 0.028) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(105, 200, 255, 0.028) 1px, transparent 1px);
+    linear-gradient(rgba(var(--accent-primary-rgb), 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--accent-primary-rgb), 0.028) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
 }
 

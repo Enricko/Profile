@@ -7,9 +7,12 @@
   background: var(--glass-gradient);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
+  text-decoration: none;
+  color: inherit;
   transition: transform 0.35s var(--ease-spring), box-shadow 0.35s ease, border-color 0.35s ease;
 }
-.project-card:hover {
+.project-card:hover,
+.project-card:focus-visible {
   transform: translateY(-8px);
   box-shadow: 0 30px 70px rgba(var(--accent-secondary-rgb), 0.22);
   border-color: var(--glass-highlight);
@@ -17,7 +20,7 @@
 
 .project-card-media {
   position: relative;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: linear-gradient(145deg, rgba(var(--accent-primary-rgb), 0.2), rgba(var(--accent-secondary-rgb), 0.08));
 }
@@ -47,6 +50,21 @@
   color: rgba(var(--accent-primary-rgb), 0.55);
 }
 
+.project-card-badge {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+  background: rgba(7, 7, 10, 0.62);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(6px);
+}
+
 .project-card-body {
   display: flex;
   flex-direction: column;
@@ -56,68 +74,37 @@
 
 .project-card-head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
 }
 .project-card-title { font-size: 1.15rem; }
-
-.project-stars {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
+.project-card-year {
   flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
   color: var(--text-dim);
 }
-.star-icon { color: var(--accent-primary); fill: var(--accent-primary); }
 
-.project-card-desc { font-size: 0.92rem; margin-bottom: 0.75rem; }
-.project-card-outcome {
-  font-size: 0.85rem;
-  color: var(--accent-tertiary);
-  border-left: 2px solid rgba(var(--accent-tertiary-rgb), 0.4);
-  padding-left: 0.75rem;
-  margin-bottom: 1.1rem;
+.project-card-client {
+  font-size: 0.88rem;
+  margin-bottom: 1rem;
 }
 
-.project-card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; }
-.project-tag {
-  font-size: 0.72rem;
-  font-family: 'JetBrains Mono', monospace;
-  padding: 0.25rem 0.6rem;
-  border-radius: 6px;
-  background: rgba(var(--accent-primary-rgb), 0.055);
-  border: 1px solid var(--glass-border);
-  color: var(--text-secondary);
-}
-
-.project-card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid var(--glass-border);
-}
-
-.project-card-links { display: flex; gap: 0.75rem; }
-.project-card-links a { color: var(--text-secondary); transition: color 0.22s ease; }
-.project-card-links a:hover { color: var(--accent-primary); }
-
-.project-card-case-study {
+.project-card-link {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--glass-border);
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--accent-primary);
-  text-decoration: none;
   transition: gap 0.22s ease;
 }
-.project-card-case-study:hover { gap: 0.55rem; text-decoration: underline; }
+.project-card:hover .project-card-link { gap: 0.55rem; }
 
 @media (max-width: 480px) {
   .project-card-body { padding: 1.25rem 1.4rem 1.4rem; }

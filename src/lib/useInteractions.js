@@ -140,6 +140,57 @@ export function useTypewriter(words, { typeSpeed = 90, deleteSpeed = 45, pause =
 }
 
 /**
+ * Focus trap for modals/dialogs. While `active`, moves focus into the
+ * container, cycles Tab/Shift+Tab within it, calls `onClose` on Escape, and
+ * restores focus to whatever was focused before the modal opened.
+ */
+export function useFocusTrap(active, onClose) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (!active) return;
+    const container = ref.current;
+    const previouslyFocused = document.activeElement;
+
+    const focusable = () =>
+      Array.from(
+        container?.querySelectorAll('a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])') || []
+      );
+
+    const first = focusable()[0];
+    (first || container)?.focus();
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        onClose?.();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const items = focusable();
+      if (!items.length) return;
+      const firstEl = items[0];
+      const lastEl = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === firstEl) {
+        e.preventDefault();
+        lastEl.focus();
+      } else if (!e.shiftKey && document.activeElement === lastEl) {
+        e.preventDefault();
+        firstEl.focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      previouslyFocused?.focus?.();
+    };
+  }, [active, onClose]);
+
+  return ref;
+}
+
+/**
  * Scroll spy — returns the id of the section currently in view.
  */
 export function useScrollSpy(ids, offset = 120) {

@@ -1,42 +1,39 @@
-import React from 'react';
-import { ExternalLink } from 'lucide-react';
-import { profile, projects } from '../data/profile';
+import React, { useMemo, useState } from 'react';
+import { projects } from '../data/artist';
+import WorkFilterBar from './WorkFilterBar';
 import ProjectCard from './ProjectCard';
 import './ProjectGrid.css';
 
 export default function ProjectGrid() {
-  const githubSocial = profile.socials.find((s) => s.icon === 'github');
+  const [activeCategory, setActiveCategory] = useState('all');
+
+  const filtered = useMemo(
+    () => (activeCategory === 'all' ? projects : projects.filter((p) => p.category === activeCategory)),
+    [activeCategory]
+  );
 
   return (
-    <section id="projects" className="project-grid-section">
+    <section id="work" className="project-grid-section">
       <div className="container">
         <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">// portfolio</span>
+          <span className="eyebrow">// selected work</span>
           <h2 className="section-title">Featured Projects</h2>
         </div>
         <p className="project-grid-desc text-muted reveal-on-scroll delay-100">
-          A selection of projects that show how I approach problems end to end. Each one links to a case study
-          with more detail.
+          A cross-section of character, environment, product, and motion work — filter by category or open any
+          project for the full breakdown.
         </p>
 
-        <div className="project-grid">
-          {projects.map((project, idx) => (
-            <div
-              key={project.slug}
-              className="reveal-on-scroll"
-              style={{ transitionDelay: `${(idx % 4) * 100}ms` }}
-            >
-              <ProjectCard project={project} />
-            </div>
-          ))}
-        </div>
+        <WorkFilterBar active={activeCategory} onChange={setActiveCategory} />
 
-        {githubSocial && (
-          <div className="project-grid-cta reveal-on-scroll delay-300">
-            <a href={githubSocial.href} target="_blank" rel="noreferrer" className="btn btn-outline">
-              View More on GitHub <ExternalLink size={16} />
-            </a>
+        {filtered.length > 0 ? (
+          <div className="project-grid">
+            {filtered.map((project) => (
+              <ProjectCard key={project.slug} project={project} />
+            ))}
           </div>
+        ) : (
+          <p className="project-grid-empty text-muted">No projects in this category yet.</p>
         )}
       </div>
     </section>
