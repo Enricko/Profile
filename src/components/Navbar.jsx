@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, PawPrint } from 'lucide-react';
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaArtstation, FaBehance, FaInstagram, FaDiscord } from 'react-icons/fa';
 import { useScrollSpy } from '../lib/useInteractions';
-import { profile } from '../data/profile';
+import { artist } from '../data/artist';
 import './Navbar.css';
 
-const SOCIAL_ICONS = { github: FaGithub, linkedin: FaLinkedin };
+const SOCIAL_ICONS = { artstation: FaArtstation, behance: FaBehance, instagram: FaInstagram, discord: FaDiscord };
 
 const LINKS = [
+  { id: 'work', label: 'Work' },
   { id: 'about', label: 'About' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'open-source', label: 'Open Source' },
-  { id: 'experience', label: 'Experience' },
+  { id: 'resources', label: 'Resources' },
   { id: 'contact', label: 'Contact' },
 ];
 
@@ -45,7 +43,7 @@ export default function Navbar({ rainActive, onRandomizeRain }) {
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} aria-label="Primary navigation">
       <div className="container nav-container">
-        <a href="#home" className="logo text-gradient">{profile.logoText}<span className="logo-dot">.</span></a>
+        <a href="#home" className="logo text-gradient">{artist.logoText}<span className="logo-dot">.</span></a>
 
         <button
           className={`nav-overlay ${menuOpen ? 'active' : ''}`}
@@ -77,7 +75,7 @@ export default function Navbar({ rainActive, onRandomizeRain }) {
           >
             <PawPrint size={20} />
           </button>
-          {profile.socials.map((social) => {
+          {artist.socials.map((social) => {
             const Icon = SOCIAL_ICONS[social.icon];
             return (
               <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={social.label}>

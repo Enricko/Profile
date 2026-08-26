@@ -1,55 +1,47 @@
-import React from 'react';
-import { ExternalLink, Star, ArrowRight } from 'lucide-react';
-import { FaGithub } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { ArrowRight } from 'lucide-react';
+import { categories } from '../data/artist';
 import { projectHref } from '../lib/router';
 import './ProjectCard.css';
 
+const CATEGORY_LABELS = Object.fromEntries(categories.map((c) => [c.id, c.label]));
+
 export default function ProjectCard({ project }) {
+  const [hovering, setHovering] = useState(false);
+  const showPreview = hovering && project.hoverPreview;
+
   return (
-    <article className="project-card">
+    <a
+      href={projectHref(project.slug)}
+      className="project-card"
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
+      onFocus={() => setHovering(true)}
+      onBlur={() => setHovering(false)}
+    >
       <div className="project-card-media">
-        {project.image ? (
-          <img src={project.image} alt="" loading="lazy" />
+        {project.thumbnail ? (
+          <img src={showPreview ? project.hoverPreview : project.thumbnail} alt="" loading="lazy" />
         ) : (
           <div className="project-card-placeholder" aria-hidden="true">
-            <span>{project.name.slice(0, 2).toUpperCase()}</span>
+            <span>{project.title.slice(0, 2).toUpperCase()}</span>
           </div>
         )}
+        <span className="project-card-badge">{CATEGORY_LABELS[project.category] || project.category}</span>
       </div>
 
       <div className="project-card-body">
         <div className="project-card-head">
-          <h3 className="project-card-title">{project.name}</h3>
-          <span className="project-stars">
-            <Star size={14} className="star-icon" /> {project.stars}
-          </span>
+          <h3 className="project-card-title">{project.title}</h3>
+          <span className="project-card-year">{project.year}</span>
         </div>
 
-        <p className="project-card-desc text-muted">{project.description}</p>
-        <p className="project-card-outcome">{project.outcome}</p>
+        {project.client && <p className="project-card-client text-muted">{project.client}</p>}
 
-        <div className="project-card-tags">
-          {project.tags.map((tag) => (
-            <span key={tag} className="project-tag">{tag}</span>
-          ))}
-        </div>
-
-        <div className="project-card-footer">
-          <div className="project-card-links">
-            <a href={project.github} target="_blank" rel="noreferrer" aria-label={`${project.name} on GitHub`}>
-              <FaGithub size={18} />
-            </a>
-            {project.demo && (
-              <a href={project.demo} target="_blank" rel="noreferrer" aria-label={`${project.name} live demo`}>
-                <ExternalLink size={18} />
-              </a>
-            )}
-          </div>
-          <a href={projectHref(project.slug)} className="project-card-case-study">
-            Case study <ArrowRight size={14} />
-          </a>
-        </div>
+        <span className="project-card-link">
+          View project <ArrowRight size={14} />
+        </span>
       </div>
-    </article>
+    </a>
   );
 }
