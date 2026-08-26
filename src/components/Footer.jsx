@@ -1,24 +1,29 @@
 import React from 'react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { profile } from '../data/profile';
 import './Footer.css';
+
+const SOCIAL_ICONS = { github: FaGithub, linkedin: FaLinkedin };
 
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <h2 className="footer-logo text-gradient">Enricko.</h2>
+        <h2 className="footer-logo text-gradient">{profile.logoText}.</h2>
 
         <div className="footer-socials">
-          <a href="https://github.com/Enricko" target="_blank" rel="noreferrer" aria-label="GitHub">
-            <FaGithub size={24} />
-          </a>
-          <a href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-            <FaLinkedin size={24} />
-          </a>
+          {profile.socials.map((social) => {
+            const Icon = SOCIAL_ICONS[social.icon];
+            return (
+              <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={social.label}>
+                {Icon && <Icon size={24} />}
+              </a>
+            );
+          })}
         </div>
 
         <p className="footer-copy">
-          © {new Date().getFullYear()} Enricko Putra Hartono. Built with React.
+          © {new Date().getFullYear()} {profile.name}. Built with React.
         </p>
       </div>
     </footer>

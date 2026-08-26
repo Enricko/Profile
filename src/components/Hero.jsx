@@ -1,75 +1,62 @@
 import React from 'react';
-import { ArrowRight, Sparkles, ChevronDown, FileText } from 'lucide-react';
+import { ArrowRight, ChevronDown, Download } from 'lucide-react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useTilt, useTypewriter } from '../lib/useInteractions';
+import { profile } from '../data/profile';
 import './Hero.css';
 
-const FLOATERS = [
-  { src: '/logos/react.svg',      cls: 'f1' },
-  { src: '/logos/flutter.svg',    cls: 'f2' },
-  { src: '/logos/laravel.svg',    cls: 'f3' },
-  { src: '/logos/typescript.svg', cls: 'f4' },
-  { src: '/logos/go.svg',         cls: 'f5' },
-];
+const SOCIAL_ICONS = { github: FaGithub, linkedin: FaLinkedin };
 
 export default function Hero() {
   const { ref: tiltRef, onMouseMove: onTiltMove, onMouseLeave: onTiltLeave } = useTilt(14);
-  const role = useTypewriter(
-    ['Field Applications', 'Operational Dashboards', 'Cross-platform Products', 'Elegant Solutions'],
-    { typeSpeed: 80, deleteSpeed: 40, pause: 1300 }
-  );
+  const role = useTypewriter(profile.roles, { typeSpeed: 80, deleteSpeed: 40, pause: 1300 });
 
   return (
     <section id="home" className="hero">
       <div className="container hero-container">
         <div className="hero-content">
           <div className="hero-badge animate-up delay-100">
-            <span className="pulse-dot" /> Available for Web, Mobile &amp; Desktop roles
+            <span className="pulse-dot" /> {profile.availability}
           </div>
 
           <h1 className="hero-title animate-up delay-200">
             Hello, I'm <br />
-            <span className="text-gradient">Enricko Putra Hartono</span>
+            <span className="text-gradient">{profile.name}</span>
           </h1>
 
           <div className="hero-typer animate-up delay-300">
-            <span className="typer-label">I build</span>
+            <span className="typer-label">I'm a</span>
             <span className="typer-text">{role}</span>
             <span className="typer-caret" />
           </div>
 
-          <p className="hero-description animate-up delay-400">
-            A Software Engineer building reliable field applications, operational dashboards, and
-            cross-platform products for Web, Desktop, and Mobile.
-          </p>
+          <p className="hero-description animate-up delay-400">{profile.tagline}</p>
 
           <div className="hero-actions animate-up delay-500">
-            <a href="#contact" className="btn btn-primary">
-              Let's Talk <ArrowRight size={18} />
+            <a href="#projects" className="btn btn-primary">
+              View Projects <ArrowRight size={18} />
             </a>
-            <a href="#experience" className="btn btn-outline">
-              <Sparkles size={16} /> View My Work
+            <a href={profile.resumeUrl} download className="btn btn-outline">
+              <Download size={16} /> Download Resume
             </a>
-            <a
-              href="/cv/Enricko-Putra-Hartono-CV.pdf"
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-outline"
-            >
-              <FileText size={16} /> View CV
-            </a>
+          </div>
+
+          <div className="hero-socials animate-up delay-500" aria-label="Social links">
+            {profile.socials.map((social) => {
+              const Icon = SOCIAL_ICONS[social.icon];
+              return (
+                <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={social.label}>
+                  {Icon && <Icon size={20} />}
+                </a>
+              );
+            })}
           </div>
         </div>
 
         <div className="hero-visual animate-up delay-400">
-          {FLOATERS.map((f) => (
-            <div key={f.cls} className={`floater ${f.cls}`}>
-              <img src={f.src} alt="" aria-hidden="true" />
-            </div>
-          ))}
-
           <div
             ref={tiltRef}
-            className="glass-card visual-card"
+            className="glass-card visual-card terminal"
             onMouseMove={onTiltMove}
             onMouseLeave={onTiltLeave}
           >
@@ -78,16 +65,31 @@ export default function Hero() {
               <span className="dot red" />
               <span className="dot yellow" />
               <span className="dot green" />
-              <span className="code-file">developer.js</span>
+              <span className="code-file">~/portfolio — zsh</span>
             </div>
-            <pre className="code-body">
+            <pre className="code-body terminal-body">
               <code>
-                <span className="keyword">const</span> <span className="entity">developer</span> <span className="operator">=</span> {'{'}
-                <br />  name: <span className="string">'Enricko Putra Hartono'</span>,
-                <br />  skills: [<span className="string">'Website'</span>, <span className="string">'Desktop'</span>, <span className="string">'Android'</span>],
-                <br />  passion: <span className="string">'Building premium apps'</span>,
-                <br />  status: <span className="keyword">true</span>
-                <br />{'}'};
+                <span className="prompt">$</span> whoami
+                <br />
+                <span className="terminal-out">{profile.name}</span>
+                <br />
+                <br />
+                <span className="prompt">$</span> cat roles.txt
+                <br />
+                {profile.roles.map((r) => (
+                  <span className="terminal-out" key={r}>
+                    - {r}
+                    <br />
+                  </span>
+                ))}
+                <br />
+                <span className="prompt">$</span> status --check
+                <br />
+                <span className="terminal-out ok">✓ {profile.availability}</span>
+                <br />
+                <span className="prompt">
+                  $ <span className="terminal-caret" />
+                </span>
               </code>
             </pre>
           </div>

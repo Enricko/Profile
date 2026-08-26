@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Send, Check } from 'lucide-react';
-import './Contact.css';
+import { Mail, MapPin, Send, Check, Clock } from 'lucide-react';
+import { contact } from '../data/profile';
+import './ContactCTA.css';
 
-export default function Contact() {
+export default function ContactCTA() {
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (e) => {
@@ -16,7 +17,7 @@ export default function Contact() {
     const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
 
     setSent(true);
-    window.location.href = `mailto:enricko.putra028@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${contact.email}?subject=${subject}&body=${body}`;
     setTimeout(() => setSent(false), 4000);
   };
 
@@ -24,28 +25,28 @@ export default function Contact() {
     <section id="contact" className="contact">
       <div className="container">
         <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">// contact</span>
-          <h2 className="section-title">Get In Touch</h2>
+          <span className="eyebrow">{contact.eyebrow}</span>
+          <h2 className="section-title">{contact.title}</h2>
         </div>
-        <p className="contact-desc text-muted reveal-on-scroll delay-100">
-          Currently open for new opportunities. Whether you have a question or just want to say hi,
-          I'll try my best to get back to you!
-        </p>
+        <p className="contact-desc text-muted reveal-on-scroll delay-100">{contact.description}</p>
 
         <div className="contact-container">
           <div className="contact-info reveal-on-scroll delay-200">
             <div className="glass-card info-card">
               <Mail className="info-icon" size={32} />
               <h4>Email Me</h4>
-              <p className="text-muted mb-2">I respond quickly to direct emails.</p>
-              <a href="mailto:enricko.putra028@gmail.com" className="contact-link text-gradient">enricko.putra028@gmail.com</a>
+              <a href={`mailto:${contact.email}`} className="contact-link text-gradient">{contact.email}</a>
             </div>
 
             <div className="glass-card info-card">
               <MapPin className="info-icon" size={32} />
               <h4>Location</h4>
-              <p className="text-muted mb-2">Indonesia</p>
+              <p className="text-muted mb-2">{contact.location}</p>
               <span className="contact-link text-gradient">Open to Remote Work</span>
+            </div>
+
+            <div className="response-time">
+              <Clock size={16} /> {contact.responseTime}
             </div>
           </div>
 

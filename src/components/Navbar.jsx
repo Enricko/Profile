@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, PawPrint } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useScrollSpy } from '../lib/useInteractions';
+import { profile } from '../data/profile';
 import './Navbar.css';
 
+const SOCIAL_ICONS = { github: FaGithub, linkedin: FaLinkedin };
+
 const LINKS = [
-  { id: 'work', label: 'Work' },
   { id: 'about', label: 'About' },
   { id: 'skills', label: 'Skills' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'education', label: 'Education' },
   { id: 'projects', label: 'Projects' },
+  { id: 'open-source', label: 'Open Source' },
+  { id: 'experience', label: 'Experience' },
   { id: 'contact', label: 'Contact' },
 ];
 
@@ -43,7 +45,7 @@ export default function Navbar({ rainActive, onRandomizeRain }) {
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} aria-label="Primary navigation">
       <div className="container nav-container">
-        <a href="#home" className="logo text-gradient">Enricko<span className="logo-dot">.</span></a>
+        <a href="#home" className="logo text-gradient">{profile.logoText}<span className="logo-dot">.</span></a>
 
         <button
           className={`nav-overlay ${menuOpen ? 'active' : ''}`}
@@ -75,8 +77,14 @@ export default function Navbar({ rainActive, onRandomizeRain }) {
           >
             <PawPrint size={20} />
           </button>
-          <a href="https://github.com/Enricko" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub size={20} /></a>
-          <a href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedin size={20} /></a>
+          {profile.socials.map((social) => {
+            const Icon = SOCIAL_ICONS[social.icon];
+            return (
+              <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={social.label}>
+                {Icon && <Icon size={20} />}
+              </a>
+            );
+          })}
           <button className="mobile-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen} aria-controls="primary-navigation">
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

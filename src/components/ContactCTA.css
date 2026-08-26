@@ -49,10 +49,23 @@
 }
 
 .contact-link {
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
+
+.response-time {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  background: rgba(var(--accent-tertiary-rgb), 0.06);
+  border: 1px solid rgba(var(--accent-tertiary-rgb), 0.2);
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+}
+.response-time svg { flex-shrink: 0; color: var(--accent-tertiary); }
 
 .contact-form {
   padding: 3rem;

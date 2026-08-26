@@ -1,39 +1,9 @@
 import React from 'react';
 import { Briefcase, Calendar } from 'lucide-react';
-import './Experience.css';
+import { experience } from '../data/profile';
+import './ExperienceTimeline.css';
 
-const EXPERIENCES = [
-  {
-    title: 'Freelance Software Developer',
-    company: 'PT. Binav Maju Sejahtera',
-    period: 'Aug 2023 - Present',
-    description: 'Providing part-time freelance software development and technical expertise to build tailored and maintainable solutions.',
-    tags: ['Software Development', 'Problem Solving'],
-  },
-  {
-    title: 'App Developer',
-    company: 'Cetaphil',
-    period: 'Dec 2024 - Jan 2026',
-    description: 'Developed a robust mobile application focusing on high-performance dashboards, GPS mapping, coverage tracking, and remote field data synchronization.',
-    tags: ['Mobile App Development', 'Application Development', 'GPS integration'],
-  },
-  {
-    title: 'App Developer',
-    company: 'IGNICE',
-    period: 'Oct 2024 - Dec 2024',
-    description: 'Built application modules for outlet coverage tracking, dynamic target achievements dashboards, and complex database-driven outlet reporting.',
-    tags: ['Application Development', 'Web Dashboards'],
-  },
-  {
-    title: 'Full Stack Developer (Intern)',
-    company: 'PT LAUWBA TECHNO INDONESIA',
-    period: 'Jun 2022 - Sep 2022',
-    description: 'Completed a comprehensive apprenticeship focused on robust Web and Application Development, building cross-functional full-stack features.',
-    tags: ['Web Applications', 'Application Development'],
-  },
-];
-
-export default function Experience() {
+export default function ExperienceTimeline() {
   const onMove = (e) => {
     const el = e.currentTarget;
     const r = el.getBoundingClientRect();
@@ -50,7 +20,7 @@ export default function Experience() {
         </div>
 
         <div className="timeline">
-          {EXPERIENCES.map((exp, idx) => (
+          {experience.map((exp, idx) => (
             <div
               key={idx}
               className="timeline-item reveal-on-scroll"
