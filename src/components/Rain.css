@@ -38,8 +38,8 @@
 /* Keep sections trackable against the rain: dim it behind content
    and draw a border between sections */
 .rain-mode main > section {
-  background: rgba(5, 9, 20, 0.68);
-  border-top: 1px solid rgba(var(--accent-primary-rgb), 0.11);
+  background: rgba(4, 2, 22, 0.55);
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
 }
 .rain-mode main > section:first-child { border-top: none; }
 

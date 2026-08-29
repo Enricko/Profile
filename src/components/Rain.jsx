@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import './Rain.css';
 
 /* --- Neon paws (solid, glowing) ------------------------------------- */
-const NEON_COLORS = ['#69c8ff', '#2d8cff', '#92ddff', '#58d8c7'];
+const NEON_COLORS = ['#00f2fe', '#4facfe', '#f093fb', '#7c5cff'];
 
 /* --- Calico paws: light fur, orange/black patches, pink beans -------- */
 const FUR_BASES = ['#fbf3e6', '#f7ede0', '#d8d2de'];
@@ -200,38 +200,52 @@ function DogFace({ clipId, base, patches, earColor }) {
 }
 
 const ITEM_COUNT = 36;
-const rand = (min, max) => min + Math.random() * (max - min);
-const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-const beanColor = () => (Math.random() < 0.68 ? pick(BEAN_PINKS) : BEAN_DARK);
 
-const createRainItems = () =>
-  Array.from({ length: ITEM_COUNT }, (_, i) => ({
-        id: i,
-        dog: Math.random() < 0.3,
-        dogFace: Math.random() < 0.5,
-        neon: pick(NEON_COLORS),
-        base: pick(FUR_BASES),
-        patches: Array.from({ length: 2 + Math.floor(Math.random() * 3) }, () => ({
-          cx: rand(0, 64),
-          cy: rand(0, 64),
-          rx: rand(9, 19),
-          ry: rand(7, 14),
-          rot: rand(0, 180),
-          color: pick(PATCH_COLORS),
-        })),
-        beans: Array.from({ length: 5 }, beanColor),
-        logo: pick(SKILL_LOGOS),
-        left: `${Math.random() * 100}%`,
-        size: 24 + Math.random() * 24,
-        opacity: 0.6 + Math.random() * 0.35,
-        duration: `${7 + Math.random() * 8}s`,
-        delay: `${-Math.random() * 15}s`,
-        sway: `${rand(-6, 6).toFixed(1)}vw`,
-        rot: `${Math.random() < 0.5 ? '' : '-'}${180 + Math.floor(Math.random() * 360)}deg`,
-      }));
+/* Seeded deterministic PRNG to satisfy pure component rules */
+function createPrng(seed = 12345) {
+  let s = seed;
+  return () => {
+    s = (s * 16807 + 0) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+function buildItems() {
+  const prng = createPrng(42);
+  const rand = (min, max) => min + prng() * (max - min);
+  const pick = (arr) => arr[Math.floor(prng() * arr.length)];
+  const beanColor = () => (prng() < 0.68 ? pick(BEAN_PINKS) : BEAN_DARK);
+
+  return Array.from({ length: ITEM_COUNT }, (_, i) => ({
+    id: i,
+    dog: prng() < 0.3,
+    dogFace: prng() < 0.5,
+    neon: pick(NEON_COLORS),
+    base: pick(FUR_BASES),
+    patches: Array.from({ length: 2 + Math.floor(prng() * 3) }, () => ({
+      cx: rand(0, 64),
+      cy: rand(0, 64),
+      rx: rand(9, 19),
+      ry: rand(7, 14),
+      rot: rand(0, 180),
+      color: pick(PATCH_COLORS),
+    })),
+    beans: Array.from({ length: 5 }, beanColor),
+    logo: pick(SKILL_LOGOS),
+    left: `${(prng() * 100).toFixed(2)}%`,
+    size: 24 + prng() * 24,
+    opacity: 0.6 + prng() * 0.35,
+    duration: `${(7 + prng() * 8).toFixed(1)}s`,
+    delay: `${(-prng() * 15).toFixed(1)}s`,
+    sway: `${rand(-6, 6).toFixed(1)}vw`,
+    rot: `${prng() < 0.5 ? '' : '-'}${180 + Math.floor(prng() * 360)}deg`,
+  }));
+}
+
+const STATIC_ITEMS = buildItems();
 
 export default function Rain({ mode }) {
-  const [items] = useState(createRainItems);
+  const items = useMemo(() => STATIC_ITEMS, []);
 
   if (mode === 'none') return null;
 

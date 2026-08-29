@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, PawPrint } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useScrollSpy } from '../lib/useInteractions';
 import './Navbar.css';
 
 const LINKS = [
-  { id: 'work', label: 'Work' },
   { id: 'about', label: 'About' },
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
@@ -16,9 +15,24 @@ const LINKS = [
 
 const SPY_IDS = ['home', ...LINKS.map((l) => l.id)];
 
-export default function Navbar() {
+const MODE_NAMES = {
+  none: 'Quiet (Off)',
+  neon: 'Neon Paws',
+  calico: 'Calico Paws',
+  faces: 'Cat & Dog Pets',
+  skills: 'Floating Tech Logos',
+};
+
+export default function Navbar({ rainActive, rainMode = 'none', onRandomizeRain }) {
+  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const active = useScrollSpy(SPY_IDS);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     document.body.classList.toggle('menu-open', menuOpen);
@@ -34,9 +48,9 @@ export default function Navbar() {
   }, [menuOpen]);
 
   return (
-    <nav className="navbar" aria-label="Primary navigation">
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
-        <a href="#home" className="logo">Enricko<span className="logo-dot">.</span></a>
+        <a href="#home" className="logo text-gradient">Enricko<span className="logo-dot">.</span></a>
 
         <button
           className={`nav-overlay ${menuOpen ? 'active' : ''}`}
@@ -45,7 +59,7 @@ export default function Navbar() {
           tabIndex={-1}
         />
 
-        <ul id="primary-navigation" className={`nav-links ${menuOpen ? 'active' : ''}`}>
+        <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
           {LINKS.map((link) => (
             <li key={link.id}>
               <a
@@ -60,10 +74,18 @@ export default function Navbar() {
         </ul>
 
         <div className="nav-socials">
-          <a href="https://github.com/Enricko" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub size={18} /></a>
-          <a href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedin size={18} /></a>
-          <button className="mobile-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen} aria-controls="primary-navigation">
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          <button
+            className={`paw-toggle ${rainActive ? 'active' : ''}`}
+            onClick={onRandomizeRain}
+            aria-label="Switch background rain effect"
+            title={`Switch Background Effect (Current: ${MODE_NAMES[rainMode] || rainMode})`}
+          >
+            <PawPrint size={20} />
+          </button>
+          <a href="https://github.com/Enricko" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub size={20} /></a>
+          <a href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedin size={20} /></a>
+          <button className="mobile-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>

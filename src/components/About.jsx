@@ -6,19 +6,19 @@ import './About.css';
 const FEATURES = [
   {
     icon: <Code size={30} />,
-    accent: 'sky',
+    accent: 'cyan',
     title: 'Web Development',
     description: 'Building responsive, modern web applications using React, Vue, and Laravel.',
   },
   {
     icon: <MonitorSmartphone size={30} />,
-    accent: 'blue',
+    accent: 'pink',
     title: 'Mobile & Desktop',
     description: 'Creating cross-platform mobile experiences and robust desktop solutions.',
   },
   {
     icon: <Database size={30} />,
-    accent: 'teal',
+    accent: 'violet',
     title: 'Backend Engineering',
     description: 'Designing efficient database schemas, API architecture, and seamless integrations.',
   },
@@ -27,7 +27,7 @@ const FEATURES = [
 const STATS = [
   { value: 3,   suffix: '+', label: 'Years of Experience' },
   { value: 20,  suffix: '+', label: 'Projects Completed' },
-  { value: 3,   suffix: '',  label: 'Platforms Shipped' },
+  { value: 100, suffix: '%', label: 'Client Satisfaction' },
 ];
 
 function Stat({ value, suffix, label, active }) {
