@@ -1,63 +1,76 @@
-import React from 'react';
-import { ArrowRight, ChevronDown, Play } from 'lucide-react';
-import { FaArtstation, FaBehance, FaInstagram, FaDiscord } from 'react-icons/fa';
+import React, { Suspense, lazy } from 'react';
+import { ArrowRight, ChevronDown, FileText } from 'lucide-react';
 import { useTypewriter } from '../lib/useInteractions';
-import { artist } from '../data/artist';
-import HeroCanvas from './HeroCanvas';
 import './Hero.css';
 
-const SOCIAL_ICONS = { artstation: FaArtstation, behance: FaBehance, instagram: FaInstagram, discord: FaDiscord };
+const TechCoreCanvas = lazy(() => import('./3d/TechCoreCanvas'));
 
-export default function Hero({ onOpenReel }) {
-  const role = useTypewriter(artist.roles, { typeSpeed: 70, deleteSpeed: 35, pause: 1400 });
+const FLOATERS = [
+  { src: '/logos/react.svg',      cls: 'f1' },
+  { src: '/logos/flutter.svg',    cls: 'f2' },
+  { src: '/logos/laravel.svg',    cls: 'f3' },
+  { src: '/logos/typescript.svg', cls: 'f4' },
+  { src: '/logos/go.svg',         cls: 'f5' },
+];
+
+export default function Hero() {
+  const role = useTypewriter(
+    ['Field Applications', 'Operational Dashboards', 'Cross-platform Products', 'Elegant Solutions'],
+    { typeSpeed: 80, deleteSpeed: 40, pause: 1300 }
+  );
 
   return (
     <section id="home" className="hero">
-      <HeroCanvas />
-      <div className="hero-overlay" aria-hidden="true" />
+      <div className="container hero-container">
+        <div className="hero-content">
+          <span className="hero-eyebrow animate-up delay-100">
+            Software Engineer — Web, Mobile &amp; Desktop
+          </span>
 
-      <div className="container hero-content">
-        <div className="hero-badge animate-up delay-100">
-          <span className="pulse-dot" /> {artist.availability}
+          <h1 className="hero-title animate-up delay-200">
+            Enricko Putra Hartono
+          </h1>
+
+          <p className="hero-typer animate-up delay-300" aria-label={`I build ${role}`}>
+            <span className="typer-label">I build </span>
+            <span className="typer-text">{role}</span>
+            <span className="typer-caret" aria-hidden="true" />
+          </p>
+
+          <p className="hero-description animate-up delay-400">
+            A Software Engineer building reliable field applications, operational dashboards, and
+            cross-platform products for Web, Desktop, and Mobile.
+          </p>
+
+          <div className="hero-actions animate-up delay-500">
+            <a href="#contact" className="btn btn-primary">
+              Let's Talk <ArrowRight size={17} />
+            </a>
+            <a
+              href="/cv/Enricko-Putra-Hartono-CV.pdf"
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-outline"
+            >
+              <FileText size={16} /> View CV
+            </a>
+          </div>
         </div>
 
-        <h1 className="hero-title animate-up delay-200">
-          <span className="text-gradient">{artist.name}</span>
-        </h1>
+        <div className="hero-visual animate-up delay-400">
+          {FLOATERS.map((f) => (
+            <div key={f.cls} className={`floater ${f.cls}`}>
+              <img src={f.src} alt="" aria-hidden="true" />
+            </div>
+          ))}
 
-        <div className="hero-typer animate-up delay-300">
-          <span className="typer-label">{artist.title} —</span>
-          <span className="typer-text">{role}</span>
-          <span className="typer-caret" />
-        </div>
-
-        <p className="hero-description animate-up delay-400">{artist.tagline}</p>
-
-        <div className="hero-actions animate-up delay-500">
-          <a href="#work" className="btn btn-primary">
-            Explore Work <ArrowRight size={18} />
-          </a>
-          <button type="button" className="btn btn-outline showreel-btn" onClick={onOpenReel}>
-            <span className="showreel-play-icon">
-              <Play size={14} fill="currentColor" />
-            </span>
-            Watch Showreel
-          </button>
-        </div>
-
-        <div className="hero-socials animate-up delay-500" aria-label="Social links">
-          {artist.socials.map((social) => {
-            const Icon = SOCIAL_ICONS[social.icon];
-            return (
-              <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={social.label}>
-                {Icon && <Icon size={20} />}
-              </a>
-            );
-          })}
+          <Suspense fallback={<div className="hero-visual-loading" aria-hidden="true" />}>
+            <TechCoreCanvas />
+          </Suspense>
         </div>
       </div>
 
-      <a href="#work" className="scroll-cue" aria-label="Scroll to work">
+      <a href="#about" className="scroll-cue" aria-label="Scroll to About">
         <span>Scroll</span>
         <ChevronDown size={18} />
       </a>
