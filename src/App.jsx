@@ -8,6 +8,7 @@ import Skills from './components/Skills'
 import Experience from './components/Experience'
 import Education from './components/Education'
 import Projects from './components/Projects'
+import GithubContributions from './components/GithubContributions'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import Effects from './components/Effects'
@@ -47,6 +48,7 @@ function App() {
         <Experience />
         <Education />
         <Projects />
+        <GithubContributions />
         <Contact />
       </main>
       <Footer />

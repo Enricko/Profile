@@ -6,6 +6,7 @@
   text-align: center;
   max-width: 600px;
   margin: 0 auto 4rem auto;
+  text-wrap: pretty;
 }
 
 .contact-container {
@@ -67,6 +68,7 @@
 .form-group input,
 .form-group textarea {
   width: 100%;
+  min-height: 44px;
   padding: 1rem 1.25rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -74,7 +76,7 @@
   color: var(--text-primary);
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-group input:focus,

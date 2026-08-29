@@ -112,6 +112,7 @@
   transform: translateY(-2px);
   border-color: rgba(0, 242, 254, 0.35);
 }
+.cert-image:active img { transform: scale(0.98); }
 
 .cert-link {
   display: inline-flex;
