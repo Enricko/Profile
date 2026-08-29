@@ -1,31 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, PawPrint } from 'lucide-react';
-import { FaArtstation, FaBehance, FaInstagram, FaDiscord } from 'react-icons/fa';
+import { Menu, X } from 'lucide-react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useScrollSpy } from '../lib/useInteractions';
-import { artist } from '../data/artist';
 import './Navbar.css';
-
-const SOCIAL_ICONS = { artstation: FaArtstation, behance: FaBehance, instagram: FaInstagram, discord: FaDiscord };
 
 const LINKS = [
   { id: 'work', label: 'Work' },
   { id: 'about', label: 'About' },
-  { id: 'resources', label: 'Resources' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'education', label: 'Education' },
+  { id: 'projects', label: 'Projects' },
   { id: 'contact', label: 'Contact' },
 ];
 
 const SPY_IDS = ['home', ...LINKS.map((l) => l.id)];
 
-export default function Navbar({ rainActive, onRandomizeRain }) {
-  const [scrolled, setScrolled] = useState(false);
+export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const active = useScrollSpy(SPY_IDS);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     document.body.classList.toggle('menu-open', menuOpen);
@@ -41,9 +34,9 @@ export default function Navbar({ rainActive, onRandomizeRain }) {
   }, [menuOpen]);
 
   return (
-    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} aria-label="Primary navigation">
+    <nav className="navbar" aria-label="Primary navigation">
       <div className="container nav-container">
-        <a href="#home" className="logo text-gradient">{artist.logoText}<span className="logo-dot">.</span></a>
+        <a href="#home" className="logo">Enricko<span className="logo-dot">.</span></a>
 
         <button
           className={`nav-overlay ${menuOpen ? 'active' : ''}`}
@@ -67,24 +60,10 @@ export default function Navbar({ rainActive, onRandomizeRain }) {
         </ul>
 
         <div className="nav-socials">
-          <button
-            className={`paw-toggle ${rainActive ? 'active' : ''}`}
-            onClick={onRandomizeRain}
-            aria-label="Randomize background rain"
-            title="Change background effect"
-          >
-            <PawPrint size={20} />
-          </button>
-          {artist.socials.map((social) => {
-            const Icon = SOCIAL_ICONS[social.icon];
-            return (
-              <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={social.label}>
-                {Icon && <Icon size={20} />}
-              </a>
-            );
-          })}
+          <a href="https://github.com/Enricko" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub size={18} /></a>
+          <a href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedin size={18} /></a>
           <button className="mobile-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen} aria-controls="primary-navigation">
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>

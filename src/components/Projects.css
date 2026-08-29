@@ -1,0 +1,104 @@
+.projects-desc {
+  text-align: center;
+  max-width: 620px;
+  margin: -2rem auto 3rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem;
+  text-decoration: none;
+  color: inherit;
+  min-height: 300px;
+  box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.project-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+.project-folder {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(var(--accent-primary-rgb), 0.07);
+  border: 1px solid rgba(var(--accent-primary-rgb), 0.18);
+  color: var(--text-primary);
+  transition: transform 0.4s var(--ease-spring), color 0.3s ease;
+}
+.project-card:hover .project-folder { transform: rotate(-8deg) scale(1.05); color: var(--accent-primary); }
+
+.project-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+.star-icon { color: var(--accent-primary); fill: var(--accent-primary); }
+
+.project-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+.project-card:hover .project-title { color: var(--accent-primary); }
+
+.project-desc {
+  font-size: 0.92rem;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+}
+
+.project-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.project-tag {
+  font-size: 0.72rem;
+  font-family: 'SF Mono', ui-monospace, 'JetBrains Mono', Menlo, monospace;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(var(--accent-primary-rgb), 0.055);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+}
+.project-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all 0.3s ease;
+}
+.project-card:hover .project-open,
+.project-card:focus-visible .project-open { opacity: 1; transform: translateX(0); }
+.project-card:focus-visible { border-color: var(--accent-primary); }
+
+.projects-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+@media (max-width: 768px) {
+  .project-open { opacity: 1; transform: none; }
+}

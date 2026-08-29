@@ -1,29 +1,29 @@
 import React from 'react';
-import { FaArtstation, FaBehance, FaInstagram, FaDiscord } from 'react-icons/fa';
-import { artist } from '../data/artist';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import './Footer.css';
-
-const SOCIAL_ICONS = { artstation: FaArtstation, behance: FaBehance, instagram: FaInstagram, discord: FaDiscord };
 
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <h2 className="footer-logo text-gradient">{artist.logoText}.</h2>
+        <h2 className="footer-logo text-gradient">Enricko.</h2>
+
+        <span className="footer-status">
+          <span className="footer-status-dot" aria-hidden="true" />
+          All systems operational
+        </span>
 
         <div className="footer-socials">
-          {artist.socials.map((social) => {
-            const Icon = SOCIAL_ICONS[social.icon];
-            return (
-              <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={social.label}>
-                {Icon && <Icon size={24} />}
-              </a>
-            );
-          })}
+          <a href="https://github.com/Enricko" target="_blank" rel="noreferrer" aria-label="GitHub">
+            <FaGithub size={24} />
+          </a>
+          <a href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+            <FaLinkedin size={24} />
+          </a>
         </div>
 
         <p className="footer-copy">
-          © {new Date().getFullYear()} {artist.name}. Built with React.
+          © {new Date().getFullYear()} Enricko Putra Hartono. Built with React.
         </p>
       </div>
     </footer>

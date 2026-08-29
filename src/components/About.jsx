@@ -1,87 +1,98 @@
 import React from 'react';
-import { GraduationCap, Cpu } from 'lucide-react';
-import { about, artist } from '../data/artist';
+import { Code, MonitorSmartphone, Database } from 'lucide-react';
+import { useCountUp, useInView } from '../lib/useInteractions';
 import './About.css';
 
-function initials(name) {
-  return name
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
+const FEATURES = [
+  {
+    icon: <Code size={30} />,
+    accent: 'sky',
+    title: 'Web Development',
+    description: 'Building responsive, modern web applications using React, Vue, and Laravel.',
+  },
+  {
+    icon: <MonitorSmartphone size={30} />,
+    accent: 'blue',
+    title: 'Mobile & Desktop',
+    description: 'Creating cross-platform mobile experiences and robust desktop solutions.',
+  },
+  {
+    icon: <Database size={30} />,
+    accent: 'teal',
+    title: 'Backend Engineering',
+    description: 'Designing efficient database schemas, API architecture, and seamless integrations.',
+  },
+];
+
+const STATS = [
+  { value: 3,   suffix: '+', label: 'Years of Experience' },
+  { value: 20,  suffix: '+', label: 'Projects Completed' },
+  { value: 3,   suffix: '',  label: 'Platforms Shipped' },
+];
+
+function Stat({ value, suffix, label, active }) {
+  const n = useCountUp(value, active);
+  return (
+    <div className="stat-item">
+      <span className="stat-number text-gradient">{n}{suffix}</span>
+      <span className="stat-label">{label}</span>
+    </div>
+  );
 }
 
 export default function About() {
+  const [statsRef, inView] = useInView({ threshold: 0.4 });
+
+  const onMove = (e) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
+  };
+
   return (
     <section id="about" className="about">
       <div className="container">
         <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">{about.eyebrow}</span>
-          <h2 className="section-title">{about.title}</h2>
+          <span className="eyebrow">// about me</span>
+          <h2 className="section-title">Who I Am</h2>
         </div>
 
         <div className="about-grid">
           <div className="about-content reveal-on-scroll delay-100">
-            <div className="about-avatar" aria-hidden="true">
-              {initials(artist.name)}
-            </div>
+            <h3 className="about-subtitle">Crafting software that makes a difference</h3>
+            <p>
+              I'm a passionate Software Engineer based in Indonesia, specializing in building exceptional
+              digital experiences. My journey in tech has equipped me with a versatile skill set spanning
+              web, mobile, and backend development.
+            </p>
+            <p>
+              Whether it's architecting a robust Laravel backend, designing a premium React frontend, or
+              ensuring seamless background location tracking on Android, I thrive on turning complex
+              requirements into elegant, maintainable solutions. I care deeply about clean code,
+              user-centric design, and continuous learning.
+            </p>
 
-            {about.bio.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-
-            <div className="availability-badges">
-              {about.availabilityBadges.map((b) => (
-                <span key={b.label} className={`availability-badge ${b.active ? 'is-active' : ''}`}>
-                  <span className="availability-dot" /> {b.label}
-                </span>
+            <div className="stats-container" ref={statsRef}>
+              {STATS.map((s) => (
+                <Stat key={s.label} {...s} active={inView} />
               ))}
             </div>
-
-            {about.currentlyLearning && (
-              <p className="currently-learning">
-                <GraduationCap size={16} /> {about.currentlyLearning}
-              </p>
-            )}
           </div>
 
-          <div className="about-panels">
-            <div className="glass-card spotlight software-panel">
-              <h3>Software Proficiency</h3>
-              <div className="software-list">
-                {about.software.map((s) => (
-                  <div key={s.name} className="software-row">
-                    <span className="software-name">{s.name}</span>
-                    <div className="software-bar-track">
-                      <div className="software-bar-fill" style={{ width: `${s.level}%` }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="glass-card spotlight hardware-panel">
-              <h3>
-                <Cpu size={18} /> Hardware
-              </h3>
-              <ul className="hardware-list">
-                {about.hardware.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="process-overview reveal-on-scroll delay-200">
-          <h3 className="process-title">My Process</h3>
-          <div className="process-steps">
-            {about.process.map((step, i) => (
-              <div key={step.title} className="process-step">
-                <span className="process-step-number">{String(i + 1).padStart(2, '0')}</span>
-                <h4>{step.title}</h4>
-                <p className="text-muted">{step.description}</p>
+          <div className="features-grid">
+            {FEATURES.map((feature, index) => (
+              <div
+                key={feature.title}
+                className={`glass-card spotlight feature-card accent-${feature.accent} reveal-on-scroll`}
+                style={{ transitionDelay: `${index * 120 + 200}ms` }}
+                onMouseMove={onMove}
+              >
+                <div className="feature-icon">{feature.icon}</div>
+                <div>
+                  <h4>{feature.title}</h4>
+                  <p className="text-muted">{feature.description}</p>
+                </div>
               </div>
             ))}
           </div>
