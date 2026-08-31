@@ -2,6 +2,7 @@
   "redirects": [
     {
       "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.lufria.tech" }],
       "destination": "https://lufria.tech/$1",
       "permanent": true
     }

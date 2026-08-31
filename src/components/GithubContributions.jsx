@@ -290,14 +290,14 @@ export default function GithubContributions() {
             icon={<BookMarked size={22} />}
             value={stats.repos}
             label="Public repositories"
-            accent="cyan"
+            accent="sapphire"
             active={metricsInView}
           />
           <MetricCard
             icon={<Star size={22} />}
             value={stats.stars}
             label="Public repo stars"
-            accent="pink"
+            accent="bronze"
             active={metricsInView}
           />
           <MetricCard
@@ -312,7 +312,7 @@ export default function GithubContributions() {
             value={currentStreak}
             suffix=" days"
             label="Synthetic streak"
-            accent="cyan"
+            accent="sapphire"
             active={metricsInView}
           />
         </div>

@@ -71,7 +71,7 @@
 .typer-text {
   color: var(--accent-primary);
   font-weight: 600;
-  text-shadow: 0 0 18px rgba(0, 242, 254, 0.4);
+  text-shadow: 0 0 18px rgba(90, 134, 230, 0.4);
 }
 .typer-caret {
   width: 2px;
@@ -107,7 +107,7 @@
   padding: 0;
   will-change: transform;
 }
-.visual-card:hover { box-shadow: 0 30px 70px rgba(0, 242, 254, 0.22); }
+.visual-card:hover { box-shadow: 0 30px 70px rgba(90, 134, 230, 0.22); }
 
 .card-glare {
   position: absolute;

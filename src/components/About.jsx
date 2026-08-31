@@ -7,13 +7,13 @@ import './About.css';
 const FEATURES = [
   {
     icon: <Code size={30} />,
-    accent: 'cyan',
+    accent: 'sapphire',
     title: 'Web Development',
     description: 'Building responsive, modern web applications using React, Vue, and Laravel.',
   },
   {
     icon: <MonitorSmartphone size={30} />,
-    accent: 'pink',
+    accent: 'bronze',
     title: 'Mobile & Desktop',
     description: 'Creating cross-platform mobile experiences and robust desktop solutions.',
   },
