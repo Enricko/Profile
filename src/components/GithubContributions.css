@@ -61,6 +61,7 @@
 .heatmap-card {
   padding: 2rem;
   margin-bottom: 2.5rem;
+  overflow: visible;
 }
 
 .heatmap-head {
@@ -110,6 +111,19 @@
   box-shadow: 0 0 0 0 rgba(34, 224, 122, 0.6);
   animation: pulse 2s infinite;
 }
+.synthetic-badge {
+  color: #f2cb7d;
+  border-color: rgba(242, 203, 125, 0.35);
+  background: rgba(242, 203, 125, 0.07);
+}
+.data-disclosure {
+  max-width: 76ch;
+  margin: -0.35rem 0 1.25rem;
+  padding-left: .75rem;
+  border-left: 2px solid #f2cb7d;
+  color: var(--text-secondary);
+  font-size: .82rem;
+}
 
 .heatmap-scroll {
   overflow-x: auto;
@@ -126,16 +140,26 @@
   gap: 3px;
 }
 .heatmap-cell {
+  display: block;
   width: 11px;
   height: 11px;
+  padding: 0;
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.06);
   transition: transform 0.15s ease-out, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 .heatmap-cell:not(.is-future):hover {
   transform: scale(1.35);
   box-shadow: 0 0 0 1px var(--accent-primary);
+}
+.heatmap-cell:focus-visible {
+  position: relative;
+  z-index: 2;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  transform: scale(1.35);
 }
 .heatmap-cell.is-future { visibility: hidden; }
 .heatmap-cell.level-1 { background: rgba(0, 242, 254, 0.22); border-color: rgba(0, 242, 254, 0.22); }
@@ -157,6 +181,21 @@
   font-variant-numeric: tabular-nums;
 }
 .heatmap-legend .heatmap-cell { cursor: default; }
+.contribution-tooltip {
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  gap: .55rem 1rem;
+  flex-wrap: wrap;
+  margin-top: .9rem;
+  padding: .65rem .8rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: .8rem;
+}
+.contribution-tooltip.active { background: var(--surface-strong); border-color: var(--border-strong); }
+.contribution-tooltip strong { color: var(--text-primary); font-size: .82rem; }
 
 /* Repo highlights ---------------------------------------------------------- */
 .repo-highlights-head {

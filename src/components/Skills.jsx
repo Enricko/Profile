@@ -21,8 +21,6 @@ const SKILLS = [
   { name: 'Electron', icon: '/logos/electron.svg' },
 ];
 
-const MARQUEE = [...SKILLS, ...SKILLS];
-
 export default function Skills() {
   const onMove = (e) => {
     const el = e.currentTarget;
@@ -57,15 +55,6 @@ export default function Skills() {
         </div>
       </div>
 
-      <div className="marquee reveal-on-scroll" aria-hidden="true">
-        <div className="marquee-track">
-          {MARQUEE.map((s, i) => (
-            <span className="marquee-item" key={i}>
-              <img src={s.icon} alt="" /> {s.name}
-            </span>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }

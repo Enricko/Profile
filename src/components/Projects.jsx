@@ -1,6 +1,5 @@
 import React from 'react';
 import { ExternalLink, LockKeyhole, Radio, ShieldCheck } from 'lucide-react';
-import { FaGithub } from 'react-icons/fa';
 import './Projects.css';
 
 const PROJECTS = [
@@ -10,7 +9,7 @@ const PROJECTS = [
     href: 'https://hematcuy.lufria.tech',
     tags: ['FastAPI', 'React', 'Redis'],
     status: 'public',
-    statusLabel: 'Open to public',
+    statusLabel: 'Public link verified',
   },
   {
     name: 'Lufria Profile',
@@ -18,7 +17,7 @@ const PROJECTS = [
     href: 'https://lufria.tech',
     tags: ['React', 'Vite', 'Design'],
     status: 'public',
-    statusLabel: 'Open to public',
+    statusLabel: 'Public link verified',
   },
   {
     name: 'Trading Advisory',
@@ -69,7 +68,7 @@ export default function Projects() {
         </p>
 
         <div className="project-legend reveal-on-scroll delay-200">
-          <span><Radio size={15} /> Open to public</span>
+          <span><Radio size={15} /> Public links checked 31 Aug 2026</span>
           <span><LockKeyhole size={15} /> Private / access restricted</span>
         </div>
 
@@ -80,7 +79,7 @@ export default function Projects() {
               <>
                 <div className="project-header">
                   <span className={`project-folder ${project.status}`}>
-                    {isPublic ? <FaGithub size={22} /> : <LockKeyhole size={20} />}
+                    {isPublic ? <ExternalLink size={20} /> : <LockKeyhole size={20} />}
                   </span>
                   <span className={`project-status ${project.status}`}>
                     {isPublic ? <Radio size={14} /> : <LockKeyhole size={14} />}
@@ -108,7 +107,7 @@ export default function Projects() {
                 {content}
               </a>
             ) : (
-              <article key={project.name} className={`glass-card project-card ${project.status} reveal-on-scroll`} style={{ transitionDelay: `${(idx % 4) * 100}ms` }}>
+              <article key={project.name} className={`glass-card project-card ${project.status} reveal-on-scroll`} style={{ transitionDelay: `${(idx % 4) * 100}ms` }} aria-label={`${project.name}, private project, access restricted`}>
                 {content}
               </article>
             );

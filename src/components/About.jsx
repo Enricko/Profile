@@ -26,8 +26,8 @@ const FEATURES = [
 
 const STATS = [
   { value: 3,   suffix: '+', label: 'Years of Experience' },
-  { value: 20,  suffix: '+', label: 'Projects Completed' },
-  { value: 100, suffix: '%', label: 'Client Satisfaction' },
+  { value: 3, suffix: '', label: 'Product Platforms' },
+  { value: 1, suffix: '', label: 'Indonesia Based' },
 ];
 
 function Stat({ value, suffix, label, active }) {

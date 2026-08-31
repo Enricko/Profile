@@ -12,6 +12,7 @@ import GithubContributions from './components/GithubContributions'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import Effects from './components/Effects'
+import './polish.css'
 
 function App() {
   const [rainMode, setRainMode] = useState(() => rollRainMode())

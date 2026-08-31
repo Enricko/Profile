@@ -62,6 +62,17 @@ function levelFromCount(count) {
   return 4;
 }
 
+function localDateKey(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function formatDate(date) {
+  return new Date(`${date}T00:00:00`).toLocaleDateString('en-US', { dateStyle: 'long' });
+}
+
 /**
  * Builds a GitHub-style 53-week activity grid ending today. Real per-day contribution
  * data requires an authenticated GraphQL call GitHub doesn't allow from the browser, so
@@ -102,7 +113,7 @@ function buildContributionYear() {
 
     days.push({
       key: i,
-      date: date.toISOString().slice(0, 10),
+      date: localDateKey(date),
       count,
       level: levelFromCount(count),
       future: false,
@@ -154,6 +165,7 @@ export default function GithubContributions() {
   const [stats, setStats] = useState(FALLBACK_STATS);
   const [repos, setRepos] = useState(FALLBACK_REPOS);
   const [filter, setFilter] = useState('starred');
+  const [activeDay, setActiveDay] = useState(null);
   const [metricsRef, metricsInView] = useInView({ threshold: 0.3 });
 
   const { weeks, totalContributions, currentStreak } = useMemo(buildContributionYear, []);
@@ -217,7 +229,7 @@ export default function GithubContributions() {
           <h2 className="section-title">GitHub Contributions</h2>
         </div>
         <p className="contributions-desc text-muted reveal-on-scroll delay-100">
-          A snapshot of my coding activity and open-source footprint, pulled live from GitHub.
+          Public repository metrics load from GitHub when available. The calendar is a clearly marked synthetic demo because exact daily history requires authenticated GitHub access.
         </p>
 
         <div className="metrics-grid reveal-on-scroll delay-100" ref={metricsRef}>
@@ -238,7 +250,7 @@ export default function GithubContributions() {
           <MetricCard
             icon={<GitCommitHorizontal size={22} />}
             value={totalContributions}
-            label="Open Source Contributions"
+            label="Synthetic activity total"
             accent="violet"
             active={metricsInView}
           />
@@ -246,7 +258,7 @@ export default function GithubContributions() {
             icon={<Flame size={22} />}
             value={currentStreak}
             suffix=" days"
-            label="Commit Streak"
+            label="Synthetic streak"
             accent="cyan"
             active={metricsInView}
           />
@@ -256,33 +268,44 @@ export default function GithubContributions() {
           <div className="heatmap-head">
             <div>
               <h3>Contribution Activity</h3>
-              <p className="text-muted heatmap-summary">
-                {totalContributions.toLocaleString()} contributions in the last year
-              </p>
+              <p className="text-muted heatmap-summary">Interactive synthetic contribution pattern</p>
             </div>
-            <span className={`live-badge ${stats.live ? 'is-live' : ''}`}>
-              <span className="live-dot" /> {stats.live ? 'Live from GitHub' : 'Cached snapshot'}
+            <span className="live-badge synthetic-badge">
+              Synthetic demo data
             </span>
           </div>
 
-          <div className="heatmap-scroll">
+          <p className="data-disclosure">
+            These daily counts are generated placeholders, not Enricko's GitHub contribution history. Repository and star totals are {stats.live ? 'live public GitHub data' : 'a cached fallback'}.
+          </p>
+
+          <div className="heatmap-scroll" onPointerLeave={() => setActiveDay(null)}>
             <div
               className="heatmap-grid"
-              role="img"
-              aria-label={`GitHub contribution heatmap: ${totalContributions} contributions in the last year, current streak of ${currentStreak} days`}
+              role="group"
+              aria-label="Synthetic daily contribution demo. Focus a date for its exact placeholder count."
             >
               {weeks.map((week, wi) => (
-                <div className="heatmap-col" key={wi} aria-hidden="true">
+                <div className="heatmap-col" key={wi}>
                   {week.map((day) => (
-                    <span
+                    day.future ? <span key={day.key} className="heatmap-cell is-future" /> : <button
                       key={day.key}
-                      className={`heatmap-cell level-${day.level} ${day.future ? 'is-future' : ''}`}
-                      title={day.date ? `${day.count} contributions on ${day.date}` : undefined}
+                      type="button"
+                      className={`heatmap-cell level-${day.level}`}
+                      aria-label={`${day.count} synthetic ${day.count === 1 ? 'contribution' : 'contributions'} on ${formatDate(day.date)}`}
+                      aria-describedby={activeDay?.key === day.key ? 'contribution-tooltip' : undefined}
+                      onPointerEnter={() => setActiveDay(day)}
+                      onFocus={() => setActiveDay(day)}
+                      onBlur={() => setActiveDay(null)}
                     />
                   ))}
                 </div>
               ))}
             </div>
+          </div>
+
+          <div id="contribution-tooltip" className={`contribution-tooltip ${activeDay ? 'active' : ''}`} role="tooltip" aria-live="polite">
+            {activeDay && <><strong>{formatDate(activeDay.date)}</strong><span>{activeDay.count} synthetic {activeDay.count === 1 ? 'contribution' : 'contributions'}</span></>}
           </div>
 
           <div className="heatmap-legend" aria-hidden="true">
@@ -329,6 +352,7 @@ export default function GithubContributions() {
                 className="glass-card spotlight repo-card"
                 style={{ transitionDelay: `${(idx % 4) * 80}ms` }}
                 onMouseMove={onMove}
+                aria-label={`View ${repo.name} on GitHub`}
               >
                 <div className="repo-card-head">
                   <span className="repo-icon"><FaGithub size={18} /></span>

@@ -1,18 +1,9 @@
 import React from 'react';
 import { ArrowRight, Sparkles, ChevronDown, FileText } from 'lucide-react';
-import { useTilt, useTypewriter } from '../lib/useInteractions';
+import { useTypewriter } from '../lib/useInteractions';
 import './Hero.css';
 
-const FLOATERS = [
-  { src: '/logos/react.svg',      cls: 'f1' },
-  { src: '/logos/flutter.svg',    cls: 'f2' },
-  { src: '/logos/laravel.svg',    cls: 'f3' },
-  { src: '/logos/typescript.svg', cls: 'f4' },
-  { src: '/logos/go.svg',         cls: 'f5' },
-];
-
 export default function Hero() {
-  const { ref: tiltRef, onMouseMove: onTiltMove, onMouseLeave: onTiltLeave } = useTilt(14);
   const role = useTypewriter(
     ['Web Applications', 'Mobile Apps', 'Desktop Software', 'Elegant Solutions'],
     { typeSpeed: 80, deleteSpeed: 40, pause: 1300 }
@@ -28,7 +19,7 @@ export default function Hero() {
 
           <h1 className="hero-title animate-up delay-200">
             Hello, I'm <br />
-            <span className="text-gradient">Enricko Putra Hartono</span>
+            <span className="hero-name">Enricko Putra Hartono</span>
           </h1>
 
           <div className="hero-typer animate-up delay-300">
@@ -38,8 +29,8 @@ export default function Hero() {
           </div>
 
           <p className="hero-description animate-up delay-400">
-            A versatile Software Engineer crafting premium, high-performance applications across
-            Web, Desktop, and Mobile platforms. Turning complex problems into elegant, aesthetic solutions.
+            Software engineer building maintainable web, mobile, and desktop products—from reliable APIs
+            and data models to clear, responsive interfaces.
           </p>
 
           <div className="hero-actions animate-up delay-500">
@@ -47,7 +38,7 @@ export default function Hero() {
               Let's Talk <ArrowRight size={18} />
             </a>
             <a href="#experience" className="btn btn-outline">
-              <Sparkles size={16} /> View My Work
+              <Sparkles size={16} /> View experience
             </a>
             <a
               href="/cv/Enricko-Putra-Hartono-CV.pdf"
@@ -61,19 +52,7 @@ export default function Hero() {
         </div>
 
         <div className="hero-visual animate-up delay-400">
-          {FLOATERS.map((f) => (
-            <div key={f.cls} className={`floater ${f.cls}`}>
-              <img src={f.src} alt="" aria-hidden="true" />
-            </div>
-          ))}
-
-          <div
-            ref={tiltRef}
-            className="glass-card visual-card"
-            onMouseMove={onTiltMove}
-            onMouseLeave={onTiltLeave}
-          >
-            <div className="card-glare" />
+          <div className="visual-card">
             <div className="code-header">
               <span className="dot red" />
               <span className="dot yellow" />
