@@ -1,36 +1,51 @@
 import React from 'react';
-import { ExternalLink, Star } from 'lucide-react';
+import { ExternalLink, LockKeyhole, Radio, ShieldCheck } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import './Projects.css';
 
 const PROJECTS = [
   {
-    name: 'Saba Jogja (Web Dev)',
-    description: 'An interactive application containing comprehensive information about Yogyakarta, built natively with Flutter.',
-    github: 'https://github.com/Enricko/Saba-Jogja-Lomba-Web-Dev-Competition-Feb-2024',
-    tags: ['Flutter', 'Dart', 'Mobile App'],
-    stars: 3,
+    name: 'HematCuy',
+    description: 'A public price-comparison platform for everyday essentials, with live catalog data and official store links.',
+    href: 'https://hematcuy.lufria.tech',
+    tags: ['FastAPI', 'React', 'Redis'],
+    status: 'public',
+    statusLabel: 'Open to public',
   },
   {
-    name: 'Realtime Chatting App',
-    description: 'A multi-platform real-time messaging application created using the robust Flutter Framework.',
-    github: 'https://github.com/Enricko/Flutter-Realtime-ChattingApp',
-    tags: ['Flutter', 'Realtime', 'Chat'],
-    stars: 4,
+    name: 'Lufria Profile',
+    description: 'This portfolio site: a public home for my work, experience, experiments, and open-source projects.',
+    href: 'https://lufria.tech',
+    tags: ['React', 'Vite', 'Design'],
+    status: 'public',
+    statusLabel: 'Open to public',
   },
   {
-    name: 'Dino Run with Flutter',
-    description: 'A multi-platform endless runner game inspired by the classic Dino Game, built using the Flutter Flame engine.',
-    github: 'https://github.com/Enricko/Dino-Run-with-Flutter',
-    tags: ['Flutter', 'Flame', 'Game Dev'],
-    stars: 4,
+    name: 'Trading Advisory',
+    description: 'A private-by-design advisory workspace for market signals, portfolio context, and scheduled briefings.',
+    href: null,
+    tags: ['FastAPI', 'WebSocket', 'Trading'],
+    status: 'private',
+    statusLabel: 'Private system',
+    note: 'Access is limited because it handles personal portfolio data and account-specific analysis.',
   },
   {
-    name: 'Flask-Restx-Template',
-    description: 'A versatile and beginner-friendly repository designed to streamline API development using Python and Flask Rest-X.',
-    github: 'https://github.com/Enricko/Flask-Restx-Template',
-    tags: ['Python', 'Flask', 'Backend API'],
-    stars: 3,
+    name: 'Clipper Apps',
+    description: 'An internal media workflow for turning long-form videos into searchable, reviewable short clips.',
+    href: null,
+    tags: ['AI Workflow', 'NVENC', 'Queue'],
+    status: 'private',
+    statusLabel: 'Private system',
+    note: 'The app is still an internal tool; the implementation and processing pipeline are not public.',
+  },
+  {
+    name: 'Cetaphil POSM',
+    description: 'A field-operations platform for managing merchandising activity, reports, and point-of-sale materials.',
+    href: null,
+    tags: ['Laravel', 'Flutter', 'MariaDB'],
+    status: 'private',
+    statusLabel: 'Private system',
+    note: 'Kept locked because it contains client workflows, operational records, and authenticated user data.',
   },
 ];
 
@@ -46,46 +61,63 @@ export default function Projects() {
     <section id="projects" className="projects">
       <div className="container">
         <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">// portfolio</span>
-          <h2 className="section-title">Open Source Projects</h2>
+          <span className="eyebrow">// current work</span>
+          <h2 className="section-title">Projects in the wild</h2>
         </div>
         <p className="projects-desc text-muted reveal-on-scroll delay-100">
-          A selection of my personal projects and contributions available on GitHub.
+          Public products you can try today, alongside private systems that stay visible for context — but remain locked for privacy and operational reasons.
         </p>
 
-        <div className="projects-grid">
-          {PROJECTS.map((project, idx) => (
-            <a
-              key={project.name}
-              href={project.github}
-              target="_blank"
-              rel="noreferrer"
-              className="glass-card spotlight project-card reveal-on-scroll"
-              style={{ transitionDelay: `${(idx % 4) * 100}ms` }}
-              onMouseMove={onMove}
-            >
-              <div className="project-header">
-                <span className="project-folder"><FaGithub size={22} /></span>
-                <span className="project-stars"><Star size={14} className="star-icon" /> {project.stars}</span>
-              </div>
-              <h3 className="project-title">{project.name}</h3>
-              <p className="project-desc text-muted">{project.description}</p>
+        <div className="project-legend reveal-on-scroll delay-200">
+          <span><Radio size={15} /> Open to public</span>
+          <span><LockKeyhole size={15} /> Private / access restricted</span>
+        </div>
 
-              <div className="project-footer">
-                <div className="project-tags">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="project-tag">{tag}</span>
-                  ))}
+        <div className="projects-grid">
+          {PROJECTS.map((project, idx) => {
+            const isPublic = project.status === 'public';
+            const content = (
+              <>
+                <div className="project-header">
+                  <span className={`project-folder ${project.status}`}>
+                    {isPublic ? <FaGithub size={22} /> : <LockKeyhole size={20} />}
+                  </span>
+                  <span className={`project-status ${project.status}`}>
+                    {isPublic ? <Radio size={14} /> : <LockKeyhole size={14} />}
+                    {project.statusLabel}
+                  </span>
                 </div>
-                <span className="project-open">View <ExternalLink size={14} /></span>
-              </div>
-            </a>
-          ))}
+                <h3 className="project-title">{project.name}</h3>
+                <p className="project-desc text-muted">{project.description}</p>
+                {project.note && (
+                  <p className="project-note"><ShieldCheck size={15} /> {project.note}</p>
+                )}
+                <div className="project-footer">
+                  <div className="project-tags">
+                    {project.tags.map((tag) => <span key={tag} className="project-tag">{tag}</span>)}
+                  </div>
+                  <span className="project-open">
+                    {isPublic ? <>Visit <ExternalLink size={14} /></> : <>Access restricted <LockKeyhole size={14} /></>}
+                  </span>
+                </div>
+              </>
+            );
+
+            return isPublic ? (
+              <a key={project.name} href={project.href} target="_blank" rel="noreferrer" className={`glass-card spotlight project-card reveal-on-scroll ${project.status}`} style={{ transitionDelay: `${(idx % 4) * 100}ms` }} onMouseMove={onMove}>
+                {content}
+              </a>
+            ) : (
+              <article key={project.name} className={`glass-card project-card ${project.status} reveal-on-scroll`} style={{ transitionDelay: `${(idx % 4) * 100}ms` }}>
+                {content}
+              </article>
+            );
+          })}
         </div>
 
         <div className="projects-cta reveal-on-scroll delay-300">
           <a href="https://github.com/Enricko" target="_blank" rel="noreferrer" className="btn btn-outline">
-            View More on GitHub <ExternalLink size={16} />
+            Explore public code on GitHub <ExternalLink size={16} />
           </a>
         </div>
       </div>
