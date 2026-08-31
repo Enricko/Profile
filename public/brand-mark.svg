@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="brand-mark-title brand-mark-description">
+  <title id="brand-mark-title">Enricko / Lufria brand mark</title>
+  <desc id="brand-mark-description">An angular silver fox-cat crest with a cut-out L and cyan signal facet on a deep-space tile.</desc>
+  <path fill="#070B18" d="M24 4h80c11 0 20 9 20 20v80c0 11-9 20-20 20H24c-11 0-20-9-20-20V24C4 13 13 4 24 4Z"/>
+  <path fill="#DCE4F0" fill-rule="evenodd" d="m25 30 22-12 17 15 17-15 22 12-7 53-32 25-32-25-7-53Zm22 14v44h35V73H63V44H47Z" clip-rule="evenodd"/>
+  <path fill="#58DDEA" d="m81 18 22 12-5 12-21-16 4-8Z"/>
+</svg>
