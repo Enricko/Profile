@@ -1,67 +1,52 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ChevronDown, Menu, PawPrint, X } from 'lucide-react';
+import { ArrowUpRight, Menu, X } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useScrollSpy } from '../lib/useInteractions';
 import './Navbar.css';
 
-const PRIMARY_LINKS = [
+const LINKS = [
   { id: 'about', label: 'About' },
+  { id: 'skills', label: 'Expertise' },
   { id: 'experience', label: 'Experience' },
+  { id: 'education', label: 'Education', secondary: true },
   { id: 'projects', label: 'Projects' },
-  { id: 'contact', label: 'Contact' },
+  { id: 'contributions', label: 'GitHub', secondary: true },
 ];
-const SECONDARY_LINKS = [
-  { id: 'skills', label: 'Skills' },
-  { id: 'education', label: 'Education' },
-  { id: 'contributions', label: 'GitHub activity' },
-];
-const ALL_LINKS = [...PRIMARY_LINKS, ...SECONDARY_LINKS];
-const SPY_IDS = ['home', ...ALL_LINKS.map((link) => link.id)];
-const MODE_NAMES = { none: 'Off', neon: 'Neon paws', calico: 'Calico paws', faces: 'Cat and dog faces', skills: 'Tech logos' };
+const SPY_IDS = ['home', ...LINKS.map((link) => link.id), 'contact'];
 
-export default function Navbar({ rainActive, rainMode = 'none', onRandomizeRain }) {
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [moreOpen, setMoreOpen] = useState(false);
-  const drawerRef = useRef(null);
-  const drawerCloseRef = useRef(null);
-  const mobileToggleRef = useRef(null);
-  const moreRef = useRef(null);
-  const moreTriggerRef = useRef(null);
-  const moreLinkRefs = useRef([]);
-  const active = useScrollSpy(SPY_IDS);
+  const panelRef = useRef(null);
+  const closeRef = useRef(null);
+  const toggleRef = useRef(null);
+  const active = useScrollSpy(SPY_IDS, 180);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 24);
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 18);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
+    const content = [document.querySelector('main'), document.querySelector('footer')].filter(Boolean);
     document.body.classList.toggle('menu-open', menuOpen);
-    const pageContent = [document.querySelector('main'), document.querySelector('footer')].filter(Boolean);
-    pageContent.forEach((element) => { element.inert = menuOpen; });
+    content.forEach((element) => { element.inert = menuOpen; });
 
-    if (menuOpen) drawerCloseRef.current?.focus();
+    if (menuOpen) closeRef.current?.focus();
 
-    const handleKey = (event) => {
-      if (event.key === 'Escape') {
-        if (menuOpen) {
-          setMenuOpen(false);
-          requestAnimationFrame(() => mobileToggleRef.current?.focus());
-        } else if (moreOpen) {
-          setMoreOpen(false);
-          requestAnimationFrame(() => moreTriggerRef.current?.focus());
-        }
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape' && menuOpen) {
+        setMenuOpen(false);
+        requestAnimationFrame(() => toggleRef.current?.focus());
         return;
       }
+      if (event.key !== 'Tab' || !menuOpen || !panelRef.current) return;
 
-      if (event.key !== 'Tab' || !menuOpen || !drawerRef.current) return;
-
-      const focusable = [...drawerRef.current.querySelectorAll('a[href], button:not([disabled])')];
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
+      const focusable = [...panelRef.current.querySelectorAll('a[href], button:not([disabled])')];
+      const first = focusable.at(0);
+      const last = focusable.at(-1);
       if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
         last?.focus();
@@ -70,112 +55,97 @@ export default function Navbar({ rainActive, rainMode = 'none', onRandomizeRain 
         first?.focus();
       }
     };
-    const handlePointer = (event) => {
-      if (moreRef.current && !moreRef.current.contains(event.target)) setMoreOpen(false);
+
+    const onResize = () => {
+      if (window.innerWidth > 900 && menuOpen) setMenuOpen(false);
     };
-    const handleFocus = (event) => {
-      if (moreOpen && moreRef.current && !moreRef.current.contains(event.target)) setMoreOpen(false);
-    };
-    const handleResize = () => {
-      if (window.innerWidth > 860 && menuOpen) {
-        setMenuOpen(false);
-        requestAnimationFrame(() => document.querySelector('.logo')?.focus());
-      }
-      if (window.innerWidth <= 860) setMoreOpen(false);
-    };
-    window.addEventListener('keydown', handleKey);
-    window.addEventListener('pointerdown', handlePointer);
-    window.addEventListener('focusin', handleFocus);
-    window.addEventListener('resize', handleResize);
+
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('resize', onResize);
     return () => {
       document.body.classList.remove('menu-open');
-      pageContent.forEach((element) => { element.inert = false; });
-      window.removeEventListener('keydown', handleKey);
-      window.removeEventListener('pointerdown', handlePointer);
-      window.removeEventListener('focusin', handleFocus);
-      window.removeEventListener('resize', handleResize);
+      content.forEach((element) => { element.inert = false; });
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('resize', onResize);
     };
-  }, [menuOpen, moreOpen]);
+  }, [menuOpen]);
 
-  const closeMenus = () => { setMenuOpen(false); setMoreOpen(false); };
-  const closeDrawerAndRestoreFocus = () => {
-    closeMenus();
-    requestAnimationFrame(() => mobileToggleRef.current?.focus());
-  };
-  const handleNavigationClick = () => {
-    closeMenus();
-    if (window.innerWidth <= 860) requestAnimationFrame(() => mobileToggleRef.current?.focus());
-  };
-  const openMoreAndFocus = (index) => {
-    setMoreOpen(true);
-    requestAnimationFrame(() => moreLinkRefs.current[index]?.focus());
-  };
-  const handleMoreTriggerKeyDown = (event) => {
-    if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      openMoreAndFocus(0);
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      openMoreAndFocus(SECONDARY_LINKS.length - 1);
-    }
-  };
-  const handleMoreMenuKeyDown = (event) => {
-    const currentIndex = moreLinkRefs.current.indexOf(document.activeElement);
-    let nextIndex = currentIndex;
-
-    if (event.key === 'ArrowDown') nextIndex = (currentIndex + 1) % SECONDARY_LINKS.length;
-    else if (event.key === 'ArrowUp') nextIndex = (currentIndex - 1 + SECONDARY_LINKS.length) % SECONDARY_LINKS.length;
-    else if (event.key === 'Home') nextIndex = 0;
-    else if (event.key === 'End') nextIndex = SECONDARY_LINKS.length - 1;
-    else if (event.key === 'Tab') {
-      setMoreOpen(false);
-      return;
-    } else {
-      return;
-    }
-
-    event.preventDefault();
-    moreLinkRefs.current[nextIndex]?.focus();
-  };
+  const closeMenu = () => setMenuOpen(false);
 
   return (
-    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} aria-label="Primary navigation">
+    <header className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
-        <a href="#home" className="logo" onClick={closeMenus} aria-label="Enricko, back to top">
-          <span>Enricko<span className="logo-dot">.</span></span>
+        <a href="#home" className="logo" onClick={closeMenu} aria-label="Lufria, back to top">
+          <span className="logo-monogram">EPH</span>
+          <span className="logo-name">Lufria</span>
         </a>
-        <button type="button" className={`nav-overlay ${menuOpen ? 'active' : ''}`} onClick={closeDrawerAndRestoreFocus} aria-hidden="true" tabIndex={-1} />
 
-        <div
-          id="site-navigation-panel"
-          ref={drawerRef}
-          className={`nav-panel ${menuOpen ? 'active' : ''}`}
-          role={menuOpen ? 'dialog' : undefined}
-          aria-modal={menuOpen ? 'true' : undefined}
-          aria-labelledby={menuOpen ? 'drawer-title' : undefined}
-        >
-          <div className="drawer-head"><span id="drawer-title">Navigate</span><button ref={drawerCloseRef} type="button" className="drawer-close" onClick={closeDrawerAndRestoreFocus} aria-label="Close navigation"><X size={22} /></button></div>
+        <nav className="desktop-navigation" aria-label="Primary navigation">
           <ul className="nav-links">
-            {PRIMARY_LINKS.map((link) => <li key={link.id}><a href={`#${link.id}`} className={active === link.id ? 'is-active' : ''} onClick={handleNavigationClick}>{link.label}</a></li>)}
+            {LINKS.filter((link) => !link.secondary).map((link, index) => (
+              <li key={link.id}>
+                <a href={`#${link.id}`} className={active === link.id ? 'is-active' : ''}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>{link.label}
+                </a>
+              </li>
+            ))}
           </ul>
-          <div className="more-menu" ref={moreRef}>
-            <button ref={moreTriggerRef} type="button" className={`more-trigger ${SECONDARY_LINKS.some((link) => link.id === active) ? 'is-active' : ''}`} onClick={() => setMoreOpen((open) => !open)} onKeyDown={handleMoreTriggerKeyDown} aria-expanded={moreOpen} aria-haspopup="menu" aria-controls="more-navigation-menu">More <ChevronDown size={15} /></button>
-            <ul id="more-navigation-menu" className={`more-popover ${moreOpen ? 'active' : ''}`} role="menu" onKeyDown={handleMoreMenuKeyDown}>
-              {SECONDARY_LINKS.map((link, index) => <li key={link.id} role="none"><a ref={(element) => { moreLinkRefs.current[index] = element; }} role="menuitem" href={`#${link.id}`} className={active === link.id ? 'is-active' : ''} onClick={closeMenus}>{link.label}</a></li>)}
-            </ul>
-          </div>
-          <ul className="drawer-secondary">
-            {SECONDARY_LINKS.map((link) => <li key={link.id}><a href={`#${link.id}`} className={active === link.id ? 'is-active' : ''} onClick={handleNavigationClick}>{link.label}</a></li>)}
-          </ul>
-        </div>
+        </nav>
 
         <div className="nav-actions">
-          <button type="button" className={`paw-toggle ${rainActive ? 'active' : ''}`} onClick={onRandomizeRain} aria-label={`Change background effect. Current: ${MODE_NAMES[rainMode] || rainMode}`} title={`Background effect: ${MODE_NAMES[rainMode] || rainMode}`}><PawPrint size={19} /></button>
-          <a href="https://github.com/Enricko" target="_blank" rel="noreferrer" aria-label="GitHub profile"><FaGithub size={19} /></a>
-          <a className="linkedin-link" href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/" target="_blank" rel="noreferrer" aria-label="LinkedIn profile"><FaLinkedin size={19} /></a>
-          <button ref={mobileToggleRef} type="button" className="mobile-toggle" onClick={() => { setMoreOpen(false); setMenuOpen((open) => !open); }} aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} aria-controls="site-navigation-panel"><Menu size={22} /></button>
+          <a className="nav-contact" href="#contact">
+            Contact <ArrowUpRight size={16} />
+          </a>
+          <button
+            ref={toggleRef}
+            type="button"
+            className="mobile-toggle"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open navigation"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+          >
+            <Menu size={22} />
+          </button>
         </div>
+
+        <button
+          type="button"
+          className={`nav-overlay ${menuOpen ? 'active' : ''}`}
+          onClick={closeMenu}
+          aria-label="Close navigation"
+          tabIndex={menuOpen ? 0 : -1}
+        />
+
+        <nav
+          id="mobile-navigation"
+          ref={panelRef}
+          className={`nav-panel ${menuOpen ? 'active' : ''}`}
+          aria-label="Mobile navigation"
+          aria-hidden={!menuOpen}
+        >
+          <div className="drawer-head">
+            <span>Index / 2026</span>
+            <button ref={closeRef} type="button" className="drawer-close" onClick={closeMenu} aria-label="Close navigation">
+              <X size={23} />
+            </button>
+          </div>
+          <ol className="drawer-links">
+            {LINKS.map((link, index) => (
+              <li key={link.id}>
+                <a href={`#${link.id}`} className={active === link.id ? 'is-active' : ''} onClick={closeMenu}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>{link.label}
+                </a>
+              </li>
+            ))}
+          </ol>
+          <a href="#contact" className="drawer-contact" onClick={closeMenu}>Start a conversation <ArrowUpRight size={18} /></a>
+          <div className="drawer-socials">
+            <a href="https://github.com/Enricko" target="_blank" rel="noreferrer"><FaGithub /> GitHub</a>
+            <a href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/" target="_blank" rel="noreferrer"><FaLinkedin /> LinkedIn</a>
+          </div>
+        </nav>
       </div>
-    </nav>
+    </header>
   );
 }

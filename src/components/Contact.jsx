@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, MapPin, Send, Check } from 'lucide-react';
+import SplitText from './SplitText';
 import './Contact.css';
 
 export default function Contact() {
@@ -24,7 +25,7 @@ export default function Contact() {
       <div className="container">
         <div className="section-head reveal-on-scroll">
           <span className="eyebrow">// contact</span>
-          <h2 className="section-title">Get In Touch</h2>
+          <SplitText as="h2" text="Get In Touch" className="section-title" />
         </div>
         <p className="contact-desc text-muted reveal-on-scroll delay-100">
           Currently open for new opportunities. Whether you have a question or just want to say hi,

@@ -1,4 +1,5 @@
 import React from 'react';
+import SplitText from './SplitText';
 import './Skills.css';
 
 const SKILLS = [
@@ -34,7 +35,7 @@ export default function Skills() {
       <div className="container">
         <div className="section-head reveal-on-scroll">
           <span className="eyebrow">// tech stack</span>
-          <h2 className="section-title">Technical Expertise</h2>
+          <SplitText as="h2" text="Technical Expertise" className="section-title" />
         </div>
         <p className="skills-desc text-muted reveal-on-scroll delay-100">
           A comprehensive breakdown of my technical capabilities across different stacks and platforms.

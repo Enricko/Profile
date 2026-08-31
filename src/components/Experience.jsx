@@ -1,5 +1,6 @@
 import React from 'react';
 import { Briefcase, Calendar } from 'lucide-react';
+import SplitText from './SplitText';
 import './Experience.css';
 
 const EXPERIENCES = [
@@ -39,7 +40,7 @@ export default function Experience() {
       <div className="container">
         <div className="section-head reveal-on-scroll">
           <span className="eyebrow">// career</span>
-          <h2 className="section-title">Professional Experience</h2>
+          <SplitText as="h2" text="Professional Experience" className="section-title" />
         </div>
 
         <div className="timeline">

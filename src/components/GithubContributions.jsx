@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { BookMarked, Star, GitCommitHorizontal, Flame, ExternalLink } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { useCountUp, useInView } from '../lib/useInteractions';
+import SplitText from './SplitText';
 import './GithubContributions.css';
 
 const GITHUB_USERNAME = 'Enricko';
@@ -278,7 +279,7 @@ export default function GithubContributions() {
       <div className="container">
         <div className="section-head reveal-on-scroll">
           <span className="eyebrow">// open source</span>
-          <h2 className="section-title">GitHub Contributions</h2>
+          <SplitText as="h2" text="GitHub Contributions" className="section-title" />
         </div>
         <p className="contributions-desc text-muted reveal-on-scroll delay-100">
           Public repository totals load from GitHub&apos;s public API when available and use a cached snapshot otherwise. The daily calendar and its activity totals are synthetic—not Enricko&apos;s contribution history.

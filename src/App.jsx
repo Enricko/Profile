@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Navbar from './components/Navbar'
-import Rain from './components/Rain'
-import { rollRainMode } from './lib/rainModes'
+import ForgeParticles from './components/ForgeParticles'
 import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
@@ -15,12 +14,6 @@ import Effects from './components/Effects'
 import './polish.css'
 
 function App() {
-  const [rainMode, setRainMode] = useState(() => rollRainMode())
-
-  useEffect(() => {
-    document.body.classList.toggle('rain-mode', rainMode !== 'none')
-  }, [rainMode])
-
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -29,7 +22,7 @@ function App() {
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
     const elements = document.querySelectorAll('.reveal-on-scroll');
     elements.forEach((el) => observer.observe(el));
@@ -40,8 +33,8 @@ function App() {
   return (
     <div className="app-container">
       <Effects />
-      <Rain mode={rainMode} />
-      <Navbar rainActive={rainMode !== 'none'} rainMode={rainMode} onRandomizeRain={() => setRainMode((m) => rollRainMode(m))} />
+      <ForgeParticles />
+      <Navbar />
       <main>
         <Hero />
         <About />

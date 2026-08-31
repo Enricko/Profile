@@ -1,6 +1,7 @@
 import React from 'react';
 import { Code, MonitorSmartphone, Database } from 'lucide-react';
 import { useCountUp, useInView } from '../lib/useInteractions';
+import SplitText from './SplitText';
 import './About.css';
 
 const FEATURES = [
@@ -48,7 +49,7 @@ export default function About() {
       <div className="container">
         <div className="section-head reveal-on-scroll">
           <span className="eyebrow">// about me</span>
-          <h2 className="section-title">Who I Am</h2>
+          <SplitText as="h2" text="Who I Am" className="section-title" />
         </div>
 
         <div className="about-grid">

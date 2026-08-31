@@ -1,5 +1,6 @@
 import React from 'react';
 import { GraduationCap, Award, Calendar, BadgeCheck, ExternalLink } from 'lucide-react';
+import SplitText from './SplitText';
 import './Education.css';
 
 const EDUCATION = [
@@ -65,7 +66,7 @@ export default function Education() {
       <div className="container">
         <div className="section-head reveal-on-scroll">
           <span className="eyebrow">// education</span>
-          <h2 className="section-title">Education & Certifications</h2>
+          <SplitText as="h2" text="Education & Certifications" className="section-title" />
         </div>
 
         <div className="edu-grid">

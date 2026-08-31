@@ -1,5 +1,6 @@
 import React from 'react';
 import { ExternalLink, LockKeyhole, Radio, ShieldCheck } from 'lucide-react';
+import SplitText from './SplitText';
 import './Projects.css';
 
 const PROJECTS = [
@@ -61,7 +62,7 @@ export default function Projects() {
       <div className="container">
         <div className="section-head reveal-on-scroll">
           <span className="eyebrow">// current work</span>
-          <h2 className="section-title">Projects in the wild</h2>
+          <SplitText as="h2" text="Projects in the wild" className="section-title" />
         </div>
         <p className="projects-desc text-muted reveal-on-scroll delay-100">
           Public products you can try today, alongside private systems that stay visible for context — but remain locked for privacy and operational reasons.
