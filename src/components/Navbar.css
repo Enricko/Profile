@@ -2,8 +2,8 @@
 .navbar.scrolled { background: rgba(3, 7, 18, .96); border-color: var(--border); }
 .nav-container { height: 100%; display: flex; align-items: center; gap: 1.25rem; min-width: 0; }
 .logo { min-height: 44px; flex: 0 0 auto; display: inline-flex; align-items: center; gap: .55rem; color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1.35rem; font-weight: 800; letter-spacing: -.03em; text-decoration: none; }
-.logo-mark { width: 27px; height: 27px; object-fit: contain; filter: drop-shadow(0 0 9px rgba(134, 59, 255, .5)); transition: transform .35s var(--ease-spring), filter .35s ease; }
-.logo:hover .logo-mark { transform: rotate(-8deg) scale(1.08); filter: drop-shadow(0 0 13px rgba(89, 215, 231, .65)); }
+.logo-mark { width: 27px; height: 27px; object-fit: contain; border-radius: 6px; filter: drop-shadow(0 0 9px rgba(75, 174, 255, .48)); transition: transform .35s var(--ease-spring), filter .35s ease; }
+.logo:hover .logo-mark { transform: rotate(-4deg) scale(1.08); filter: drop-shadow(0 0 13px rgba(89, 215, 231, .65)); }
 .logo-dot { color: var(--accent-primary); }
 .nav-panel { display: flex; align-items: center; gap: .35rem; margin-left: auto; }
 .nav-links, .more-popover, .drawer-secondary { list-style: none; }
