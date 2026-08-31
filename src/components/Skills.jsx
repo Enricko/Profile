@@ -22,13 +22,6 @@ const SKILLS = [
 ];
 
 export default function Skills() {
-  const onMove = (e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
-  };
-
   return (
     <section id="skills" className="skills">
       <div className="container">
@@ -41,12 +34,10 @@ export default function Skills() {
         </p>
 
         <div className="skills-grid">
-          {SKILLS.map((skill, idx) => (
+          {SKILLS.map((skill) => (
             <div
               key={skill.name}
               className="logo-card reveal-on-scroll"
-              style={{ transitionDelay: `${(idx % 10) * 50}ms` }}
-              onMouseMove={onMove}
             >
               <img src={skill.icon} alt={skill.name} className="skill-logo" loading="lazy" />
               <span className="skill-name">{skill.name}</span>

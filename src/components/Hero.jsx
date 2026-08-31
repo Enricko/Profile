@@ -18,7 +18,7 @@ export default function Hero() {
           </div>
 
           <h1 className="hero-title animate-up delay-200">
-            Hello, I'm <br />
+            <span className="hero-greeting">Hello, I&apos;m</span>
             <span className="hero-name">Enricko Putra Hartono</span>
           </h1>
 
@@ -63,8 +63,8 @@ export default function Hero() {
               <code>
                 <span className="keyword">const</span> <span className="entity">developer</span> <span className="operator">=</span> {'{'}
                 <br />  name: <span className="string">'Enricko Putra Hartono'</span>,
-                <br />  skills: [<span className="string">'Website'</span>, <span className="string">'Desktop'</span>, <span className="string">'Android'</span>],
-                <br />  passion: <span className="string">'Building premium apps'</span>,
+                <br />  platforms: [<span className="string">'Web'</span>, <span className="string">'Mobile'</span>, <span className="string">'Desktop'</span>],
+                <br />  focus: <span className="string">'Maintainable products'</span>,
                 <br />  status: <span className="keyword">true</span>
                 <br />{'}'};
               </code>

@@ -55,13 +55,18 @@
   margin-bottom: 0.5rem;
 }
 .timeline-header h3 { font-size: 1.2rem; }
+.timeline-header h3,
+.timeline-company { min-width: 0; }
 .timeline-company {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   font-size: 0.88rem;
   color: var(--text-secondary);
+  max-width: 100%;
 }
+.timeline-company svg,
+.timeline-period svg { flex: 0 0 auto; }
 .timeline-period {
   display: inline-flex;
   align-items: center;
@@ -84,4 +89,9 @@
   .timeline { padding-left: 1.6rem; }
   .timeline-dot { left: -1.6rem; width: 15px; height: 15px; }
   .timeline-content { padding: 1.4rem 1.25rem; }
+  .timeline-header h3 { font-size: 1.1rem; }
+  .timeline-company { align-items: flex-start; line-height: 1.45; }
+  .timeline-period { align-items: flex-start; line-height: 1.45; }
+  .timeline-tags { gap: .4rem; }
+  .badge { white-space: normal; line-height: 1.35; }
 }

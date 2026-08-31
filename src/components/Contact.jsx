@@ -51,17 +51,17 @@ export default function Contact() {
           <form className="glass-card contact-form reveal-on-scroll delay-300" onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="name">Name</label>
-              <input type="text" id="name" placeholder="John Doe" required />
+              <input type="text" id="name" name="name" autoComplete="name" placeholder="John Doe" required />
             </div>
 
             <div className="form-group">
               <label htmlFor="email">Email</label>
-              <input type="email" id="email" placeholder="john@example.com" required />
+              <input type="email" id="email" name="email" autoComplete="email" inputMode="email" placeholder="john@example.com" required />
             </div>
 
             <div className="form-group">
               <label htmlFor="message">Message</label>
-              <textarea id="message" rows="5" placeholder="Your message here..." required></textarea>
+              <textarea id="message" name="message" rows="5" placeholder="Your message here..." required></textarea>
             </div>
 
             <button type="submit" className={`btn btn-primary submit-btn ${sent ? 'sent' : ''}`}>

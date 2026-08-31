@@ -49,13 +49,6 @@ const PROJECTS = [
 ];
 
 export default function Projects() {
-  const onMove = (e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
-  };
-
   return (
     <section id="projects" className="projects">
       <div className="container">
@@ -73,7 +66,7 @@ export default function Projects() {
         </div>
 
         <div className="projects-grid">
-          {PROJECTS.map((project, idx) => {
+          {PROJECTS.map((project) => {
             const isPublic = project.status === 'public';
             const content = (
               <>
@@ -103,11 +96,11 @@ export default function Projects() {
             );
 
             return isPublic ? (
-              <a key={project.name} href={project.href} target="_blank" rel="noreferrer" className={`glass-card spotlight project-card reveal-on-scroll ${project.status}`} style={{ transitionDelay: `${(idx % 4) * 100}ms` }} onMouseMove={onMove}>
+              <a key={project.name} href={project.href} target="_blank" rel="noreferrer" className={`glass-card project-card reveal-on-scroll ${project.status}`}>
                 {content}
               </a>
             ) : (
-              <article key={project.name} className={`glass-card project-card ${project.status} reveal-on-scroll`} style={{ transitionDelay: `${(idx % 4) * 100}ms` }} aria-label={`${project.name}, private project, access restricted`}>
+              <article key={project.name} className={`glass-card project-card ${project.status} reveal-on-scroll`} aria-label={`${project.name}, private project, access restricted`}>
                 {content}
               </article>
             );

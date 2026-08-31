@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { BookMarked, Star, GitCommitHorizontal, Flame, ExternalLink } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { useCountUp, useInView } from '../lib/useInteractions';
@@ -166,9 +166,18 @@ export default function GithubContributions() {
   const [repos, setRepos] = useState(FALLBACK_REPOS);
   const [filter, setFilter] = useState('starred');
   const [activeDay, setActiveDay] = useState(null);
+  const [keyboardDayKey, setKeyboardDayKey] = useState(null);
   const [metricsRef, metricsInView] = useInView({ threshold: 0.3 });
+  const heatmapScrollRef = useRef(null);
+  const heatmapCellRefs = useRef(new Map());
 
   const { weeks, totalContributions, currentStreak } = useMemo(buildContributionYear, []);
+  const calendarDays = useMemo(() => weeks.flat().filter((day) => !day.future), [weeks]);
+  const dayIndexByKey = useMemo(
+    () => new Map(calendarDays.map((day, index) => [day.key, index])),
+    [calendarDays],
+  );
+  const rovingDayKey = keyboardDayKey ?? calendarDays.at(-1)?.key;
 
   useEffect(() => {
     let cancelled = false;
@@ -204,6 +213,19 @@ export default function GithubContributions() {
     return () => { cancelled = true; };
   }, []);
 
+  useEffect(() => {
+    const scrollToLatest = () => {
+      const scroller = heatmapScrollRef.current;
+      if (scroller) scroller.scrollLeft = scroller.scrollWidth - scroller.clientWidth;
+    };
+    const frame = requestAnimationFrame(scrollToLatest);
+    window.addEventListener('resize', scrollToLatest);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', scrollToLatest);
+    };
+  }, []);
+
   const topRepos = useMemo(() => {
     const sorted = [...repos];
     if (filter === 'starred') {
@@ -214,11 +236,34 @@ export default function GithubContributions() {
     return sorted.slice(0, 4);
   }, [repos, filter]);
 
-  const onMove = (e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
+  const focusCalendarDay = (index) => {
+    const day = calendarDays[index];
+    if (!day) return;
+
+    setKeyboardDayKey(day.key);
+    setActiveDay(day);
+    requestAnimationFrame(() => {
+      const cell = heatmapCellRefs.current.get(day.key);
+      cell?.focus({ preventScroll: true });
+      cell?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    });
+  };
+
+  const handleCalendarKeyDown = (event, day) => {
+    const index = dayIndexByKey.get(day.key);
+    if (index === undefined) return;
+
+    let nextIndex;
+    if (event.key === 'ArrowLeft') nextIndex = index - 7;
+    else if (event.key === 'ArrowRight') nextIndex = index + 7;
+    else if (event.key === 'ArrowUp') nextIndex = index - 1;
+    else if (event.key === 'ArrowDown') nextIndex = index + 1;
+    else if (event.key === 'Home') nextIndex = event.ctrlKey ? 0 : index - (index % 7);
+    else if (event.key === 'End') nextIndex = event.ctrlKey ? calendarDays.length - 1 : Math.min(index + (6 - (index % 7)), calendarDays.length - 1);
+    else return;
+
+    event.preventDefault();
+    focusCalendarDay(nextIndex);
   };
 
   return (
@@ -229,21 +274,21 @@ export default function GithubContributions() {
           <h2 className="section-title">GitHub Contributions</h2>
         </div>
         <p className="contributions-desc text-muted reveal-on-scroll delay-100">
-          Public repository metrics load from GitHub when available. The calendar is a clearly marked synthetic demo because exact daily history requires authenticated GitHub access.
+          Public repository totals load from GitHub&apos;s public API when available and use a cached snapshot otherwise. The daily calendar and its activity totals are synthetic—not Enricko&apos;s contribution history.
         </p>
 
         <div className="metrics-grid reveal-on-scroll delay-100" ref={metricsRef}>
           <MetricCard
             icon={<BookMarked size={22} />}
             value={stats.repos}
-            label="Total Repositories"
+            label="Public repositories"
             accent="cyan"
             active={metricsInView}
           />
           <MetricCard
             icon={<Star size={22} />}
             value={stats.stars}
-            label="Stars Earned"
+            label="Public repo stars"
             accent="pink"
             active={metricsInView}
           />
@@ -270,33 +315,59 @@ export default function GithubContributions() {
               <h3>Contribution Activity</h3>
               <p className="text-muted heatmap-summary">Interactive synthetic contribution pattern</p>
             </div>
-            <span className="live-badge synthetic-badge">
-              Synthetic demo data
-            </span>
+            <div className="heatmap-statuses">
+              <span className={`live-badge ${stats.live ? 'is-live' : ''}`}>
+                <span className="live-dot" /> {stats.live ? 'Repository totals live' : 'Repository totals cached'}
+              </span>
+              <span className="live-badge synthetic-badge">Daily calendar synthetic</span>
+            </div>
           </div>
 
-          <p className="data-disclosure">
-            These daily counts are generated placeholders, not Enricko's GitHub contribution history. Repository and star totals are {stats.live ? 'live public GitHub data' : 'a cached fallback'}.
+          <p id="heatmap-disclosure" className="data-disclosure">
+            Every calendar cell, activity total, and streak is generated demo data. Repository and star totals are {stats.live ? 'live public GitHub data' : 'the cached public snapshot'}.
           </p>
 
-          <div className="heatmap-scroll" onPointerLeave={() => setActiveDay(null)}>
+          <p id="heatmap-instructions" className="heatmap-instructions">
+            Scroll horizontally for the full year. Keyboard users can enter on the latest day, then use arrow keys to move between dates.
+          </p>
+
+          <div
+            className="heatmap-scroll"
+            ref={heatmapScrollRef}
+            onPointerLeave={() => {
+              const focusedCell = activeDay && heatmapCellRefs.current.get(activeDay.key);
+              if (focusedCell !== document.activeElement) setActiveDay(null);
+            }}
+          >
             <div
               className="heatmap-grid"
               role="group"
-              aria-label="Synthetic daily contribution demo. Focus a date for its exact placeholder count."
+              aria-label="Synthetic daily contribution calendar"
+              aria-describedby="heatmap-disclosure heatmap-instructions"
             >
               {weeks.map((week, wi) => (
                 <div className="heatmap-col" key={wi}>
                   {week.map((day) => (
                     day.future ? <span key={day.key} className="heatmap-cell is-future" /> : <button
                       key={day.key}
+                      ref={(element) => {
+                        if (element) heatmapCellRefs.current.set(day.key, element);
+                        else heatmapCellRefs.current.delete(day.key);
+                      }}
                       type="button"
                       className={`heatmap-cell level-${day.level}`}
+                      tabIndex={day.key === rovingDayKey ? 0 : -1}
                       aria-label={`${day.count} synthetic ${day.count === 1 ? 'contribution' : 'contributions'} on ${formatDate(day.date)}`}
                       aria-describedby={activeDay?.key === day.key ? 'contribution-tooltip' : undefined}
+                      aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight Home End"
                       onPointerEnter={() => setActiveDay(day)}
-                      onFocus={() => setActiveDay(day)}
+                      onPointerLeave={(event) => {
+                        if (event.currentTarget !== document.activeElement) setActiveDay(null);
+                      }}
+                      onFocus={() => { setKeyboardDayKey(day.key); setActiveDay(day); }}
                       onBlur={() => setActiveDay(null)}
+                      onClick={() => { setKeyboardDayKey(day.key); setActiveDay(day); }}
+                      onKeyDown={(event) => handleCalendarKeyDown(event, day)}
                     />
                   ))}
                 </div>
@@ -304,7 +375,7 @@ export default function GithubContributions() {
             </div>
           </div>
 
-          <div id="contribution-tooltip" className={`contribution-tooltip ${activeDay ? 'active' : ''}`} role="tooltip" aria-live="polite">
+          <div id="contribution-tooltip" className={`contribution-tooltip ${activeDay ? 'active' : ''}`} role="tooltip" aria-live="polite" aria-atomic="true">
             {activeDay && <><strong>{formatDate(activeDay.date)}</strong><span>{activeDay.count} synthetic {activeDay.count === 1 ? 'contribution' : 'contributions'}</span></>}
           </div>
 
@@ -320,11 +391,10 @@ export default function GithubContributions() {
         <div className="repo-highlights reveal-on-scroll delay-300">
           <div className="repo-highlights-head">
             <h3>Top Repositories</h3>
-            <div className="repo-filter" role="tablist" aria-label="Sort top repositories">
+            <div className="repo-filter" role="group" aria-label="Sort top repositories">
               <button
                 type="button"
-                role="tab"
-                aria-selected={filter === 'starred'}
+                aria-pressed={filter === 'starred'}
                 className={filter === 'starred' ? 'is-active' : ''}
                 onClick={() => setFilter('starred')}
               >
@@ -332,8 +402,7 @@ export default function GithubContributions() {
               </button>
               <button
                 type="button"
-                role="tab"
-                aria-selected={filter === 'recent'}
+                aria-pressed={filter === 'recent'}
                 className={filter === 'recent' ? 'is-active' : ''}
                 onClick={() => setFilter('recent')}
               >
@@ -343,15 +412,13 @@ export default function GithubContributions() {
           </div>
 
           <div className="repo-grid">
-            {topRepos.map((repo, idx) => (
+            {topRepos.map((repo) => (
               <a
                 key={repo.name}
                 href={repo.html_url}
                 target="_blank"
                 rel="noreferrer"
-                className="glass-card spotlight repo-card"
-                style={{ transitionDelay: `${(idx % 4) * 80}ms` }}
-                onMouseMove={onMove}
+                className="glass-card repo-card"
                 aria-label={`View ${repo.name} on GitHub`}
               >
                 <div className="repo-card-head">

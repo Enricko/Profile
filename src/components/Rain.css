@@ -45,7 +45,12 @@
 
 /* Lighter shower on small screens */
 @media (max-width: 600px) {
-  .paw:nth-child(n + 21) { display: none; }
+  .paw-rain { opacity: .55; }
+  .paw:nth-child(n + 13) { display: none; }
+  .mode-neon .paw svg,
+  .mode-calico .paw svg,
+  .mode-faces .paw svg,
+  .mode-skills .paw img { filter: none; }
 }
 
 /* Under reduced motion the global override freezes animations mid-flight;

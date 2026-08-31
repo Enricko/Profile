@@ -26,9 +26,15 @@ export default function Effects() {
       <div className="scroll-progress" ref={progressRef} aria-hidden="true" />
 
       <button
+        type="button"
         className={`to-top ${showTop ? 'show' : ''}`}
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        onClick={() => {
+          window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+          document.querySelector('.logo')?.focus({ preventScroll: true });
+        }}
         aria-label="Scroll back to top"
+        aria-hidden={!showTop}
+        tabIndex={showTop ? 0 : -1}
       >
         <ArrowUp size={20} />
       </button>

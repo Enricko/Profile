@@ -60,13 +60,6 @@ const CERTIFICATIONS = [
 ];
 
 export default function Education() {
-  const onMove = (e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
-  };
-
   return (
     <section id="education" className="education">
       <div className="container">
@@ -79,9 +72,7 @@ export default function Education() {
           {EDUCATION.map((edu, idx) => (
             <div
               key={idx}
-              className="glass-card spotlight edu-card reveal-on-scroll"
-              style={{ transitionDelay: `${(idx % 2) * 100}ms` }}
-              onMouseMove={onMove}
+              className="glass-card edu-card reveal-on-scroll"
             >
               <div className="edu-icon"><GraduationCap size={22} /></div>
               <div className="edu-body">
@@ -106,9 +97,7 @@ export default function Education() {
           {CERTIFICATIONS.map((cert, idx) => (
             <div
               key={idx}
-              className="glass-card spotlight cert-card reveal-on-scroll"
-              style={{ transitionDelay: `${(idx % 3) * 100}ms` }}
-              onMouseMove={onMove}
+              className="glass-card cert-card reveal-on-scroll"
             >
               <div className="cert-icon"><BadgeCheck size={20} /></div>
               <h4>{cert.title}</h4>

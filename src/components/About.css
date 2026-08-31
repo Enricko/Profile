@@ -60,7 +60,9 @@
   align-items: flex-start;
   gap: 1.1rem;
   padding: 1.6rem;
+  min-width: 0;
 }
+.feature-card > div:last-child { min-width: 0; }
 .feature-icon {
   flex-shrink: 0;
   width: 56px;
@@ -91,4 +93,10 @@
   .stat-number { font-size: 1.9rem; }
   .feature-card { padding: 1.25rem; gap: 0.9rem; }
   .feature-icon { width: 46px; height: 46px; }
+}
+
+@media (max-width: 350px) {
+  .feature-card { gap: .75rem; }
+  .feature-icon { width: 42px; height: 42px; }
+  .feature-icon svg { width: 24px; height: 24px; }
 }

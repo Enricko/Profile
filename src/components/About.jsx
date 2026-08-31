@@ -43,13 +43,6 @@ function Stat({ value, suffix, label, active }) {
 export default function About() {
   const [statsRef, inView] = useInView({ threshold: 0.4 });
 
-  const onMove = (e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
-  };
-
   return (
     <section id="about" className="about">
       <div className="container">
@@ -81,12 +74,10 @@ export default function About() {
           </div>
 
           <div className="features-grid">
-            {FEATURES.map((feature, index) => (
+            {FEATURES.map((feature) => (
               <div
                 key={feature.title}
-                className={`glass-card spotlight feature-card accent-${feature.accent} reveal-on-scroll`}
-                style={{ transitionDelay: `${index * 120 + 200}ms` }}
-                onMouseMove={onMove}
+                className={`glass-card feature-card accent-${feature.accent} reveal-on-scroll`}
               >
                 <div className="feature-icon">{feature.icon}</div>
                 <div>

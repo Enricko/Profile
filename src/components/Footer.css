@@ -1,6 +1,6 @@
 .footer {
   padding: 3rem 0 2rem;
-  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom));
   text-align: center;
   border-top: 1px solid var(--glass-border);
   margin-top: 4rem;
@@ -25,8 +25,8 @@
   gap: 0.75rem;
 }
 .footer-socials a {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   display: grid;
   place-items: center;
   color: var(--text-secondary);
@@ -44,7 +44,7 @@
 }
 
 @media (max-width: 480px) {
-  .footer { padding: 2.25rem 0 1.5rem; margin-top: 2.5rem; }
+  .footer { padding: 2.25rem 0 calc(1.5rem + env(safe-area-inset-bottom)); margin-top: 0; }
   .footer-inner { gap: 1rem; }
   .footer-logo { font-size: 1.5rem; }
   .footer-copy { font-size: 0.85rem; }

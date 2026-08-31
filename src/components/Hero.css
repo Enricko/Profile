@@ -13,9 +13,13 @@
   grid-template-columns: 1.05fr 0.95fr;
   align-items: center;
   gap: 3rem;
+  min-width: 0;
 }
 
 /* Left column ----------------------------------------------------------- */
+.hero-content,
+.hero-visual { min-width: 0; }
+
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -28,8 +32,10 @@
   color: var(--text-secondary);
   margin-bottom: 1.5rem;
   backdrop-filter: blur(8px);
+  max-width: 100%;
 }
 .pulse-dot {
+  flex: 0 0 auto;
   width: 9px;
   height: 9px;
   border-radius: 50%;
@@ -48,6 +54,9 @@
   font-weight: 900;
   margin-bottom: 1rem;
 }
+.hero-greeting,
+.hero-name { display: block; }
+.hero-name { overflow-wrap: anywhere; }
 
 .hero-typer {
   display: flex;
@@ -131,6 +140,7 @@
   color: var(--text-dim);
 }
 .code-body {
+  max-width: 100%;
   padding: 1.5rem;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.92rem;

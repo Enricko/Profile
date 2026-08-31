@@ -34,13 +34,6 @@ const EXPERIENCES = [
 ];
 
 export default function Experience() {
-  const onMove = (e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
-  };
-
   return (
     <section id="experience" className="experience">
       <div className="container">
@@ -57,7 +50,7 @@ export default function Experience() {
               style={{ transitionDelay: `${(idx % 4) * 100}ms` }}
             >
               <div className="timeline-dot"><span /></div>
-              <div className="glass-card spotlight timeline-content" onMouseMove={onMove}>
+              <div className="glass-card timeline-content">
                 <div className="timeline-header">
                   <h3>{exp.title}</h3>
                   <span className="timeline-company"><Briefcase size={15} /> {exp.company}</span>

@@ -27,7 +27,7 @@
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   gap: 1.5rem;
 }
 
@@ -37,6 +37,7 @@
   padding: 1.75rem;
   text-decoration: none;
   color: inherit;
+  min-width: 0;
 }
 .project-card.private {
   background: rgba(24, 24, 43, 0.62);
@@ -79,6 +80,7 @@
   font-size: 0.78rem;
   line-height: 1.45;
 }
+.project-note svg { flex: 0 0 auto; margin-top: .12rem; }
 .project-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
 .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .project-tag {
@@ -99,4 +101,19 @@
 @media (max-width: 768px) {
   .project-open { opacity: 1; transform: none; }
   .project-status { font-size: 0.68rem; }
+}
+
+@media (max-width: 480px) {
+  .project-legend { align-items: flex-start; flex-direction: column; gap: .7rem; margin-bottom: 1.75rem; line-height: 1.45; }
+  .project-legend span { align-items: flex-start; }
+  .project-legend svg { flex: 0 0 auto; margin-top: .12rem; }
+  .projects-grid { gap: .85rem; }
+  .project-card { padding: 1.25rem; }
+  .project-header { align-items: flex-start; margin-bottom: .9rem; }
+  .project-folder { width: 42px; height: 42px; flex: 0 0 42px; }
+  .project-status { align-items: flex-start; white-space: normal; text-align: right; line-height: 1.35; }
+  .project-status svg { flex: 0 0 auto; margin-top: .08rem; }
+  .project-footer { align-items: flex-start; flex-direction: column; }
+  .projects-cta { margin-top: 2rem; }
+  .projects-cta .btn { width: 100%; }
 }

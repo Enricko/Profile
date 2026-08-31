@@ -1,5 +1,5 @@
 .contact {
-  padding-bottom: 8rem;
+  padding-bottom: 6rem;
 }
 
 .contact-desc {
@@ -45,9 +45,14 @@
 }
 
 .contact-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-weight: 600;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: clamp(0.92rem, 2vw, 1.05rem);
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .contact-form {
@@ -107,16 +112,19 @@
 }
 
 @media (max-width: 640px) {
-  .contact { padding-bottom: 5rem; }
+  .contact { padding-bottom: 4rem; }
   .contact-info { flex-direction: column; gap: 1.25rem; }
   .info-card { padding: 1.75rem; }
   .contact-form { padding: 2rem 1.5rem; }
 }
 
 @media (max-width: 480px) {
+  .contact { padding-bottom: 3.5rem; }
   .info-card { padding: 1.5rem 1.25rem; }
   .contact-form { padding: 1.5rem 1.25rem; }
-  .contact-link { font-size: 0.98rem; word-break: break-all; }
+  .contact-link { font-size: 0.94rem; }
   .form-group input,
   .form-group textarea { padding: 0.85rem 1rem; }
+  .form-group { margin-bottom: 1.25rem; }
+  .submit-btn { margin-top: .5rem; }
 }
