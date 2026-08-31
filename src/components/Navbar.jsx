@@ -141,7 +141,10 @@ export default function Navbar({ rainActive, rainMode = 'none', onRandomizeRain 
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} aria-label="Primary navigation">
       <div className="container nav-container">
-        <a href="#home" className="logo" onClick={closeMenus} aria-label="Enricko, back to top">Enricko<span className="logo-dot">.</span></a>
+        <a href="#home" className="logo" onClick={closeMenus} aria-label="Enricko, back to top">
+          <img className="logo-mark" src="/favicon.svg" alt="" aria-hidden="true" />
+          <span>Enricko<span className="logo-dot">.</span></span>
+        </a>
         <button type="button" className={`nav-overlay ${menuOpen ? 'active' : ''}`} onClick={closeDrawerAndRestoreFocus} aria-hidden="true" tabIndex={-1} />
 
         <div
