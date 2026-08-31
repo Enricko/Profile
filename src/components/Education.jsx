@@ -73,6 +73,7 @@ export default function Education() {
             <div
               key={idx}
               className="glass-card edu-card reveal-on-scroll"
+              style={{ transitionDelay: `${idx * 90}ms` }}
             >
               <div className="edu-icon"><GraduationCap size={22} /></div>
               <div className="edu-body">
@@ -98,6 +99,7 @@ export default function Education() {
             <div
               key={idx}
               className="glass-card cert-card reveal-on-scroll"
+              style={{ transitionDelay: `${(idx % 3) * 70}ms` }}
             >
               <div className="cert-icon"><BadgeCheck size={20} /></div>
               <h4>{cert.title}</h4>

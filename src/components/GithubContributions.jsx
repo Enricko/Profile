@@ -171,6 +171,13 @@ export default function GithubContributions() {
   const heatmapScrollRef = useRef(null);
   const heatmapCellRefs = useRef(new Map());
 
+  const handleMouseMove = (event) => {
+    const card = event.currentTarget;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${((event.clientX - rect.left) / rect.width) * 100}%`);
+    card.style.setProperty('--my', `${((event.clientY - rect.top) / rect.height) * 100}%`);
+  };
+
   const { weeks, totalContributions, currentStreak } = useMemo(buildContributionYear, []);
   const calendarDays = useMemo(() => weeks.flat().filter((day) => !day.future), [weeks]);
   const dayIndexByKey = useMemo(
@@ -418,7 +425,8 @@ export default function GithubContributions() {
                 href={repo.html_url}
                 target="_blank"
                 rel="noreferrer"
-                className="glass-card repo-card"
+                className="glass-card spotlight repo-card"
+                onMouseMove={handleMouseMove}
                 aria-label={`View ${repo.name} on GitHub`}
               >
                 <div className="repo-card-head">

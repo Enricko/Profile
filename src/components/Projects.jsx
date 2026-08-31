@@ -49,6 +49,13 @@ const PROJECTS = [
 ];
 
 export default function Projects() {
+  const handleMouseMove = (event) => {
+    const card = event.currentTarget;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${((event.clientX - rect.left) / rect.width) * 100}%`);
+    card.style.setProperty('--my', `${((event.clientY - rect.top) / rect.height) * 100}%`);
+  };
+
   return (
     <section id="projects" className="projects">
       <div className="container">
@@ -96,7 +103,14 @@ export default function Projects() {
             );
 
             return isPublic ? (
-              <a key={project.name} href={project.href} target="_blank" rel="noreferrer" className={`glass-card project-card reveal-on-scroll ${project.status}`}>
+              <a
+                key={project.name}
+                href={project.href}
+                target="_blank"
+                rel="noreferrer"
+                className={`glass-card spotlight project-card reveal-on-scroll ${project.status}`}
+                onMouseMove={handleMouseMove}
+              >
                 {content}
               </a>
             ) : (

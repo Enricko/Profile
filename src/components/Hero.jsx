@@ -1,9 +1,18 @@
 import React from 'react';
 import { ArrowRight, Sparkles, ChevronDown, FileText } from 'lucide-react';
-import { useTypewriter } from '../lib/useInteractions';
+import { useTilt, useTypewriter } from '../lib/useInteractions';
 import './Hero.css';
 
+const FLOATERS = [
+  { src: '/logos/react.svg', cls: 'f1' },
+  { src: '/logos/flutter.svg', cls: 'f2' },
+  { src: '/logos/laravel.svg', cls: 'f3' },
+  { src: '/logos/typescript.svg', cls: 'f4' },
+  { src: '/logos/go.svg', cls: 'f5' },
+];
+
 export default function Hero() {
+  const { ref: tiltRef, onMouseMove: onTiltMove, onMouseLeave: onTiltLeave } = useTilt(9);
   const role = useTypewriter(
     ['Web Applications', 'Mobile Apps', 'Desktop Software', 'Elegant Solutions'],
     { typeSpeed: 80, deleteSpeed: 40, pause: 1300 }
@@ -52,7 +61,21 @@ export default function Hero() {
         </div>
 
         <div className="hero-visual animate-up delay-400">
-          <div className="visual-card">
+          <div className="orbit-track orbit-one" aria-hidden="true" />
+          <div className="orbit-track orbit-two" aria-hidden="true" />
+          {FLOATERS.map((floater) => (
+            <div key={floater.cls} className={`floater ${floater.cls}`} aria-hidden="true">
+              <img src={floater.src} alt="" />
+            </div>
+          ))}
+
+          <div
+            ref={tiltRef}
+            className="glass-card visual-card"
+            onMouseMove={onTiltMove}
+            onMouseLeave={onTiltLeave}
+          >
+            <div className="card-glare" aria-hidden="true" />
             <div className="code-header">
               <span className="dot red" />
               <span className="dot yellow" />

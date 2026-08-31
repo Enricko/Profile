@@ -22,6 +22,13 @@ const SKILLS = [
 ];
 
 export default function Skills() {
+  const handleMouseMove = (event) => {
+    const card = event.currentTarget;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${((event.clientX - rect.left) / rect.width) * 100}%`);
+    card.style.setProperty('--my', `${((event.clientY - rect.top) / rect.height) * 100}%`);
+  };
+
   return (
     <section id="skills" className="skills">
       <div className="container">
@@ -38,6 +45,7 @@ export default function Skills() {
             <div
               key={skill.name}
               className="logo-card reveal-on-scroll"
+              onMouseMove={handleMouseMove}
             >
               <img src={skill.icon} alt={skill.name} className="skill-logo" loading="lazy" />
               <span className="skill-name">{skill.name}</span>

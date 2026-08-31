@@ -74,10 +74,11 @@ export default function About() {
           </div>
 
           <div className="features-grid">
-            {FEATURES.map((feature) => (
+            {FEATURES.map((feature, index) => (
               <div
                 key={feature.title}
                 className={`glass-card feature-card accent-${feature.accent} reveal-on-scroll`}
+                style={{ transitionDelay: `${100 + index * 90}ms` }}
               >
                 <div className="feature-icon">{feature.icon}</div>
                 <div>

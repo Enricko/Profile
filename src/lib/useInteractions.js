@@ -113,9 +113,16 @@ export function useTypewriter(words, { typeSpeed = 90, deleteSpeed = 45, pause =
   const [text, setText] = useState('');
   const [wordIndex, setWordIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
+  const [pageVisible, setPageVisible] = useState(() => typeof document === 'undefined' || !document.hidden);
 
   useEffect(() => {
-    if (reduced) return;
+    const handleVisibility = () => setPageVisible(!document.hidden);
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, []);
+
+  useEffect(() => {
+    if (reduced || !pageVisible) return;
     const current = words[wordIndex % words.length];
     let timeout;
 
@@ -134,7 +141,7 @@ export function useTypewriter(words, { typeSpeed = 90, deleteSpeed = 45, pause =
       }, deleting ? deleteSpeed : typeSpeed);
     }
     return () => clearTimeout(timeout);
-  }, [text, deleting, wordIndex, words, typeSpeed, deleteSpeed, pause, reduced]);
+  }, [text, deleting, wordIndex, words, typeSpeed, deleteSpeed, pause, reduced, pageVisible]);
 
   return reduced ? words[0] : text;
 }

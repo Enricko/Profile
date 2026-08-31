@@ -40,6 +40,8 @@ export default function Navbar({ rainActive, rainMode = 'none', onRandomizeRain 
 
   useEffect(() => {
     document.body.classList.toggle('menu-open', menuOpen);
+    const pageContent = [document.querySelector('main'), document.querySelector('footer')].filter(Boolean);
+    pageContent.forEach((element) => { element.inert = menuOpen; });
 
     if (menuOpen) drawerCloseRef.current?.focus();
 
@@ -87,6 +89,7 @@ export default function Navbar({ rainActive, rainMode = 'none', onRandomizeRain 
     window.addEventListener('resize', handleResize);
     return () => {
       document.body.classList.remove('menu-open');
+      pageContent.forEach((element) => { element.inert = false; });
       window.removeEventListener('keydown', handleKey);
       window.removeEventListener('pointerdown', handlePointer);
       window.removeEventListener('focusin', handleFocus);
