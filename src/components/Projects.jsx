@@ -1,55 +1,102 @@
-import React from 'react';
-import { ExternalLink, LockKeyhole, Radio, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { ExternalLink, LockKeyhole, Radio, ShieldCheck, LayoutGrid, List, Layers, CheckCircle2 } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import './Projects.css';
 
 const PROJECTS = [
   {
+    id: 'hematcuy',
     name: 'HematCuy',
-    description: 'A public price-comparison platform for everyday essentials, with live catalog data and official store links.',
+    category: 'Public Platform',
+    categoryType: 'public',
+    description: 'Universal real-time price & deal aggregator for groceries, tech, and essentials with official platform deep links and WAF-resilient catalog indexing.',
     href: 'https://hematcuy.lufria.tech',
-    tags: ['FastAPI', 'React', 'Redis'],
+    tags: ['FastAPI', 'React', 'Redis', 'Tailwind'],
     status: 'public',
-    statusLabel: 'Open to public',
+    statusLabel: 'Live Public App',
+    featured: true,
   },
   {
-    name: 'Lufria Profile',
-    description: 'This portfolio site: a public home for my work, experience, experiments, and open-source projects.',
-    href: 'https://lufria.tech',
-    tags: ['React', 'Vite', 'Design'],
+    id: 'slipgaji',
+    name: 'SlipGajiApps',
+    category: 'Enterprise Software',
+    categoryType: 'public',
+    description: 'Enterprise payroll, Indonesian PPh 21, and BPJS automated calculation system with multi-department salary slips and Windows desktop binary builds.',
+    href: 'https://gaji.lufria.tech',
+    tags: ['Electron', 'SQLite', 'Windows', 'React'],
     status: 'public',
-    statusLabel: 'Open to public',
+    statusLabel: 'Live Web Portal',
+    featured: true,
   },
   {
-    name: 'Trading Advisory',
-    description: 'A private-by-design advisory workspace for market signals, portfolio context, and scheduled briefings.',
+    id: 'ticketsystem',
+    name: 'IT Ticket System',
+    category: 'Web Platform',
+    categoryType: 'public',
+    description: 'Autonomous IT support ticketing desk with daily rotating PIN security, client-side WebP photo compression, and automated Discord webhook dispatch.',
+    href: 'https://ticket.lufria.tech',
+    tags: ['FastAPI', 'SQLite', 'Discord Webhook', 'Python'],
+    status: 'public',
+    statusLabel: 'Live Portal',
+    featured: false,
+  },
+  {
+    id: 'tradingadvisory',
+    name: 'Trading Advisory Bot',
+    category: 'Fintech & Algorithmic',
+    categoryType: 'enterprise',
+    description: 'Algorithmic market signal engine and Discord bot delivering scheduled BPJS/BSJP analysis, real-time WebSocket market streams, and portfolio risk telemetry.',
     href: null,
-    tags: ['FastAPI', 'WebSocket', 'Trading'],
+    tags: ['FastAPI', 'WebSocket', 'MySQL', 'Discord API'],
     status: 'private',
-    statusLabel: 'Private system',
-    note: 'Access is limited because it handles personal portfolio data and account-specific analysis.',
+    statusLabel: 'Private System',
+    note: 'Restricted system handling private portfolio capital, execution strategies, and real-time exchange feeds.',
+    featured: true,
   },
   {
+    id: 'clipperapps',
     name: 'Clipper Apps',
-    description: 'An internal media workflow for turning long-form videos into searchable, reviewable short clips.',
+    category: 'AI & Media Pipeline',
+    categoryType: 'enterprise',
+    description: 'Automated video workflow engine converting long-form footage into indexed, transcribed short clips using dedicated GPU NVENC hardware encoding.',
     href: null,
-    tags: ['AI Workflow', 'NVENC', 'Queue'],
+    tags: ['AI Workflow', 'GPU NVENC', 'FastAPI', 'Job Queue'],
     status: 'private',
-    statusLabel: 'Private system',
-    note: 'The app is still an internal tool; the implementation and processing pipeline are not public.',
+    statusLabel: 'Internal Pipeline',
+    note: 'Private media engine running on dedicated workstation hardware with proprietary transcription queue.',
+    featured: false,
   },
   {
+    id: 'cetaphil',
     name: 'Cetaphil POSM',
-    description: 'A field-operations platform for managing merchandising activity, reports, and point-of-sale materials.',
+    category: 'Field Operations',
+    categoryType: 'enterprise',
+    description: 'Enterprise field merchandise tracking mobile app featuring GPS geofencing, outlet coverage dashboards, and background photo synchronization.',
     href: null,
-    tags: ['Laravel', 'Flutter', 'MariaDB'],
+    tags: ['Flutter', 'Laravel', 'MariaDB', 'GPS Geofence'],
     status: 'private',
-    statusLabel: 'Private system',
-    note: 'Kept locked because it contains client workflows, operational records, and authenticated user data.',
+    statusLabel: 'Enterprise Client',
+    note: 'Restricted client software containing commercial retail outlet records, store audit images, and employee data.',
+    featured: false,
+  },
+  {
+    id: 'profile',
+    name: 'Lufria.tech Portfolio',
+    category: 'Design System',
+    categoryType: 'public',
+    description: 'Modern cyberpunk deep-space portfolio engineered with React 19, custom CSS tokens, physics-driven particle effects, and strict anti-AI-slop standards.',
+    href: 'https://lufria.tech',
+    tags: ['React 19', 'Vite', 'Design Tokens', 'CSS3'],
+    status: 'public',
+    statusLabel: 'Live Public Site',
+    featured: false,
   },
 ];
 
 export default function Projects() {
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'table'
+  const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'public' | 'enterprise'
+
   const onMove = (e) => {
     const el = e.currentTarget;
     const r = el.getBoundingClientRect();
@@ -57,67 +104,231 @@ export default function Projects() {
     el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
   };
 
+  const filteredProjects = PROJECTS.filter((p) => {
+    if (activeFilter === 'all') return true;
+    return p.categoryType === activeFilter;
+  });
+
   return (
     <section id="projects" className="projects">
       <div className="container">
         <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">// current work</span>
-          <h2 className="section-title">Projects in the wild</h2>
+          <span className="eyebrow">// engineered systems</span>
+          <h2 className="section-title">Featured Projects</h2>
         </div>
+
         <p className="projects-desc text-muted reveal-on-scroll delay-100">
-          Public products you can try today, alongside private systems that stay visible for context — but remain locked for privacy and operational reasons.
+          A collection of public digital products and production systems, accompanied by private enterprise
+          architectures maintained for operational rigor.
         </p>
 
-        <div className="project-legend reveal-on-scroll delay-200">
-          <span><Radio size={15} /> Open to public</span>
-          <span><LockKeyhole size={15} /> Private / access restricted</span>
+        {/* Toolbar: Filters & Dual-View Toggle */}
+        <div className="projects-toolbar reveal-on-scroll delay-200">
+          <div className="filter-chips">
+            <button
+              className={`filter-chip ${activeFilter === 'all' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('all')}
+              type="button"
+            >
+              All Projects ({PROJECTS.length})
+            </button>
+            <button
+              className={`filter-chip ${activeFilter === 'public' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('public')}
+              type="button"
+            >
+              <Radio size={13} className="chip-icon public" /> Public Apps (4)
+            </button>
+            <button
+              className={`filter-chip ${activeFilter === 'enterprise' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('enterprise')}
+              type="button"
+            >
+              <LockKeyhole size={13} className="chip-icon private" /> Enterprise &amp; Systems (3)
+            </button>
+          </div>
+
+          <div className="view-mode-switch">
+            <button
+              className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              onClick={() => setViewMode('grid')}
+              aria-label="Switch to Grid View"
+              title="Grid View"
+              type="button"
+            >
+              <LayoutGrid size={17} />
+              <span className="view-label">Grid</span>
+            </button>
+            <button
+              className={`view-btn ${viewMode === 'table' ? 'active' : ''}`}
+              onClick={() => setViewMode('table')}
+              aria-label="Switch to Dense List View"
+              title="Dense List View"
+              type="button"
+            >
+              <List size={17} />
+              <span className="view-label">Table</span>
+            </button>
+          </div>
         </div>
 
-        <div className="projects-grid">
-          {PROJECTS.map((project, idx) => {
-            const isPublic = project.status === 'public';
-            const content = (
-              <>
-                <div className="project-header">
-                  <span className={`project-folder ${project.status}`}>
-                    {isPublic ? <FaGithub size={22} /> : <LockKeyhole size={20} />}
-                  </span>
-                  <span className={`project-status ${project.status}`}>
-                    {isPublic ? <Radio size={14} /> : <LockKeyhole size={14} />}
-                    {project.statusLabel}
-                  </span>
-                </div>
-                <h3 className="project-title">{project.name}</h3>
-                <p className="project-desc text-muted">{project.description}</p>
-                {project.note && (
-                  <p className="project-note"><ShieldCheck size={15} /> {project.note}</p>
-                )}
-                <div className="project-footer">
-                  <div className="project-tags">
-                    {project.tags.map((tag) => <span key={tag} className="project-tag">{tag}</span>)}
+        {/* Grid View Mode */}
+        {viewMode === 'grid' ? (
+          <div className="projects-grid">
+            {filteredProjects.map((project, idx) => {
+              const isPublic = project.status === 'public';
+              const cardContent = (
+                <>
+                  <div className="project-header">
+                    <span className={`project-folder ${project.status}`}>
+                      {isPublic ? <Layers size={22} /> : <LockKeyhole size={20} />}
+                    </span>
+                    <div className="project-meta-pill">
+                      <span className={`project-status ${project.status}`}>
+                        {isPublic ? <Radio size={13} /> : <LockKeyhole size={13} />}
+                        {project.statusLabel}
+                      </span>
+                    </div>
                   </div>
-                  <span className="project-open">
-                    {isPublic ? <>Visit <ExternalLink size={14} /></> : <>Access restricted <LockKeyhole size={14} /></>}
-                  </span>
-                </div>
-              </>
-            );
 
-            return isPublic ? (
-              <a key={project.name} href={project.href} target="_blank" rel="noreferrer" className={`glass-card spotlight project-card reveal-on-scroll ${project.status}`} style={{ transitionDelay: `${(idx % 4) * 100}ms` }} onMouseMove={onMove}>
-                {content}
-              </a>
-            ) : (
-              <article key={project.name} className={`glass-card project-card ${project.status} reveal-on-scroll`} style={{ transitionDelay: `${(idx % 4) * 100}ms` }}>
-                {content}
-              </article>
-            );
-          })}
-        </div>
+                  <div className="project-title-row">
+                    <h3 className="project-title">{project.name}</h3>
+                    <span className="project-category-tag">{project.category}</span>
+                  </div>
+
+                  <p className="project-desc text-muted">{project.description}</p>
+
+                  {project.note && (
+                    <div className="project-note">
+                      <ShieldCheck size={14} />
+                      <span>{project.note}</span>
+                    </div>
+                  )}
+
+                  <div className="project-footer">
+                    <div className="project-tags">
+                      {project.tags.map((tag) => (
+                        <span key={tag} className="project-tag">{tag}</span>
+                      ))}
+                    </div>
+
+                    <div className="project-action-wrapper">
+                      {isPublic ? (
+                        <span className="project-open public">
+                          Visit System <ExternalLink size={14} />
+                        </span>
+                      ) : (
+                        <span className="project-open private">
+                          Restricted <LockKeyhole size={14} />
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </>
+              );
+
+              return isPublic ? (
+                <a
+                  key={project.id}
+                  href={project.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`glass-card spotlight project-card ${project.status}`}
+                  style={{ transitionDelay: `${(idx % 4) * 80}ms` }}
+                  onMouseMove={onMove}
+                >
+                  {cardContent}
+                </a>
+              ) : (
+                <article
+                  key={project.id}
+                  className={`glass-card project-card ${project.status}`}
+                  style={{ transitionDelay: `${(idx % 4) * 80}ms` }}
+                >
+                  {cardContent}
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          /* Dense Table / List View Mode */
+          <div className="projects-table-container glass-card">
+            <div className="table-responsive">
+              <table className="projects-table">
+                <thead>
+                  <tr>
+                    <th>Project</th>
+                    <th>Category</th>
+                    <th>Architecture &amp; Stack</th>
+                    <th>Access State</th>
+                    <th className="text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredProjects.map((project) => {
+                    const isPublic = project.status === 'public';
+                    return (
+                      <tr key={project.id} className={`table-row ${project.status}`}>
+                        <td className="project-cell-name">
+                          <div className="cell-name-lockup">
+                            <span className={`cell-icon ${project.status}`}>
+                              {isPublic ? <Layers size={16} /> : <LockKeyhole size={16} />}
+                            </span>
+                            <div>
+                              <strong className="cell-title">{project.name}</strong>
+                              <p className="cell-desc-mobile text-muted">{project.description}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="project-cell-category">
+                          <span className="table-category-badge">{project.category}</span>
+                        </td>
+                        <td className="project-cell-tags">
+                          <div className="table-tags-group">
+                            {project.tags.map((tag) => (
+                              <span key={tag} className="table-tag">{tag}</span>
+                            ))}
+                          </div>
+                        </td>
+                        <td className="project-cell-status">
+                          <span className={`table-status-pill ${project.status}`}>
+                            {isPublic ? <CheckCircle2 size={13} /> : <LockKeyhole size={13} />}
+                            {project.statusLabel}
+                          </span>
+                        </td>
+                        <td className="project-cell-action text-right">
+                          {isPublic ? (
+                            <a
+                              href={project.href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="table-action-link"
+                            >
+                              Launch <ExternalLink size={13} />
+                            </a>
+                          ) : (
+                            <span className="table-action-locked" title={project.note}>
+                              Private
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
         <div className="projects-cta reveal-on-scroll delay-300">
-          <a href="https://github.com/Enricko" target="_blank" rel="noreferrer" className="btn btn-outline">
-            Explore public code on GitHub <ExternalLink size={16} />
+          <a
+            href="https://github.com/Enricko"
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-outline"
+          >
+            <FaGithub size={18} /> View Open Repositories on GitHub <ExternalLink size={15} />
           </a>
         </div>
       </div>

@@ -1,36 +1,43 @@
 import React from 'react';
-import { Code, MonitorSmartphone, Database } from 'lucide-react';
+import { Code2, Smartphone, Terminal, Cpu, ShieldCheck, Zap } from 'lucide-react';
 import { useCountUp, useInView } from '../lib/useInteractions';
 import './About.css';
 
-const FEATURES = [
+const PILLARS = [
   {
-    icon: <Code size={30} />,
+    icon: <Code2 size={26} />,
     accent: 'cyan',
-    title: 'Web Development',
-    description: 'Building responsive, modern web applications using React, Vue, and Laravel.',
+    title: 'Web & API Architecture',
+    description: 'Engineering responsive, resilient web apps using React, TypeScript, FastAPI, and Laravel with optimized database schemas.',
   },
   {
-    icon: <MonitorSmartphone size={30} />,
+    icon: <Smartphone size={26} />,
     accent: 'pink',
-    title: 'Mobile & Desktop',
-    description: 'Creating cross-platform mobile experiences and robust desktop solutions.',
+    title: 'Cross-Platform Applications',
+    description: 'Crafting responsive mobile applications (Flutter) and desktop software (Electron) with offline persistence and background tasks.',
   },
   {
-    icon: <Database size={30} />,
+    icon: <Terminal size={26} />,
     accent: 'violet',
-    title: 'Backend Engineering',
-    description: 'Designing efficient database schemas, API architecture, and seamless integrations.',
+    title: 'Systems & Real-Time Engines',
+    description: 'Developing high-throughput media pipelines (NVENC), WebSocket market signal feeds, and Redis-cached aggregators.',
   },
 ];
 
 const STATS = [
-  { value: 3,   suffix: '+', label: 'Years of Experience' },
-  { value: 20,  suffix: '+', label: 'Projects Completed' },
-  { value: 100, suffix: '%', label: 'Client Satisfaction' },
+  { value: 3,   suffix: '+', label: 'Years Experience' },
+  { value: 20,  suffix: '+', label: 'Projects Delivered' },
+  { value: 99,  suffix: '%', label: 'Uptime & Reliability' },
+  { value: 100, suffix: '%', label: 'Human-Crafted Code' },
 ];
 
-function Stat({ value, suffix, label, active }) {
+const QUICK_BADGES = [
+  { icon: <Cpu size={14} />, text: 'Full-Stack & Systems' },
+  { icon: <Zap size={14} />, text: 'Real-Time & Low-Latency' },
+  { icon: <ShieldCheck size={14} />, text: 'Anti-AI-Slop Standard' },
+];
+
+function StatItem({ value, suffix, label, active }) {
   const n = useCountUp(value, active);
   return (
     <div className="stat-item">
@@ -41,7 +48,7 @@ function Stat({ value, suffix, label, active }) {
 }
 
 export default function About() {
-  const [statsRef, inView] = useInView({ threshold: 0.4 });
+  const [statsRef, inView] = useInView({ threshold: 0.3 });
 
   const onMove = (e) => {
     const el = e.currentTarget;
@@ -54,44 +61,55 @@ export default function About() {
     <section id="about" className="about">
       <div className="container">
         <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">// about me</span>
+          <span className="eyebrow">// identity &amp; ethos</span>
           <h2 className="section-title">Who I Am</h2>
         </div>
 
         <div className="about-grid">
           <div className="about-content reveal-on-scroll delay-100">
-            <h3 className="about-subtitle">Crafting software that makes a difference</h3>
+            <div className="about-badges">
+              {QUICK_BADGES.map((b, i) => (
+                <span key={i} className="about-badge">
+                  {b.icon} {b.text}
+                </span>
+              ))}
+            </div>
+
+            <h3 className="about-subtitle">
+              Engineering robust software with precision and craft
+            </h3>
+
             <p>
-              I'm a passionate Software Engineer based in Indonesia, specializing in building exceptional
-              digital experiences. My journey in tech has equipped me with a versatile skill set spanning
-              web, mobile, and backend development.
+              I'm Enricko Putra Hartono (often going by <span className="highlight-text">Lufria</span>),
+              a Software Engineer and Computer Science student at <span className="highlight-text">Universitas AMIKOM Yogyakarta</span> (IT Professional Track).
+              My work centers on building reliable, aesthetic, and production-ready applications across web, mobile, and desktop environments.
             </p>
+
             <p>
-              Whether it's architecting a robust Laravel backend, designing a premium React frontend, or
-              ensuring seamless background location tracking on Android, I thrive on turning complex
-              requirements into elegant, maintainable solutions. I care deeply about clean code,
-              user-centric design, and continuous learning.
+              From architecting high-throughput media pipelines with GPU hardware acceleration, to engineering real-time
+              financial advisory systems and enterprise payroll calculators, I bridge system-level rigor with human-crafted
+              frontends. I believe in eliminating generic AI clutter in favor of intentional, high-density interfaces that respect the user's attention.
             </p>
 
             <div className="stats-container" ref={statsRef}>
               {STATS.map((s) => (
-                <Stat key={s.label} {...s} active={inView} />
+                <StatItem key={s.label} {...s} active={inView} />
               ))}
             </div>
           </div>
 
-          <div className="features-grid">
-            {FEATURES.map((feature, index) => (
+          <div className="pillars-grid">
+            {PILLARS.map((pillar, index) => (
               <div
-                key={feature.title}
-                className={`glass-card spotlight feature-card accent-${feature.accent} reveal-on-scroll`}
+                key={pillar.title}
+                className={`glass-card spotlight pillar-card accent-${pillar.accent} reveal-on-scroll`}
                 style={{ transitionDelay: `${index * 120 + 200}ms` }}
                 onMouseMove={onMove}
               >
-                <div className="feature-icon">{feature.icon}</div>
-                <div>
-                  <h4>{feature.title}</h4>
-                  <p className="text-muted">{feature.description}</p>
+                <div className="pillar-icon">{pillar.icon}</div>
+                <div className="pillar-text">
+                  <h4>{pillar.title}</h4>
+                  <p className="text-muted">{pillar.description}</p>
                 </div>
               </div>
             ))}

@@ -223,7 +223,13 @@ section {
 .repo-stars,
 .live-badge,
 .heatmap-summary,
-.heatmap-legend {
+.heatmap-legend,
+.cert-count-pill,
+.table-status-pill,
+.table-tag,
+.filter-chip,
+.cert-modal-id,
+.standard-chip {
   font-variant-numeric: tabular-nums;
 }
 

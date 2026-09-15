@@ -1,35 +1,43 @@
 import React from 'react';
-import { Briefcase, Calendar } from 'lucide-react';
+import { Briefcase, Calendar, MapPin, CheckCircle2 } from 'lucide-react';
 import './Experience.css';
 
 const EXPERIENCES = [
   {
     title: 'Freelance Software Developer',
     company: 'PT. Binav Maju Sejahtera',
-    period: 'Aug 2023 - Present',
-    description: 'Providing part-time freelance software development and technical expertise to build tailored and maintainable solutions.',
-    tags: ['Software Development', 'Problem Solving'],
+    location: 'Indonesia / Remote',
+    period: 'Aug 2023 — Present',
+    current: true,
+    description: 'Providing technical leadership and full-stack software development: architecting payroll systems (SlipGajiApps), autonomous document controllers, and internal operations portals.',
+    tags: ['Desktop Software', 'FastAPI', 'Electron', 'React', 'SQLite', 'LibreOffice Engine'],
   },
   {
-    title: 'App Developer',
+    title: 'Mobile Application Developer',
     company: 'Cetaphil',
-    period: 'Dec 2024 - Jan 2026',
-    description: 'Developed a robust mobile application focusing on high-performance dashboards, GPS mapping, coverage tracking, and remote field data synchronization.',
-    tags: ['Mobile App Development', 'Application Development', 'GPS integration'],
+    location: 'Jakarta / Remote',
+    period: 'Dec 2024 — Jan 2026',
+    current: false,
+    description: 'Engineered cross-platform mobile modules for field merchandising, geofenced GPS outlet tracking, and high-res offline photo syncing with Laravel backend services.',
+    tags: ['Flutter', 'Mobile Architecture', 'GPS Geofencing', 'Laravel', 'Offline Sync'],
   },
   {
-    title: 'App Developer',
+    title: 'Mobile Application Developer',
     company: 'IGNICE',
-    period: 'Oct 2024 - Dec 2024',
-    description: 'Built application modules for outlet coverage tracking, dynamic target achievements dashboards, and complex database-driven outlet reporting.',
-    tags: ['Application Development', 'Web Dashboards'],
+    location: 'Yogyakarta / Hybrid',
+    period: 'Oct 2024 — Dec 2024',
+    current: false,
+    description: 'Developed analytics dashboards and automated reporting modules tracking outlet coverage KPIs, target achievements, and regional distribution metrics.',
+    tags: ['Mobile Development', 'Web Dashboards', 'KPI Telemetry', 'MySQL'],
   },
   {
-    title: 'Full Stack Developer (Intern)',
+    title: 'Full-Stack Developer (Apprentice)',
     company: 'PT LAUWBA TECHNO INDONESIA',
-    period: 'Jun 2022 - Sep 2022',
-    description: 'Completed a comprehensive apprenticeship focused on robust Web and Application Development, building cross-functional full-stack features.',
-    tags: ['Web Applications', 'Application Development'],
+    location: 'Yogyakarta',
+    period: 'Jun 2022 — Sep 2022',
+    current: false,
+    description: 'Completed comprehensive software engineering apprenticeship building full-stack web applications, database schema designs, and RESTful API integrations.',
+    tags: ['Web Applications', 'PHP / Laravel', 'REST APIs', 'Database Design'],
   },
 ];
 
@@ -45,7 +53,7 @@ export default function Experience() {
     <section id="experience" className="experience">
       <div className="container">
         <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">// career</span>
+          <span className="eyebrow">// track record</span>
           <h2 className="section-title">Professional Experience</h2>
         </div>
 
@@ -53,22 +61,46 @@ export default function Experience() {
           {EXPERIENCES.map((exp, idx) => (
             <div
               key={idx}
-              className="timeline-item reveal-on-scroll"
-              style={{ transitionDelay: `${(idx % 4) * 100}ms` }}
+              className={`timeline-item reveal-on-scroll ${exp.current ? 'is-current' : ''}`}
+              style={{ transitionDelay: `${(idx % 4) * 90}ms` }}
             >
-              <div className="timeline-dot"><span /></div>
+              <div className="timeline-dot">
+                <span />
+              </div>
+
               <div className="glass-card spotlight timeline-content" onMouseMove={onMove}>
                 <div className="timeline-header">
-                  <h3>{exp.title}</h3>
-                  <span className="timeline-company"><Briefcase size={15} /> {exp.company}</span>
+                  <div>
+                    <div className="timeline-role-row">
+                      <h3 className="timeline-role">{exp.title}</h3>
+                      {exp.current && (
+                        <span className="current-badge">
+                          <span className="current-pulse-dot" /> Active Role
+                        </span>
+                      )}
+                    </div>
+                    <div className="timeline-company-row">
+                      <span className="timeline-company">
+                        <Briefcase size={14} /> {exp.company}
+                      </span>
+                      <span className="timeline-location">
+                        <MapPin size={13} /> {exp.location}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="timeline-period">
+                    <Calendar size={13} /> {exp.period}
+                  </div>
                 </div>
-                <div className="timeline-period">
-                  <Calendar size={14} /> {exp.period}
-                </div>
+
                 <p className="timeline-desc text-muted">{exp.description}</p>
+
                 <div className="timeline-tags">
                   {exp.tags.map((tag, tIdx) => (
-                    <span key={tIdx} className={`badge ${tIdx % 2 === 0 ? 'desktop' : 'mobile'}`}>{tag}</span>
+                    <span key={tIdx} className="badge">
+                      {tag}
+                    </span>
                   ))}
                 </div>
               </div>
