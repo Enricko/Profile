@@ -268,6 +268,11 @@
   object-fit: contain;
 }
 
+.tool-icon img[src$="/hermes.png"],
+.tool-icon img[src$="/9router.png"] {
+  border-radius: 4px;
+}
+
 .tool-text {
   display: flex;
   flex-direction: column;
@@ -292,25 +297,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-/* Terminal footer in tools group */
-.stack-terminal {
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  padding: 0.7rem 0.9rem;
-  border-radius: 10px;
-  background: rgba(3, 0, 20, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-}
-
-.stack-terminal-prompt { color: #22e07a; font-weight: 600; }
-.stack-terminal-cmd { color: var(--text-secondary); }
-.stack-terminal-out { color: var(--accent-primary); word-break: break-all; }
 
 /* ======================================================================
    MARQUEE
@@ -373,7 +359,6 @@
   .tool-card { padding: 0.55rem 0.65rem; }
   .tool-icon { width: 34px; height: 34px; }
   .tool-icon img { width: 19px; height: 19px; }
-  .stack-terminal { font-size: 0.64rem; }
 }
 
 /* Respect reduced motion */

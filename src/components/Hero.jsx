@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ArrowRight, Layers, ChevronDown, FileText, Check, Copy, Terminal, Code2, Database, MapPin } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useTilt, useTypewriter } from '../lib/useInteractions';
-import { HERO_AI_WORKFLOW } from '../data/tools';
 import './Hero.css';
 
 const FLOATERS = [
@@ -56,10 +55,7 @@ const enricko: SoftwareEngineer = {
     id: 'bash',
     label: 'workflow.sh',
     icon: <Terminal size={13} />,
-    code: `$ lufria workflow --agents
-${HERO_AI_WORKFLOW}
-
-$ uptime
+    code: `$ uptime
   architecting systems since 2023 — Yogyakarta, ID
   shipping web, mobile & desktop products
 

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Terminal } from 'lucide-react';
-import { LANGUAGES, TOOLS, LANGUAGE_FILTERS, HERO_AI_WORKFLOW } from '../data/tools';
+import { LANGUAGES, TOOLS, LANGUAGE_FILTERS } from '../data/tools';
 import './Skills.css';
 
 export default function Skills() {
@@ -98,12 +97,6 @@ export default function Skills() {
                 </li>
               ))}
             </ul>
-
-            <div className="stack-terminal" aria-hidden="true">
-              <span className="stack-terminal-prompt">$</span>
-              <span className="stack-terminal-cmd">lufria workflow --agents</span>
-              <span className="stack-terminal-out">{HERO_AI_WORKFLOW}</span>
-            </div>
           </div>
         </div>
       </div>

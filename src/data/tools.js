@@ -4,8 +4,6 @@
 // Icon priority: official SVG (public/logos) -> Simple Icons -> clean neutral
 // Lucide glyph (Icon). Never hotlink random images from the internet.
 
-import { Bot, Route, Compass, Code2 } from 'lucide-react';
-
 export const LANGUAGES = [
   { name: 'React',        icon: '/logos/react.svg',      category: 'frontend', role: 'UI Library' },
   { name: 'Vite',         icon: '/logos/vite.svg',       category: 'frontend', role: 'Build Tool' },
@@ -33,12 +31,12 @@ export const TOOLS = [
   // AI Coding & Agents — the daily driver loop
   { name: 'Claude Code',  role: 'AI Coding Agent',    category: 'ai',    img: '/logos/ai/claude.svg' },
   { name: 'OpenAI Codex', role: 'AI Coding Agent',    category: 'ai',    img: '/logos/ai/openai.svg' },
-  { name: 'Hermes Agent', role: 'Agentic Workflow',   category: 'ai',    Icon: Bot },
-  { name: '9Router',      role: 'AI Model Router',    category: 'ai',    Icon: Route },
-  { name: 'Antigravity',  role: 'Agentic IDE',        category: 'ai',    Icon: Compass },
+  { name: 'Hermes Agent', role: 'Agentic Workflow',   category: 'ai',    img: '/logos/ai/hermes.png' },
+  { name: '9Router',      role: 'AI Model Router',    category: 'ai',    img: '/logos/ai/9router.png' },
+  { name: 'Antigravity',  role: 'Agentic IDE',        category: 'ai',    img: '/logos/ai/antigravity.png' },
 
   // Editors & Version Control
-  { name: 'VS Code',      role: 'Primary Editor',     category: 'editor', Icon: Code2 },
+  { name: 'VS Code',      role: 'Primary Editor',     category: 'editor', img: '/logos/ai/vscode.png' },
   { name: 'Git',          role: 'Version Control',    category: 'vcs',   img: '/logos/ai/git.svg' },
   { name: 'GitHub',       role: 'Code Hosting & CI',  category: 'vcs',   img: '/logos/ai/github.svg' },
 
@@ -61,6 +59,3 @@ export const LANGUAGE_FILTERS = [
   { id: 'mobile-desktop', label: 'Mobile & Desktop' },
   { id: 'database',       label: 'Databases' },
 ];
-
-// Compact strip for the hero terminal — single source of truth with the section above.
-export const HERO_AI_WORKFLOW = 'claude-code · codex · hermes · 9router · antigravity';

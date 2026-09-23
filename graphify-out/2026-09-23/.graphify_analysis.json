@@ -1,0 +1,266 @@
+{
+  "communities": {
+    "0": [
+      "eslint_config",
+      "package",
+      "package_dependencies",
+      "package_dependencies_lucide_react",
+      "package_dependencies_react",
+      "package_dependencies_react_dom",
+      "package_dependencies_react_icons",
+      "package_name",
+      "package_private",
+      "package_type",
+      "package_version",
+      "ref_eslint",
+      "ref_eslint_config",
+      "ref_eslint_js",
+      "ref_eslint_plugin_react_hooks",
+      "ref_eslint_plugin_react_refresh",
+      "ref_globals",
+      "ref_react_dom",
+      "ref_react_icons",
+      "ref_types_react",
+      "ref_types_react_dom",
+      "ref_vite",
+      "ref_vitejs_plugin_react",
+      "vite_config"
+    ],
+    "1": [
+      "ref_react",
+      "ref_react_dom_client",
+      "ref_react_icons_fa",
+      "src_app",
+      "src_app_app",
+      "src_components_contact",
+      "src_components_contact_contact",
+      "src_components_education",
+      "src_components_education_certifications",
+      "src_components_education_education",
+      "src_components_effects",
+      "src_components_effects_effects",
+      "src_components_experience",
+      "src_components_experience_experience",
+      "src_components_experience_experiences",
+      "src_components_footer",
+      "src_components_footer_footer",
+      "src_components_projects",
+      "src_components_projects_projects",
+      "src_index",
+      "src_lib_rainmodes",
+      "src_lib_rainmodes_modes",
+      "src_lib_rainmodes_rollrainmode",
+      "src_main"
+    ],
+    "2": [
+      "src_components_about",
+      "src_components_about_about",
+      "src_components_about_pillars",
+      "src_components_about_quick_badges",
+      "src_components_about_statitem",
+      "src_components_about_stats",
+      "src_components_githubcontributions_metriccard",
+      "src_components_hero",
+      "src_components_hero_code_tabs",
+      "src_components_hero_floaters",
+      "src_components_hero_hero",
+      "src_lib_useinteractions",
+      "src_lib_useinteractions_prefersreducedmotion",
+      "src_lib_useinteractions_usecountup",
+      "src_lib_useinteractions_useinview",
+      "src_lib_useinteractions_usespotlight",
+      "src_lib_useinteractions_usetilt",
+      "src_lib_useinteractions_usetypewriter"
+    ],
+    "3": [
+      "src_components_rain",
+      "src_components_rain_bean_pinks",
+      "src_components_rain_builditems",
+      "src_components_rain_calicopaw",
+      "src_components_rain_catface",
+      "src_components_rain_claws",
+      "src_components_rain_createprng",
+      "src_components_rain_dogface",
+      "src_components_rain_fur_bases",
+      "src_components_rain_neon_colors",
+      "src_components_rain_patch_colors",
+      "src_components_rain_pawshape",
+      "src_components_rain_rain",
+      "src_components_rain_skill_logos",
+      "src_components_rain_solidpaw",
+      "src_components_rain_static_items",
+      "src_components_rain_toes"
+    ],
+    "4": [
+      "package_devdependencies",
+      "package_devdependencies_eslint",
+      "package_devdependencies_eslint_js",
+      "package_devdependencies_eslint_plugin_react_hooks",
+      "package_devdependencies_eslint_plugin_react_refresh",
+      "package_devdependencies_globals",
+      "package_devdependencies_types_react",
+      "package_devdependencies_types_react_dom",
+      "package_devdependencies_vite",
+      "package_devdependencies_vitejs_plugin_react"
+    ],
+    "5": [
+      "ref_lucide_react",
+      "src_components_skills",
+      "src_components_skills_skills",
+      "src_data_tools",
+      "src_data_tools_hero_ai_workflow",
+      "src_data_tools_language_filters",
+      "src_data_tools_languages",
+      "src_data_tools_tools"
+    ],
+    "6": [
+      "src_components_githubcontributions",
+      "src_components_githubcontributions_buildcontributionyear",
+      "src_components_githubcontributions_fallback_repos",
+      "src_components_githubcontributions_fallback_stats",
+      "src_components_githubcontributions_githubcontributions",
+      "src_components_githubcontributions_githubcontributions_loadgithubdata",
+      "src_components_githubcontributions_levelfromcount",
+      "src_components_githubcontributions_mulberry32"
+    ],
+    "7": [
+      "src_components_navbar",
+      "src_components_navbar_links",
+      "src_components_navbar_mode_names",
+      "src_components_navbar_navbar",
+      "src_components_navbar_spy_ids",
+      "src_lib_useinteractions_usescrollspy"
+    ],
+    "8": [
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_lint",
+      "package_scripts_preview"
+    ]
+  },
+  "cohesion": {
+    "0": 0.09782608695652174,
+    "1": 0.14492753623188406,
+    "2": 0.1830065359477124,
+    "3": 0.125,
+    "4": 0.2,
+    "5": 0.42857142857142855,
+    "6": 0.35714285714285715,
+    "7": 0.4,
+    "8": 0.4
+  },
+  "gods": [
+    {
+      "id": "ref_react",
+      "label": "react",
+      "degree": 16
+    },
+    {
+      "id": "ref_lucide_react",
+      "label": "lucide-react",
+      "degree": 13
+    },
+    {
+      "id": "src_lib_useinteractions_usecountup",
+      "label": "useCountUp()",
+      "degree": 6
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 5
+    },
+    {
+      "id": "src_components_githubcontributions_githubcontributions",
+      "label": "GithubContributions()",
+      "degree": 5
+    },
+    {
+      "id": "src_lib_useinteractions_useinview",
+      "label": "useInView()",
+      "degree": 5
+    },
+    {
+      "id": "src_components_githubcontributions_buildcontributionyear",
+      "label": "buildContributionYear()",
+      "degree": 4
+    },
+    {
+      "id": "src_components_hero_hero",
+      "label": "Hero()",
+      "degree": 4
+    },
+    {
+      "id": "src_lib_useinteractions_prefersreducedmotion",
+      "label": "prefersReducedMotion()",
+      "degree": 4
+    },
+    {
+      "id": "src_lib_useinteractions_usetilt",
+      "label": "useTilt()",
+      "degree": 4
+    }
+  ],
+  "surprises": [
+    {
+      "source": "StatItem()",
+      "target": "useCountUp()",
+      "source_files": [
+        "src/components/About.jsx",
+        "src/lib/useInteractions.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "peripheral node `StatItem()` unexpectedly reaches hub `useCountUp()`"
+    },
+    {
+      "source": "MetricCard()",
+      "target": "useCountUp()",
+      "source_files": [
+        "src/components/GithubContributions.jsx",
+        "src/lib/useInteractions.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "peripheral node `MetricCard()` unexpectedly reaches hub `useCountUp()`"
+    },
+    {
+      "source": "GithubContributions()",
+      "target": "useInView()",
+      "source_files": [
+        "src/components/GithubContributions.jsx",
+        "src/lib/useInteractions.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "App()",
+      "target": "rollRainMode()",
+      "source_files": [
+        "src/App.jsx",
+        "src/lib/rainModes.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "About()",
+      "target": "useInView()",
+      "source_files": [
+        "src/components/About.jsx",
+        "src/lib/useInteractions.js"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}
