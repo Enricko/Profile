@@ -29,27 +29,27 @@ export const LANGUAGES = [
 // /opt/n8n-lufria, self-hosted mail stack.
 export const TOOLS = [
   // AI Coding & Agents — the daily driver loop
-  { name: 'Claude Code',  role: 'AI Coding Agent',    category: 'ai',    img: '/logos/ai/claude.svg' },
-  { name: 'OpenAI Codex', role: 'AI Coding Agent',    category: 'ai',    img: '/logos/ai/openai.svg' },
+  { name: 'Claude Code',  role: 'AI Coding Agent',    category: 'ai',    img: '/logos/ai/claude.svg?v=2' },
+  { name: 'OpenAI Codex', role: 'AI Coding Agent',    category: 'ai',    img: '/logos/ai/openai.svg?v=2' },
   { name: 'Hermes Agent', role: 'Agentic Workflow',   category: 'ai',    img: '/logos/ai/hermes.png' },
   { name: '9Router',      role: 'AI Model Router',    category: 'ai',    img: '/logos/ai/9router.png' },
   { name: 'Antigravity',  role: 'Agentic IDE',        category: 'ai',    img: '/logos/ai/antigravity.png' },
 
   // Editors & Version Control
   { name: 'VS Code',      role: 'Primary Editor',     category: 'editor', img: '/logos/ai/vscode.png' },
-  { name: 'Git',          role: 'Version Control',    category: 'vcs',   img: '/logos/ai/git.svg' },
-  { name: 'GitHub',       role: 'Code Hosting & CI',  category: 'vcs',   img: '/logos/ai/github.svg' },
+  { name: 'Git',          role: 'Version Control',    category: 'vcs',   img: '/logos/ai/git.svg?v=2' },
+  { name: 'GitHub',       role: 'Code Hosting & CI',  category: 'vcs',   img: '/logos/ai/github.svg?v=2' },
 
   // DevOps & Infrastructure — the home-server fleet
-  { name: 'Docker',       role: 'Containers',         category: 'infra', img: '/logos/ai/docker.svg' },
-  { name: 'Nginx',        role: 'Web Server',         category: 'infra', img: '/logos/ai/nginx.svg' },
-  { name: 'Ubuntu Linux', role: 'Server OS',          category: 'infra', img: '/logos/ai/ubuntu.svg' },
-  { name: 'Cloudflare',   role: 'Tunnels & DNS',      category: 'infra', img: '/logos/ai/cloudflare.svg' },
+  { name: 'Docker',       role: 'Containers',         category: 'infra', img: '/logos/ai/docker.svg?v=2' },
+  { name: 'Nginx',        role: 'Web Server',         category: 'infra', img: '/logos/ai/nginx.svg?v=2' },
+  { name: 'Ubuntu Linux', role: 'Server OS',          category: 'infra', img: '/logos/ai/ubuntu.svg?v=2' },
+  { name: 'Cloudflare',   role: 'Tunnels & DNS',      category: 'infra', img: '/logos/ai/cloudflare.svg?v=2' },
 
   // Automation & Ops
-  { name: 'n8n',          role: 'Workflow Automation',category: 'ops',   img: '/logos/ai/n8n.svg' },
-  { name: 'Proton Mail',  role: 'Self-Hosted Mail',   category: 'ops',   img: '/logos/ai/protonmail.svg' },
-  { name: 'Telegram Bots',role: 'Ops Notifications',  category: 'ops',   img: '/logos/ai/telegram.svg' },
+  { name: 'n8n',          role: 'Workflow Automation',category: 'ops',   img: '/logos/ai/n8n.svg?v=2' },
+  { name: 'Proton Mail',  role: 'Self-Hosted Mail',   category: 'ops',   img: '/logos/ai/protonmail.svg?v=2' },
+  { name: 'Telegram Bots',role: 'Ops Notifications',  category: 'ops',   img: '/logos/ai/telegram.svg?v=2' },
 ];
 
 export const LANGUAGE_FILTERS = [
