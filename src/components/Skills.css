@@ -4,32 +4,104 @@
 
 .skills-desc {
   text-align: center;
-  max-width: 660px;
+  max-width: 680px;
   margin: -2rem auto 2.5rem;
   line-height: 1.65;
   text-wrap: pretty;
 }
 
-/* Category Filter Tabs */
+/* ======================================================================
+   STACK LAYOUT — two visually connected groups
+   ====================================================================== */
+.stack-layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+/* Short neon bridge between the two groups — desktop only */
+@media (min-width: 961px) {
+  .stack-layout::after {
+    content: '';
+    position: absolute;
+    left: calc((100% - 1.25rem) * 0.575 + 0.625rem);
+    width: 1.25rem;
+    top: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(0, 242, 254, 0.55), rgba(240, 147, 251, 0.55));
+    border-radius: 2px;
+    box-shadow: 0 0 12px rgba(0, 242, 254, 0.35);
+    opacity: 0.9;
+    pointer-events: none;
+  }
+}
+
+.stack-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  padding: 1.75rem;
+  border-radius: 20px;
+  min-width: 0;
+}
+
+.stack-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.stack-group-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.stack-group-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  padding: 0.15rem 0.55rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tools group: slight cyan tint + matching border to read as "connected pair" */
+.stack-group-tools {
+  background: linear-gradient(180deg, rgba(0, 242, 254, 0.045), rgba(13, 13, 40, 0.45) 55%);
+  border-color: rgba(0, 242, 252, 0.16);
+}
+
+.stack-tools-note {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  margin-top: -0.35rem;
+}
+
+/* Language filter tabs */
 .skills-filter-tabs {
   display: flex;
-  justify-content: center;
-  gap: 0.6rem;
-  margin-bottom: 2.5rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .skill-tab-btn {
-  padding: 0.5rem 1.1rem;
+  padding: 0.4rem 0.95rem;
   border-radius: 9999px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--text-secondary);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   cursor: pointer;
   transition: all 0.25s ease;
-  min-height: 38px;
+  min-height: 36px;
 }
 
 .skill-tab-btn:hover {
@@ -46,11 +118,11 @@
   box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
 }
 
-/* Skills Grid */
+/* Language cards grid */
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 1.1rem;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 0.9rem;
 }
 
 .logo-card {
@@ -59,16 +131,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.55rem;
-  padding: 1.5rem 0.9rem;
+  gap: 0.5rem;
+  padding: 1.3rem 0.75rem;
   border-radius: 14px;
   background: rgba(13, 13, 40, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(14px);
   cursor: default;
   overflow: hidden;
   transition: transform 0.35s var(--ease-spring), border-color 0.3s ease, box-shadow 0.35s ease;
-  min-height: 140px;
+  min-height: 128px;
 }
 
 .logo-card::before {
@@ -82,14 +153,12 @@
 }
 
 .logo-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
   border-color: rgba(0, 242, 254, 0.35);
   box-shadow: 0 14px 32px rgba(0, 242, 254, 0.12);
 }
 
-.logo-card:hover::before {
-  opacity: 1;
-}
+.logo-card:hover::before { opacity: 1; }
 
 .skill-logo-wrapper {
   width: 44px;
@@ -120,22 +189,132 @@
   position: relative;
   z-index: 1;
   transition: color 0.25s ease;
+  text-align: center;
 }
 
-.logo-card:hover .skill-name {
-  color: var(--text-primary);
-}
+.logo-card:hover .skill-name { color: var(--text-primary); }
 
 .skill-role-badge {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   color: var(--text-dim);
   text-align: center;
   position: relative;
   z-index: 1;
 }
 
-/* Infinite Marquee */
+/* ======================================================================
+   TOOLS — compact horizontal cards
+   ====================================================================== */
+.tools-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+
+.tool-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(3, 0, 20, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s var(--ease-spring);
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(140px circle at var(--mx, 50%) var(--my, 50%), rgba(0, 242, 254, 0.12), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tool-card:hover {
+  border-color: rgba(0, 242, 254, 0.3);
+  background: rgba(0, 242, 254, 0.05);
+  transform: translateX(3px);
+}
+
+.tool-card:hover::before { opacity: 1; }
+
+.tool-icon {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--accent-primary);
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.tool-card:hover .tool-icon {
+  transform: scale(1.08);
+  color: #fff;
+}
+
+.tool-icon img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.tool-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.tool-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tool-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Terminal footer in tools group */
+.stack-terminal {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  background: rgba(3, 0, 20, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+}
+
+.stack-terminal-prompt { color: #22e07a; font-weight: 600; }
+.stack-terminal-cmd { color: var(--text-secondary); }
+.stack-terminal-out { color: var(--accent-primary); word-break: break-all; }
+
+/* ======================================================================
+   MARQUEE
+   ====================================================================== */
 .marquee {
   margin-top: 4rem;
   position: relative;
@@ -150,9 +329,7 @@
   animation: scroll-x 36s linear infinite;
 }
 
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
+.marquee:hover .marquee-track { animation-play-state: paused; }
 
 .marquee-item {
   display: inline-flex;
@@ -175,17 +352,32 @@
   to   { transform: translateX(-50%); }
 }
 
+/* ======================================================================
+   RESPONSIVE — stack below 960px (group order: languages, then tools)
+   ====================================================================== */
+@media (max-width: 960px) {
+  .stack-layout {
+    grid-template-columns: 1fr;
+  }
+  /* connector hidden on mobile — handled by the media-scoped rule above */
+}
+
 @media (max-width: 640px) {
+  .stack-group { padding: 1.4rem; }
   .skills-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 0.85rem;
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+    gap: 0.7rem;
   }
-  .logo-card {
-    padding: 1.25rem 0.75rem;
-    min-height: 125px;
-  }
-  .skill-logo {
-    width: 32px;
-    height: 32px;
-  }
+  .logo-card { padding: 1.05rem 0.6rem; min-height: 112px; }
+  .skill-logo { width: 32px; height: 32px; }
+  .tool-card { padding: 0.55rem 0.65rem; }
+  .tool-icon { width: 34px; height: 34px; }
+  .tool-icon img { width: 19px; height: 19px; }
+  .stack-terminal { font-size: 0.64rem; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .logo-card, .tool-card, .tool-icon, .skill-logo { transition: none; }
 }

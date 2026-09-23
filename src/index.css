@@ -361,9 +361,12 @@ section {
 
 .delay-100 { animation-delay: 100ms; transition-delay: 100ms; }
 .delay-200 { animation-delay: 200ms; transition-delay: 200ms; }
+.delay-250 { animation-delay: 250ms; transition-delay: 250ms; }
 .delay-300 { animation-delay: 300ms; transition-delay: 300ms; }
 .delay-400 { animation-delay: 400ms; transition-delay: 400ms; }
+.delay-450 { animation-delay: 450ms; transition-delay: 450ms; }
 .delay-500 { animation-delay: 500ms; transition-delay: 500ms; }
+.delay-550 { animation-delay: 550ms; transition-delay: 550ms; }
 
 /* Floating scroll-to-top */
 .to-top {

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { ArrowRight, Layers, ChevronDown, FileText, Check, Copy, Terminal, Code2, Database } from 'lucide-react';
+import { ArrowRight, Layers, ChevronDown, FileText, Check, Copy, Terminal, Code2, Database, MapPin } from 'lucide-react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useTilt, useTypewriter } from '../lib/useInteractions';
+import { HERO_AI_WORKFLOW } from '../data/tools';
 import './Hero.css';
 
 const FLOATERS = [
@@ -21,6 +23,7 @@ const CODE_TABS = [
   focus: ('Web' | 'Mobile' | 'Desktop' | 'AI Systems')[];
   location: string;
   availability: 'Ready to build' | 'Shipping';
+  aiWorkflow: string[];
   coreStack: string[];
 }
 
@@ -29,6 +32,7 @@ const enricko: SoftwareEngineer = {
   focus: ['Web', 'Mobile', 'Desktop', 'AI Systems'],
   location: 'Yogyakarta, Indonesia',
   availability: 'Ready to build',
+  aiWorkflow: ['Claude Code', 'Codex', 'Hermes', '9Router', 'Antigravity'],
   coreStack: ['React', 'Flutter', 'Laravel', 'Python', 'FastAPI']
 };`,
   },
@@ -43,23 +47,22 @@ const enricko: SoftwareEngineer = {
     "web": ["React", "TypeScript", "Tailwind", "Vite"],
     "mobile_desktop": ["Flutter", "Electron", "Cross-Platform"],
     "backend_api": ["FastAPI", "Laravel", "Python", "Node.js"],
-    "data_infra": ["PostgreSQL", "MySQL", "Redis", "NVENC"]
+    "data_infra": ["PostgreSQL", "MySQL", "Redis", "Docker"]
   },
-  "craft_standards": "Human-Crafted • Tabular Precision • High Density"
+  "workflow": "agentic coding · model routing · self-hosted infra"
 }`,
   },
   {
     id: 'bash',
-    label: 'system.sh',
+    label: 'workflow.sh',
     icon: <Terminal size={13} />,
-    code: `$ curl -s https://api.lufria.tech/health | jq .
-{
-  "status": "online",
-  "service": "lufria-portfolio-v2",
-  "uptime": "99.99%",
-  "latency": "12ms",
-  "mode": "Anti-AI-Slop • Cyberpunk Neon • Responsive"
-}
+    code: `$ lufria workflow --agents
+${HERO_AI_WORKFLOW}
+
+$ uptime
+  architecting systems since 2023 — Yogyakarta, ID
+  shipping web, mobile & desktop products
+
 $ echo "Ready to engineer robust digital products."`,
   },
 ];
@@ -91,9 +94,12 @@ export default function Hero() {
           </div>
 
           <h1 className="hero-title animate-up delay-200">
-            Hello, I'm <br />
-            <span className="text-gradient">Enricko Putra Hartono</span>
+            Enricko <span className="text-gradient">Putra Hartono</span>
           </h1>
+
+          <p className="hero-role animate-up delay-250">
+            Software Engineer <span className="role-sep" aria-hidden="true">·</span> Lufria
+          </p>
 
           <div className="hero-typer animate-up delay-300">
             <span className="typer-label">I engineer</span>
@@ -102,17 +108,26 @@ export default function Hero() {
           </div>
 
           <p className="hero-description animate-up delay-400">
-            Versatile Software Engineer crafting high-performance, human-centered systems across
-            Web, Desktop, and Mobile. Dedicated to clean architecture, purposeful motion, and
-            uncompromising craft.
+            Building high-performance systems across Web, Desktop, and Mobile — with a
+            production workflow powered by agentic AI coding tools, model routing, and
+            self-hosted infrastructure.
           </p>
 
+          <div className="hero-meta animate-up delay-450">
+            <span className="hero-meta-item">
+              <MapPin size={14} /> Yogyakarta, Indonesia
+            </span>
+            <span className="hero-meta-item">
+              <span className="live-dot-green" aria-hidden="true" /> Open to remote work
+            </span>
+          </div>
+
           <div className="hero-actions animate-up delay-500">
-            <a href="#contact" className="btn btn-primary">
-              Let's Talk <ArrowRight size={18} />
+            <a href="#projects" className="btn btn-primary">
+              View Projects <ArrowRight size={18} />
             </a>
-            <a href="#projects" className="btn btn-outline">
-              <Layers size={17} /> Explore Projects
+            <a href="#contact" className="btn btn-outline">
+              <Layers size={17} /> Contact
             </a>
             <a
               href="/cv/Enricko-Putra-Hartono-CV.pdf?rev=20260922-avts-ai-server-maintenance"
@@ -121,6 +136,28 @@ export default function Hero() {
               className="btn btn-outline"
             >
               <FileText size={17} /> View CV
+            </a>
+          </div>
+
+          <div className="hero-socials animate-up delay-550" aria-label="Social links">
+            <a
+              href="https://github.com/Enricko"
+              target="_blank"
+              rel="noreferrer"
+              className="hero-social-link"
+              aria-label="GitHub profile"
+            >
+              <FaGithub size={18} aria-hidden="true" /> GitHub
+            </a>
+            <span className="hero-social-sep" aria-hidden="true" />
+            <a
+              href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/"
+              target="_blank"
+              rel="noreferrer"
+              className="hero-social-link"
+              aria-label="LinkedIn profile"
+            >
+              <FaLinkedin size={18} aria-hidden="true" /> LinkedIn
             </a>
           </div>
         </div>
@@ -181,7 +218,7 @@ export default function Hero() {
             <div className="code-status-bar">
               <span className="status-item"><span className="status-online-dot" /> UTF-8</span>
               <span className="status-item">TypeScript / JSON / Shell</span>
-              <span className="status-item">Ready to Deploy</span>
+              <span className="status-item">AI-Assisted · Human-Reviewed</span>
             </div>
           </div>
         </div>
