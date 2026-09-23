@@ -115,7 +115,7 @@ export default function Hero() {
               <Layers size={17} /> Explore Projects
             </a>
             <a
-              href="/cv/Enricko-Putra-Hartono-CV.pdf"
+              href="/cv/Enricko-Putra-Hartono-CV.pdf?rev=20260922-avts-ai-server-maintenance"
               target="_blank"
               rel="noreferrer"
               className="btn btn-outline"

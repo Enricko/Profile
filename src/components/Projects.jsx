@@ -17,27 +17,16 @@ const PROJECTS = [
     featured: true,
   },
   {
-    id: 'slipgaji',
-    name: 'SlipGajiApps',
-    category: 'Enterprise Software',
-    categoryType: 'public',
-    description: 'Enterprise payroll, Indonesian PPh 21, and BPJS automated calculation system with multi-department salary slips and Windows desktop binary builds.',
-    href: 'https://gaji.lufria.tech',
-    tags: ['Electron', 'SQLite', 'Windows', 'React'],
-    status: 'public',
-    statusLabel: 'Live Web Portal',
-    featured: true,
-  },
-  {
     id: 'ticketsystem',
     name: 'IT Ticket System',
     category: 'Web Platform',
-    categoryType: 'public',
+    categoryType: 'enterprise',
     description: 'Autonomous IT support ticketing desk with daily rotating PIN security, client-side WebP photo compression, and automated Discord webhook dispatch.',
-    href: 'https://ticket.lufria.tech',
+    href: null,
     tags: ['FastAPI', 'SQLite', 'Discord Webhook', 'Python'],
-    status: 'public',
-    statusLabel: 'Live Portal',
+    status: 'private',
+    statusLabel: 'Private System',
+    note: 'Restricted operational support system containing internal requests, attachments, and incident records.',
     featured: false,
   },
   {
@@ -64,19 +53,6 @@ const PROJECTS = [
     status: 'private',
     statusLabel: 'Internal Pipeline',
     note: 'Private media engine running on dedicated workstation hardware with proprietary transcription queue.',
-    featured: false,
-  },
-  {
-    id: 'cetaphil',
-    name: 'Cetaphil POSM',
-    category: 'Field Operations',
-    categoryType: 'enterprise',
-    description: 'Enterprise field merchandise tracking mobile app featuring GPS geofencing, outlet coverage dashboards, and background photo synchronization.',
-    href: null,
-    tags: ['Flutter', 'Laravel', 'MariaDB', 'GPS Geofence'],
-    status: 'private',
-    statusLabel: 'Enterprise Client',
-    note: 'Restricted client software containing commercial retail outlet records, store audit images, and employee data.',
     featured: false,
   },
   {
@@ -137,14 +113,14 @@ export default function Projects() {
               onClick={() => setActiveFilter('public')}
               type="button"
             >
-              <Radio size={13} className="chip-icon public" /> Public Apps (4)
+              <Radio size={13} className="chip-icon public" /> Public Apps ({PROJECTS.filter((project) => project.categoryType === 'public').length})
             </button>
             <button
               className={`filter-chip ${activeFilter === 'enterprise' ? 'active' : ''}`}
               onClick={() => setActiveFilter('enterprise')}
               type="button"
             >
-              <LockKeyhole size={13} className="chip-icon private" /> Enterprise &amp; Systems (3)
+              <LockKeyhole size={13} className="chip-icon private" /> Enterprise &amp; Systems ({PROJECTS.filter((project) => project.categoryType === 'enterprise').length})
             </button>
           </div>
 

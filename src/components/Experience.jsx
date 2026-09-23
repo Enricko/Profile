@@ -4,13 +4,13 @@ import './Experience.css';
 
 const EXPERIENCES = [
   {
-    title: 'Freelance Software Developer',
+    title: 'Software Developer',
     company: 'PT. Binav Maju Sejahtera',
     location: 'Indonesia / Remote',
     period: 'Aug 2023 — Present',
     current: true,
-    description: 'Providing technical leadership and full-stack software development: architecting payroll systems (SlipGajiApps), autonomous document controllers, and internal operations portals.',
-    tags: ['Desktop Software', 'FastAPI', 'Electron', 'React', 'SQLite', 'LibreOffice Engine'],
+    description: 'Building AVTS platforms, AI systems, and server maintenance solutions for intelligent automation, streamlined operational workflows, and scalable internal systems.',
+    tags: ['AVTS', 'AI System', 'Server Maintenance']
   },
   {
     title: 'Mobile Application Developer',
