@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://lufria.tech/$1",
+      "permanent": true
+    }
+  ]
+}
