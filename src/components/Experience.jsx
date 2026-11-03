@@ -3,6 +3,9 @@ import { MapPin } from 'lucide-react';
 import SectionHead from './SectionHead';
 import './Experience.css';
 
+// summary:    one plain sentence on what the work is.
+// highlights: what was built or achieved. Only facts from the CV, the old
+//             copy and public repos (binav_avts); no invented metrics.
 const EXPERIENCES = [
   {
     title: 'Software Developer',
@@ -10,8 +13,14 @@ const EXPERIENCES = [
     location: 'Indonesia / Remote',
     period: 'Aug 2022 — Present',
     current: true,
-    description: 'Building AVTS platforms, AI systems, and server maintenance solutions for intelligent automation, streamlined operational workflows, and scalable internal systems.',
-    tags: ['AVTS', 'AI System', 'Server Maintenance']
+    summary:
+      "AVTS is Binav's vessel tracking system: it shows ships' live positions on a map. I build it, plus the AI tools and servers behind the company's internal systems.",
+    highlights: [
+      'Built the AVTS app in Flutter, streaming live vessel positions over WebSocket onto an interactive map with KML overlays',
+      'Build AI systems that automate internal operational workflows',
+      'Maintain the servers that keep these internal systems running',
+    ],
+    tags: ['Vessel Tracking', 'Flutter', 'WebSocket', 'AI Systems', 'Server Maintenance'],
   },
   {
     title: 'Mobile Application Developer',
@@ -19,8 +28,13 @@ const EXPERIENCES = [
     location: 'Jakarta / Remote',
     period: 'Dec 2024 — Jan 2026',
     current: false,
-    description: 'Engineered cross-platform mobile modules for field merchandising, geofenced GPS outlet tracking, and high-res offline photo syncing with Laravel backend services.',
-    tags: ['Flutter', 'Mobile Architecture', 'GPS Geofencing', 'Laravel', 'Offline Sync'],
+    summary: "Field app for Cetaphil's merchandising team, covering outlet visits, location checks and photo reports.",
+    highlights: [
+      'Geofenced GPS tracking that confirms staff are at the outlet they report from',
+      'Offline photo capture: high-resolution photos sync to the Laravel backend once the device is back online',
+      'In-app dashboards and GPS maps of outlet coverage',
+    ],
+    tags: ['Flutter', 'Laravel', 'GPS Geofencing', 'Offline Sync', 'Mobile Architecture'],
   },
   {
     title: 'Mobile Application Developer',
@@ -28,8 +42,13 @@ const EXPERIENCES = [
     location: 'Yogyakarta / Hybrid',
     period: 'Oct 2024 — Dec 2024',
     current: false,
-    description: 'Developed analytics dashboards and automated reporting modules tracking outlet coverage KPIs, target achievements, and regional distribution metrics.',
-    tags: ['Mobile Development', 'Web Dashboards', 'KPI Telemetry', 'MySQL'],
+    summary: 'Sales coverage reporting: which outlets are covered, and how each region is doing against its targets.',
+    highlights: [
+      'Outlet coverage tracking modules for the mobile app',
+      'Target-achievement dashboards for outlet and regional KPIs',
+      'Automated, database-driven reports on regional distribution',
+    ],
+    tags: ['Mobile Development', 'Web Dashboards', 'KPI Reporting', 'MySQL'],
   },
   {
     title: 'Full-Stack Developer (Apprentice)',
@@ -37,7 +56,11 @@ const EXPERIENCES = [
     location: 'Yogyakarta',
     period: 'Jun 2022 — Sep 2022',
     current: false,
-    description: 'Completed comprehensive software engineering apprenticeship building full-stack web applications, database schema designs, and RESTful API integrations.',
+    summary: 'Full-stack web apprenticeship, building web applications end to end, from the database to the interface.',
+    highlights: [
+      'Built full-stack web application features in PHP and Laravel',
+      'Designed database schemas and integrated REST APIs',
+    ],
     tags: ['Web Applications', 'PHP / Laravel', 'REST APIs', 'Database Design'],
   },
 ];
@@ -51,7 +74,7 @@ export default function Experience() {
           label="Experience"
           title={<>Where I've been <em>shipping</em></>}
         >
-          Production work across platform engineering, mobile field apps, and analytics — most recent first.
+          Production work across vessel tracking, mobile field apps and sales analytics, most recent first.
         </SectionHead>
 
         <ol className="exp-list">
@@ -77,7 +100,12 @@ export default function Experience() {
                     <MapPin size={13} aria-hidden="true" /> {exp.location}
                   </span>
                 </p>
-                <p className="exp-desc">{exp.description}</p>
+                <p className="exp-summary">{exp.summary}</p>
+                <ul className="exp-highlights">
+                  {exp.highlights.map((h) => (
+                    <li key={h}>{h}</li>
+                  ))}
+                </ul>
                 <div className="tag-list">
                   {exp.tags.map((tag) => (
                     <span key={tag} className="tag">{tag}</span>
