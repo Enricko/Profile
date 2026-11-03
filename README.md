@@ -1,16 +1,39 @@
-# React + Vite
+# Lufria — Enricko Putra Hartono
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[Website: lufria.tech](https://lufria.tech)
 
-Currently, two official plugins are available:
+Enricko Putra Hartono's software engineering portfolio, built with React 19 and Vite 8. It includes selected projects, work experience, a downloadable CV, and GitHub activity.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- GitHub contribution skyline and heatmap, starting with a genuine bundled calendar while current data loads; usable saved data remains available when requests fail.
+- Randomized falling backgrounds, including twelve chibi mascot poses.
+- Responsive layouts and reduced-motion support.
+- A public profile visit total beside the hero social links.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Run locally
 
-## Expanding the ESLint configuration
+```sh
+npm ci
+npm run dev -- --host 127.0.0.1 --port 5180
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Run the project checks or create the production build with:
+
+```sh
+npm test
+npm run lint
+npm run build
+```
+
+The static production files are written to `dist/`.
+
+## Profile visit count
+
+On `lufria.tech` and `www.lufria.tech`, the shared total normally increments once per browser-tab session. Local and preview hosts only read the total. The counter starts at zero until a production visit is recorded; it has no imported historical data and does not measure unique people. It is a best-effort public count, so a blocked request, network failure, or service limit may miss a visit.
+
+To check the total directly, open the [read-only counter response](https://countapi.mileshilliard.com/api/v1/get/lufria-tech-profile-visits) and read its `value`. “Key not found” means no production visit has been recorded yet; the site displays `0`. No account or API key is needed.
+
+## Deploy
+
+Build with `npm run build` and publish the contents of `dist/` with a static host. The current root `vercel.json` redirects every path to `https://lufria.tech`. If deploying this site on Vercel at `lufria.tech`, adjust that redirect first to avoid a redirect loop.

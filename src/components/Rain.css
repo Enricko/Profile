@@ -25,6 +25,8 @@
 .mode-calico .paw svg,
 .mode-faces .paw svg { filter: drop-shadow(0 0 5px rgba(255, 245, 230, 0.28)); }
 .mode-skills .paw img { filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.22)); }
+/* Sprites are taller than wide: fit them in the square box without stretching */
+.mode-chibi .paw img { object-fit: contain; }
 
 @keyframes paw-fall {
   from { transform: translateY(-12vh) translateX(0) rotate(0deg); }

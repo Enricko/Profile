@@ -7,35 +7,18 @@
   margin-bottom: 1.75rem;
 }
 
-/* Grid ------------------------------------------------------------------- */
-.projects-grid {
+/* Groups: public first, then private. Each opens with its featured card. */
+.projects-groups {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 3rem;
+}
+.projects-group {
+  display: grid;
   gap: 1rem;
 }
 
-.project-card {
-  display: flex;
-  flex-direction: column;
-  padding: 1.6rem;
-  min-height: 300px;
-}
-
-.project-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.75rem;
-}
+/* Shared card pieces ------------------------------------------------------ */
 .project-status { font-size: 0.75rem; padding: 0.22rem 0.6rem; }
-.project-arrow {
-  color: var(--text-dim);
-  transition: transform 0.25s var(--ease-out), color 0.2s ease;
-}
-.card-link:hover .project-arrow {
-  color: var(--text);
-  transform: translate(2px, -2px);
-}
 
 .project-category {
   font-family: var(--font-mono);
@@ -44,31 +27,249 @@
   text-transform: uppercase;
   color: var(--text-dim);
 }
+.project-desc {
+  color: var(--text-muted);
+  font-size: 0.93rem;
+  line-height: 1.65;
+  max-width: 62ch;
+}
+
+.project-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.project-note svg { flex-shrink: 0; margin-top: 0.18rem; }
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+.project-links.is-lg { gap: 0.6rem; }
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 32px;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.project-link svg { transition: transform 0.25s var(--ease-out); }
+.project-link:hover {
+  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.04);
+}
+.project-link:hover svg { transform: translate(2px, -2px); }
+
+/* Featured project ------------------------------------------------------- */
+.project-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 2.25rem;
+  align-items: center;
+  padding: 1.25rem 2rem 1.25rem 1.25rem;
+}
+/* The private feature mirrors it: copy left, flow diagram right. */
+.project-feature.has-flow {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  padding: 2rem 1.25rem 2rem 2rem;
+}
+.project-feature.has-flow .feature-visual { order: 2; }
+
+.feature-shot {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #0b1120;
+}
+.feature-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top left;
+}
+.feature-shot figcaption {
+  padding: 0.55rem 0.85rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-dim);
+  font-size: 0.75rem;
+}
+
+.feature-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+.feature-body .project-status { margin-bottom: 1.4rem; }
+.feature-title {
+  margin: 0.4rem 0 0.75rem;
+  font-size: clamp(1.6rem, 2.6vw, 2rem);
+  letter-spacing: -0.035em;
+}
+
+.feature-highlights {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1.25rem;
+  list-style: none;
+}
+.feature-highlights li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.feature-highlights svg { flex-shrink: 0; margin-top: 0.15rem; color: var(--accent); }
+
+.feature-footer {
+  display: grid;
+  gap: 1.1rem;
+  width: 100%;
+  margin-top: 1.75rem;
+}
+
+/* Vertical flow diagram for the private feature */
+.flow-steps {
+  list-style: none;
+  padding: 1.6rem 1.5rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+}
+.flow-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 1rem;
+  padding-bottom: 1.35rem;
+}
+.flow-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 34px;
+  bottom: 4px;
+  left: 14.5px;
+  width: 1px;
+  background: var(--border-strong);
+}
+.flow-step-index {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+.flow-step:last-child .flow-step-index {
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.flow-step-label {
+  display: block;
+  padding-top: 0.2rem;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+}
+.flow-step-detail {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* Compact cards ---------------------------------------------------------- */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.6rem;
+}
+
+.project-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 32px; /* same height with or without link buttons, so paired cards align */
+  margin-bottom: 1.5rem;
+}
 .project-title {
   margin: 0.4rem 0 0.7rem;
   font-size: 1.35rem;
   letter-spacing: -0.03em;
 }
-.project-desc {
-  color: var(--text-muted);
-  font-size: 0.93rem;
-  line-height: 1.65;
-}
 
-.project-note {
+/* Horizontal flow strip: the system's main path in one line */
+.flow-strip {
   display: flex;
-  gap: 0.55rem;
-  margin-top: 1rem;
-  padding: 0.7rem 0.8rem;
-  border: 1px dashed var(--border-strong);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.25rem;
+  margin-top: 1.25rem;
+  padding: 0.7rem;
+  list-style: none;
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  color: var(--text-dim);
-  font-size: 0.8rem;
-  line-height: 1.5;
+  background: var(--bg-elevated);
 }
-.project-note svg { flex-shrink: 0; margin-top: 0.15rem; }
+.flow-strip li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.flow-sep { color: var(--text-dim); flex-shrink: 0; }
+.flow-node {
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.flow-strip li:last-child .flow-node {
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
 
-.project-tags {
+.project-footer {
+  display: grid;
+  gap: 1rem;
   margin-top: auto;
   padding-top: 1.4rem;
 }
@@ -80,7 +281,7 @@
 }
 .projects-table {
   width: 100%;
-  min-width: 860px;
+  min-width: 900px;
   border-collapse: collapse;
   font-size: 0.9rem;
 }
@@ -103,6 +304,7 @@
 .projects-table tbody tr:last-child td { border-bottom: none; }
 .projects-table tbody tr { transition: background-color 0.2s ease; }
 .projects-table tbody tr:hover { background: rgba(255, 255, 255, 0.02); }
+.projects-table .project-links { justify-content: flex-end; flex-wrap: nowrap; }
 .cell-name { max-width: 340px; }
 .cell-name strong { display: block; font-weight: 600; color: var(--text); }
 .cell-desc {
@@ -121,10 +323,8 @@
   min-height: 32px;
   color: var(--text);
   font-weight: 500;
-  text-decoration: none;
   white-space: nowrap;
 }
-.table-action:hover { color: var(--accent); }
 .table-action.is-locked { color: var(--text-dim); font-weight: 400; }
 
 .sr-only {
@@ -136,32 +336,57 @@
   white-space: nowrap;
 }
 
-/* Closing "more on GitHub" tile */
-.project-more {
-  justify-content: center;
-  align-items: flex-start;
-  gap: 0.25rem;
-  border-style: dashed;
-  border-color: var(--border-strong);
-  background: transparent;
-  color: var(--text-muted);
-}
-.project-more .project-title { margin-top: 1rem; color: var(--text); }
-.project-more-link {
-  display: inline-flex;
+/* Closing "more on GitHub" row */
+.projects-more {
+  display: flex;
   align-items: center;
-  gap: 0.35rem;
-  margin-top: 1.25rem;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--text);
+  gap: 0.9rem;
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
-.project-more-link svg { transition: transform 0.25s var(--ease-out); }
-.project-more:hover .project-more-link svg { transform: translate(2px, -2px); }
+.projects-more > svg:first-child { color: var(--text); flex-shrink: 0; }
+.projects-more strong { color: var(--text); font-weight: 600; margin-right: 0.5rem; }
+.projects-more-desc { font-size: 0.9rem; }
+.projects-more-arrow {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--text-dim);
+  transition: transform 0.25s var(--ease-out), color 0.2s ease;
+}
+.projects-more:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.02);
+}
+.projects-more:hover .projects-more-arrow { color: var(--text); transform: translate(2px, -2px); }
+
+@media (max-width: 960px) {
+  .project-feature,
+  .project-feature.has-flow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+    padding: 1.25rem 1.25rem 1.6rem;
+  }
+  .project-feature.has-flow { padding-top: 1.6rem; }
+  .project-feature.has-flow .feature-visual { order: 2; }
+  .feature-body { padding: 0 0.35rem; }
+}
+
+@media (max-width: 760px) {
+  .projects-grid { grid-template-columns: minmax(0, 1fr); }
+}
 
 @media (max-width: 640px) {
   .projects-toolbar { align-items: stretch; }
   .projects-toolbar .segmented:first-child { width: 100%; }
   .view-label { display: none; }
-  .project-card { min-height: 0; padding: 1.35rem; }
+  .project-card { padding: 1.35rem; }
+  .projects-groups { gap: 2rem; }
+  .flow-steps { padding: 1.25rem 1.1rem 0.2rem; }
+  .projects-more { align-items: flex-start; }
+  .projects-more strong { display: block; margin: 0 0 0.15rem; }
 }

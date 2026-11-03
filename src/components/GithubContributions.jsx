@@ -2,38 +2,38 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { BookMarked, Star, GitCommitHorizontal, CalendarDays, ArrowUpRight } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { useCountUp, useInView } from '../lib/useInteractions';
+import { GITHUB_USERNAME, GITHUB_URL } from '../lib/contributions';
+import { useContributions } from '../lib/useContributions';
 import SectionHead from './SectionHead';
 import './GithubContributions.css';
 
-const GITHUB_USERNAME = 'Enricko';
-const GITHUB_URL = `https://github.com/${GITHUB_USERNAME}`;
-// Public, CORS-enabled mirror of the GitHub contribution calendar (GitHub's own
-// endpoint needs an authenticated GraphQL call the browser can't make).
-const CONTRIBUTIONS_URL = `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last`;
 const WEEKS_IN_GRID = 53;
 
 // Shown only if the live repo list can't be fetched.
 const FALLBACK_REPOS = [
   {
-    name: 'Realtime Chatting App',
+    name: 'Flutter-Realtime-ChattingApp',
     description: 'A multi-platform real-time messaging application built with Flutter.',
     html_url: 'https://github.com/Enricko/Flutter-Realtime-ChattingApp',
     stargazers_count: 4,
     language: 'Dart',
+    pushed_at: '2023-06-14T00:00:00Z',
   },
   {
-    name: 'Dino Run with Flutter',
+    name: 'Dino-Run-with-Flutter',
     description: 'An endless runner game inspired by the classic Dino Game, built with Flutter Flame.',
     html_url: 'https://github.com/Enricko/Dino-Run-with-Flutter',
     stargazers_count: 4,
     language: 'Dart',
+    pushed_at: '2023-05-30T00:00:00Z',
   },
   {
-    name: 'Saba Jogja',
+    name: 'Saba-Jogja',
     description: 'An interactive app with comprehensive information about Yogyakarta, built with Flutter.',
     html_url: 'https://github.com/Enricko/Saba-Jogja-Lomba-Web-Dev-Competition-Feb-2024',
     stargazers_count: 3,
     language: 'Dart',
+    pushed_at: '2024-03-05T00:00:00Z',
   },
   {
     name: 'Flask-Restx-Template',
@@ -41,8 +41,50 @@ const FALLBACK_REPOS = [
     html_url: 'https://github.com/Enricko/Flask-Restx-Template',
     stargazers_count: 3,
     language: 'Python',
+    pushed_at: '2024-02-27T00:00:00Z',
+  },
+  {
+    name: 'lufria-monitor',
+    description: 'Self-hosted monitoring dashboard for a Linux home server: live stats, power use in kWh and Rupiah, passkey sign-in, browser terminal.',
+    html_url: 'https://github.com/Enricko/lufria-monitor',
+    stargazers_count: 1,
+    language: 'TypeScript',
+    pushed_at: '2026-10-29T00:00:00Z',
   },
 ];
+
+// Profile plumbing, not projects: the profile-README repo and a repo that is
+// public but describes itself as private.
+const HIDDEN_REPOS = new Set([GITHUB_USERNAME, 'hermes-skills']);
+
+// Most repos have no description; a card that says "No description provided"
+// undersells the work, so only described repos are eligible.
+const isShowcaseRepo = (r) => !r.fork && !r.archived && !!r.description?.trim() && !HIDDEN_REPOS.has(r.name);
+
+// GitHub's own language colors, for the dot on each card.
+const LANGUAGE_COLORS = {
+  Dart: '#00B4AB',
+  Python: '#3572A5',
+  TypeScript: '#3178C6',
+  JavaScript: '#F1E05A',
+  Go: '#00ADD8',
+  PHP: '#4F5D95',
+  Blade: '#F7523F',
+  Swift: '#F05138',
+  Rust: '#DEA584',
+  'C++': '#F34B7D',
+  'C#': '#178600',
+  C: '#8B8B94',
+  HTML: '#E34C26',
+  CSS: '#663399',
+  'Jupyter Notebook': '#DA5B0B',
+};
+
+const repoTitle = (name) => name.replace(/[-_]+/g, ' ');
+const pushedTime = (r) => new Date(r.pushed_at || 0).getTime();
+const formatUpdated = (iso) =>
+  iso ? new Date(iso).toLocaleDateString('en', { month: 'short', year: 'numeric' }) : null;
+const formatDay = (ms) => new Date(ms).toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric' });
 
 /**
  * Lays the API's day list out as Sunday-first week columns, like GitHub does.
@@ -66,11 +108,16 @@ function buildCalendar(days) {
 }
 
 function MetricCard({ icon, value, label, active }) {
-  const n = useCountUp(value ?? 0, active && value != null);
+  // Counts up once, to the value showing when the card scrolls into view; a
+  // later refresh (saved activity replaced by live) then shows as-is.
+  const [countTo, setCountTo] = useState(null);
+  if (countTo == null && active && value != null) setCountTo(value);
+  const n = useCountUp(countTo ?? 0, countTo != null);
+  const shown = countTo != null && n === countTo ? value : n;
   return (
     <div className="metric">
       <span className="metric-label">{icon} {label}</span>
-      <span className="metric-value">{value == null ? '—' : n.toLocaleString()}</span>
+      <span className="metric-value">{value == null ? '—' : shown.toLocaleString()}</span>
     </div>
   );
 }
@@ -78,7 +125,7 @@ function MetricCard({ icon, value, label, active }) {
 export default function GithubContributions() {
   const [stats, setStats] = useState(null);
   const [repos, setRepos] = useState(FALLBACK_REPOS);
-  const [calendar, setCalendar] = useState('loading'); // 'loading' | 'error' | { weeks, total, activeDays }
+  const { days, source, updatedAt } = useContributions();
   const [filter, setFilter] = useState('starred');
   const [metricsRef, metricsInView] = useInView({ threshold: 0.3 });
 
@@ -102,41 +149,32 @@ export default function GithubContributions() {
           repos: profile.public_repos ?? ownedRepos.length,
           stars: ownedRepos.reduce((sum, r) => sum + (r.stargazers_count || 0), 0),
         });
-        if (ownedRepos.length) setRepos(ownedRepos);
+        const showcase = ownedRepos.filter(isShowcaseRepo);
+        if (showcase.length >= 4) setRepos(showcase);
       } catch (err) {
         console.warn('GithubContributions: repo stats unavailable:', err.message);
       }
     }
 
-    async function loadCalendar() {
-      try {
-        const res = await fetch(CONTRIBUTIONS_URL);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        if (!Array.isArray(data.contributions) || !data.contributions.length) throw new Error('empty calendar');
-        if (!cancelled) setCalendar(buildCalendar(data.contributions));
-      } catch (err) {
-        console.warn('GithubContributions: contribution calendar unavailable:', err.message);
-        if (!cancelled) setCalendar('error');
-      }
-    }
-
     loadGithubData();
-    loadCalendar();
     return () => { cancelled = true; };
   }, []);
 
   const topRepos = useMemo(() => {
     const sorted = [...repos];
     if (filter === 'starred') {
-      sorted.sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0));
+      // Many repos tie on stars; the more recently active one wins the tie.
+      sorted.sort((a, b) =>
+        (b.stargazers_count || 0) - (a.stargazers_count || 0) || pushedTime(b) - pushedTime(a));
     } else {
-      sorted.sort((a, b) => new Date(b.pushed_at || 0) - new Date(a.pushed_at || 0));
+      sorted.sort((a, b) => pushedTime(b) - pushedTime(a));
     }
     return sorted.slice(0, 4);
   }, [repos, filter]);
 
-  const cal = typeof calendar === 'object' ? calendar : null;
+  const cal = useMemo(() => (days.length ? buildCalendar(days) : null), [days]);
+  const isLive = source === 'live';
+  const savedOn = updatedAt ? formatDay(updatedAt) : null;
   const placeholderWeeks = useMemo(
     () => Array.from({ length: WEEKS_IN_GRID }, (_, w) =>
       Array.from({ length: 7 }, (_, d) => ({ key: `ph-${w}-${d}`, empty: true }))),
@@ -151,7 +189,7 @@ export default function GithubContributions() {
           label="Open Source"
           title={<>Building in the <em>open</em></>}
         >
-          My public GitHub footprint, pulled live from GitHub when the page loads.
+          My public GitHub footprint, kept up to date from GitHub.
         </SectionHead>
 
         <div className="metrics reveal-on-scroll delay-100" ref={metricsRef}>
@@ -166,18 +204,24 @@ export default function GithubContributions() {
             <div>
               <h3>Contribution activity</h3>
               <p className="heatmap-summary">
-                {cal && `${cal.total.toLocaleString()} contributions in the last year`}
-                {calendar === 'loading' && 'Loading contribution calendar…'}
-                {calendar === 'error' && "Couldn't load the contribution calendar right now."}
+                {cal && isLive && `${cal.total.toLocaleString()} contributions in the last year`}
+                {cal && !isLive && `${cal.total.toLocaleString()} contributions in the year to ${savedOn}`}
+                {!cal && "Couldn't load the contribution calendar right now."}
               </p>
             </div>
-            {cal ? (
+            {cal && isLive ? (
               <span className="pill pill-accent">
                 <span className="live-dot" aria-hidden="true" /> Live from GitHub
               </span>
             ) : (
-              <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="pill heatmap-fallback-link">
-                View on GitHub <ArrowUpRight size={13} />
+              <a
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="pill heatmap-fallback-link"
+                title={cal ? `Saved from GitHub on ${savedOn}` : undefined}
+              >
+                {cal ? 'Saved GitHub activity' : 'View on GitHub'} <ArrowUpRight size={13} aria-hidden="true" />
               </a>
             )}
           </div>
@@ -187,7 +231,7 @@ export default function GithubContributions() {
               className={`heatmap-grid ${cal ? '' : 'is-placeholder'}`}
               role="img"
               aria-label={cal
-                ? `GitHub contribution heatmap: ${cal.total} contributions on ${cal.activeDays} days in the last year`
+                ? `GitHub contribution heatmap: ${cal.total} contributions on ${cal.activeDays} days in the ${isLive ? 'last year' : `year to ${savedOn}`}`
                 : 'GitHub contribution heatmap unavailable'}
             >
               {(cal ? cal.weeks : placeholderWeeks).map((week, wi) => (
@@ -246,14 +290,29 @@ export default function GithubContributions() {
                 className="card card-link repo-card"
               >
                 <div className="repo-card-head">
-                  <FaGithub size={16} className="repo-icon" aria-hidden="true" />
+                  {repo.language ? (
+                    <span className="repo-lang">
+                      <span
+                        className="lang-dot"
+                        style={{ background: LANGUAGE_COLORS[repo.language] || 'var(--text-dim)' }}
+                      />
+                      {repo.language}
+                    </span>
+                  ) : (
+                    <FaGithub size={15} className="repo-icon" aria-hidden="true" />
+                  )}
                   <ArrowUpRight size={16} className="repo-arrow" aria-hidden="true" />
                 </div>
-                <h4 className="repo-name">{repo.name}</h4>
-                <p className="repo-desc">{repo.description || 'No description provided.'}</p>
+                <h4 className="repo-name">{repoTitle(repo.name)}</h4>
+                <p className="repo-desc">{repo.description}</p>
                 <div className="repo-card-footer">
-                  {repo.language && <span className="repo-lang"><span className="lang-dot" /> {repo.language}</span>}
-                  <span className="repo-stars"><Star size={13} aria-hidden="true" /> {repo.stargazers_count ?? 0}</span>
+                  <span className="repo-stars">
+                    <Star size={13} aria-hidden="true" /> {repo.stargazers_count ?? 0}
+                    <span className="sr-only">stars</span>
+                  </span>
+                  {repo.pushed_at && (
+                    <span className="repo-updated">Updated {formatUpdated(repo.pushed_at)}</span>
+                  )}
                 </div>
               </a>
             ))}

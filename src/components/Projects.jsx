@@ -1,112 +1,224 @@
 import React, { useState } from 'react';
-import { ArrowUpRight, LockKeyhole, ShieldCheck, LayoutGrid, List, PowerOff } from 'lucide-react';
+import { ArrowUpRight, LockKeyhole, LayoutGrid, List, PowerOff, ChevronRight, Check } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
+import { PROJECTS, PROJECT_FILTERS } from '../data/projects';
 import SectionHead from './SectionHead';
 import './Projects.css';
 
-const PROJECTS = [
-  {
-    id: 'hematcuy',
-    name: 'HematCuy',
-    category: 'Public Platform',
-    categoryType: 'public',
-    description: 'Universal real-time price & deal aggregator for groceries, tech, and essentials with official platform deep links and WAF-resilient catalog indexing.',
-    // hematcuy.lufria.tech has no tunnel route after the server migration (404) —
-    // switch back to status 'public' + href once it is redeployed.
-    href: null,
-    tags: ['FastAPI', 'React', 'Redis', 'Tailwind'],
-    status: 'offline',
-    statusLabel: 'Currently Offline',
-    featured: true,
-  },
-  {
-    id: 'ticketsystem',
-    name: 'IT Ticket System',
-    category: 'Web Platform',
-    categoryType: 'enterprise',
-    description: 'Autonomous IT support ticketing desk with daily rotating PIN security, client-side WebP photo compression, and automated Discord webhook dispatch.',
-    href: null,
-    tags: ['FastAPI', 'SQLite', 'Discord Webhook', 'Python'],
-    status: 'private',
-    statusLabel: 'Private System',
-    note: 'Restricted operational support system containing internal requests, attachments, and incident records.',
-    featured: false,
-  },
-  {
-    id: 'tradingadvisory',
-    name: 'Trading Advisory Bot',
-    category: 'Fintech & Algorithmic',
-    categoryType: 'enterprise',
-    description: 'Algorithmic market signal engine and Discord bot delivering scheduled BPJS/BSJP analysis, real-time WebSocket market streams, and portfolio risk telemetry.',
-    href: null,
-    tags: ['FastAPI', 'WebSocket', 'MySQL', 'Discord API'],
-    status: 'private',
-    statusLabel: 'Private System',
-    note: 'Restricted system handling private portfolio capital, execution strategies, and real-time exchange feeds.',
-    featured: true,
-  },
-  {
-    id: 'clipperapps',
-    name: 'Clipper Apps',
-    category: 'AI & Media Pipeline',
-    categoryType: 'enterprise',
-    description: 'Automated video workflow engine converting long-form footage into indexed, transcribed short clips using dedicated GPU NVENC hardware encoding.',
-    href: null,
-    tags: ['AI Workflow', 'GPU NVENC', 'FastAPI', 'Job Queue'],
-    status: 'private',
-    statusLabel: 'Internal Pipeline',
-    note: 'Private media engine running on dedicated workstation hardware with proprietary transcription queue.',
-    featured: false,
-  },
-  {
-    id: 'profile',
-    name: 'Lufria.tech Portfolio',
-    category: 'Design System',
-    categoryType: 'public',
-    description: 'This site — a dark, editorial portfolio built with React 19, Vite, and plain-CSS design tokens, with live data from the GitHub API.',
-    href: 'https://lufria.tech',
-    tags: ['React 19', 'Vite', 'Design Tokens', 'CSS3'],
-    status: 'public',
-    statusLabel: 'Live Public Site',
-    featured: false,
-  },
-];
+const STATUS = {
+  'open-source': { label: 'Open source', className: 'pill-accent', icon: <FaGithub size={12} aria-hidden="true" /> },
+  live: { label: 'Live site', className: 'pill-accent', icon: <span className="live-dot" aria-hidden="true" /> },
+  offline: { label: 'Offline', className: '', icon: <PowerOff size={12} aria-hidden="true" /> },
+  private: { label: 'Private system', className: '', icon: <LockKeyhole size={12} aria-hidden="true" /> },
+};
 
-const FILTERS = [
-  { id: 'all', label: 'All' },
-  { id: 'public', label: 'Public apps' },
-  { id: 'enterprise', label: 'Enterprise & systems' },
-];
-
-function StatusPill({ project }) {
-  if (project.status === 'public') {
-    return (
-      <span className="pill pill-accent project-status">
-        <span className="live-dot" aria-hidden="true" /> {project.statusLabel}
-      </span>
-    );
-  }
+function StatusPill({ status }) {
+  const s = STATUS[status];
   return (
-    <span className="pill project-status">
-      {project.status === 'offline'
-        ? <PowerOff size={12} aria-hidden="true" />
-        : <LockKeyhole size={12} aria-hidden="true" />}
-      {project.statusLabel}
+    <span className={`pill project-status ${s.className}`}>
+      {s.icon} {s.label}
     </span>
+  );
+}
+
+function ProjectLinks({ project, size = 'sm' }) {
+  const { live, code } = project.links;
+  if (!live && !code) return null;
+  const cls = size === 'lg' ? 'btn btn-secondary' : 'project-link';
+  return (
+    <div className={`project-links ${size === 'lg' ? 'is-lg' : ''}`}>
+      {live && (
+        <a href={live} target="_blank" rel="noreferrer" className={cls} aria-label={`Open the ${project.name} live site`}>
+          Live site <ArrowUpRight size={size === 'lg' ? 16 : 14} aria-hidden="true" />
+        </a>
+      )}
+      {code && (
+        <a href={code} target="_blank" rel="noreferrer" className={cls} aria-label={`View the ${project.name} source code on GitHub`}>
+          {size === 'lg' && <FaGithub size={15} aria-hidden="true" />}
+          Code <ArrowUpRight size={size === 'lg' ? 16 : 14} aria-hidden="true" />
+        </a>
+      )}
+    </div>
+  );
+}
+
+function FlowStrip({ project }) {
+  return (
+    <ol className="flow-strip" aria-label={`How ${project.name} works`}>
+      {project.flow.map((step, i) => (
+        <li key={step.label}>
+          <span className="flow-node">{step.label}</span>
+          {i < project.flow.length - 1 && <ChevronRight size={13} className="flow-sep" aria-hidden="true" />}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function FlowSteps({ project }) {
+  return (
+    <ol className="flow-steps" aria-label={`How ${project.name} works`}>
+      {project.flow.map((step, i) => (
+        <li key={step.label} className="flow-step">
+          <span className="flow-step-index" aria-hidden="true">{i + 1}</span>
+          <div>
+            <span className="flow-step-label">{step.label}</span>
+            <span className="flow-step-detail">{step.detail}</span>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function ProjectNote({ project }) {
+  if (!project.note) return null;
+  return (
+    <p className="project-note">
+      {project.status === 'offline'
+        ? <PowerOff size={13} aria-hidden="true" />
+        : <LockKeyhole size={13} aria-hidden="true" />}
+      <span>{project.note}</span>
+    </p>
+  );
+}
+
+function Tags({ tags }) {
+  return (
+    <div className="tag-list">
+      {tags.map((tag) => (
+        <span key={tag} className="tag">{tag}</span>
+      ))}
+    </div>
+  );
+}
+
+function FeaturedProject({ project }) {
+  return (
+    <article className={`card project-feature ${project.image ? 'has-image' : 'has-flow'}`}>
+      <div className="feature-visual">
+        {project.image ? (
+          <figure className="feature-shot">
+            <img
+              src={project.image.src}
+              alt={project.image.alt}
+              width={project.image.width}
+              height={project.image.height}
+              loading="lazy"
+            />
+            {project.image.caption && <figcaption>{project.image.caption}</figcaption>}
+          </figure>
+        ) : (
+          <FlowSteps project={project} />
+        )}
+      </div>
+
+      <div className="feature-body">
+        <StatusPill status={project.status} />
+        <span className="project-category">{project.category}</span>
+        <h3 className="feature-title">{project.name}</h3>
+        <p className="project-desc">{project.summary}</p>
+
+        {project.highlights && (
+          <ul className="feature-highlights">
+            {project.highlights.map((h) => (
+              <li key={h}><Check size={15} aria-hidden="true" /> {h}</li>
+            ))}
+          </ul>
+        )}
+
+        <div className="feature-footer">
+          <Tags tags={project.tags} />
+          <ProjectNote project={project} />
+          <ProjectLinks project={project} size="lg" />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function ProjectCard({ project }) {
+  return (
+    <article className="card project-card">
+      <div className="project-top">
+        <StatusPill status={project.status} />
+        <ProjectLinks project={project} />
+      </div>
+
+      <span className="project-category">{project.category}</span>
+      <h3 className="project-title">{project.name}</h3>
+      <p className="project-desc">{project.summary}</p>
+
+      {project.flow && <FlowStrip project={project} />}
+
+      <div className="project-footer">
+        <Tags tags={project.tags} />
+        <ProjectNote project={project} />
+      </div>
+    </article>
+  );
+}
+
+function ProjectsTable({ projects }) {
+  return (
+    <div className="projects-table-wrap card">
+      <table className="projects-table">
+        <thead>
+          <tr>
+            <th scope="col">Project</th>
+            <th scope="col">Category</th>
+            <th scope="col">Stack</th>
+            <th scope="col">Status</th>
+            <th scope="col" className="text-right">
+              <span className="sr-only">Links</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {projects.map((project) => (
+            <tr key={project.id}>
+              <td className="cell-name">
+                <strong>{project.name}</strong>
+                <span className="cell-desc">{project.summary}</span>
+              </td>
+              <td className="cell-category">{project.category}</td>
+              <td><Tags tags={project.tags} /></td>
+              <td><StatusPill status={project.status} /></td>
+              <td className="text-right">
+                {project.links.live || project.links.code ? (
+                  <ProjectLinks project={project} />
+                ) : (
+                  <span className="table-action is-locked" title={project.note}>
+                    {project.status === 'offline'
+                      ? <><PowerOff size={13} aria-hidden="true" /> Offline</>
+                      : <><LockKeyhole size={13} aria-hidden="true" /> Private</>}
+                  </span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
 export default function Projects() {
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'table'
-  const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'public' | 'enterprise'
+  const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'public' | 'private'
 
   const countFor = (id) =>
-    id === 'all' ? PROJECTS.length : PROJECTS.filter((p) => p.categoryType === id).length;
+    id === 'all' ? PROJECTS.length : PROJECTS.filter((p) => p.group === id).length;
 
-  const filteredProjects = PROJECTS.filter((p) => {
-    if (activeFilter === 'all') return true;
-    return p.categoryType === activeFilter;
-  });
+  const filteredProjects = PROJECTS.filter((p) => activeFilter === 'all' || p.group === activeFilter);
+
+  // In grid view each group opens with its featured project, then a 2-up grid.
+  const groups = ['public', 'private']
+    .map((group) => {
+      const items = filteredProjects.filter((p) => p.group === group);
+      return { group, featured: items.filter((p) => p.featured), rest: items.filter((p) => !p.featured) };
+    })
+    .filter((g) => g.featured.length || g.rest.length);
 
   return (
     <section id="projects" className="projects">
@@ -116,13 +228,13 @@ export default function Projects() {
           label="Projects"
           title={<>Selected <em>work</em></>}
         >
-          Public products and production systems, alongside private enterprise architectures
-          maintained for operational rigor.
+          Open-source tools you can read and run, plus private production systems
+          explained by how they work.
         </SectionHead>
 
         <div className="projects-toolbar reveal-on-scroll delay-100">
           <div className="segmented" role="group" aria-label="Filter projects">
-            {FILTERS.map((f) => (
+            {PROJECT_FILTERS.map((f) => (
               <button
                 key={f.id}
                 type="button"
@@ -158,124 +270,35 @@ export default function Projects() {
         </div>
 
         {viewMode === 'grid' ? (
-          <div className="projects-grid">
-            {filteredProjects.map((project) => {
-              const isPublic = project.status === 'public';
-              const cardContent = (
-                <>
-                  <div className="project-top">
-                    <StatusPill project={project} />
-                    {isPublic && <ArrowUpRight size={18} className="project-arrow" aria-hidden="true" />}
+          <div className="projects-groups">
+            {groups.map(({ group, featured, rest }) => (
+              <div key={group} className="projects-group">
+                {featured.map((p) => <FeaturedProject key={p.id} project={p} />)}
+                {rest.length > 0 && (
+                  <div className="projects-grid">
+                    {rest.map((p) => <ProjectCard key={p.id} project={p} />)}
                   </div>
-
-                  <span className="project-category">{project.category}</span>
-                  <h3 className="project-title">{project.name}</h3>
-                  <p className="project-desc">{project.description}</p>
-
-                  {project.note && (
-                    <p className="project-note">
-                      <ShieldCheck size={14} aria-hidden="true" />
-                      <span>{project.note}</span>
-                    </p>
-                  )}
-
-                  <div className="tag-list project-tags">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="tag">{tag}</span>
-                    ))}
-                  </div>
-                </>
-              );
-
-              return isPublic ? (
-                <a
-                  key={project.id}
-                  href={project.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="card card-link project-card"
-                  aria-label={`${project.name} — open ${project.href}`}
-                >
-                  {cardContent}
-                </a>
-              ) : (
-                <article key={project.id} className="card project-card is-private">
-                  {cardContent}
-                </article>
-              );
-            })}
-
-            <a
-              href="https://github.com/Enricko"
-              target="_blank"
-              rel="noreferrer"
-              className="card card-link project-card project-more"
-            >
-              <FaGithub size={22} aria-hidden="true" />
-              <h3 className="project-title">More on GitHub</h3>
-              <p className="project-desc">
-                Open repositories — Flutter apps, games, API templates, and experiments.
-              </p>
-              <span className="project-more-link">
-                github.com/Enricko <ArrowUpRight size={15} />
-              </span>
-            </a>
+                )}
+              </div>
+            ))}
           </div>
         ) : (
-          <div className="projects-table-wrap card">
-            <table className="projects-table">
-              <thead>
-                <tr>
-                  <th scope="col">Project</th>
-                  <th scope="col">Category</th>
-                  <th scope="col">Stack</th>
-                  <th scope="col">Access</th>
-                  <th scope="col" className="text-right">
-                    <span className="sr-only">Action</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredProjects.map((project) => {
-                  const isPublic = project.status === 'public';
-                  return (
-                    <tr key={project.id}>
-                      <td className="cell-name">
-                        <strong>{project.name}</strong>
-                        <span className="cell-desc">{project.description}</span>
-                      </td>
-                      <td className="cell-category">{project.category}</td>
-                      <td>
-                        <div className="tag-list">
-                          {project.tags.map((tag) => (
-                            <span key={tag} className="tag">{tag}</span>
-                          ))}
-                        </div>
-                      </td>
-                      <td><StatusPill project={project} /></td>
-                      <td className="text-right">
-                        {isPublic ? (
-                          <a href={project.href} target="_blank" rel="noreferrer" className="table-action">
-                            Open <ArrowUpRight size={14} />
-                          </a>
-                        ) : project.status === 'offline' ? (
-                          <span className="table-action is-locked">
-                            <PowerOff size={13} /> Offline
-                          </span>
-                        ) : (
-                          <span className="table-action is-locked" title={project.note}>
-                            <LockKeyhole size={13} /> Private
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          <ProjectsTable projects={filteredProjects} />
         )}
 
+        <a
+          href="https://github.com/Enricko?tab=repositories"
+          target="_blank"
+          rel="noreferrer"
+          className="projects-more"
+        >
+          <FaGithub size={18} aria-hidden="true" />
+          <span>
+            <strong>More on GitHub</strong>
+            <span className="projects-more-desc">Flutter apps, games, API templates and experiments.</span>
+          </span>
+          <ArrowUpRight size={16} className="projects-more-arrow" aria-hidden="true" />
+        </a>
       </div>
     </section>
   );

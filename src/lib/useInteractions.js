@@ -66,15 +66,21 @@ export function useCountUp(target, active, duration = 1600) {
     started.current = true;
 
     let raf;
+    let done = false;
     const start = performance.now();
     const tick = (now) => {
       const p = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
       setValue(Math.round(eased * target));
       if (p < 1) raf = requestAnimationFrame(tick);
+      else done = true;
     };
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      // Interrupted before finishing (e.g. StrictMode's mount/unmount/mount): let it run again.
+      if (!done) started.current = false;
+    };
   }, [active, target, duration, reduced]);
 
   if (reduced) return active ? target : 0;

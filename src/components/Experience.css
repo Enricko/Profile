@@ -56,11 +56,36 @@
   color: var(--text-dim);
   font-size: 0.875rem;
 }
-.exp-desc {
+.exp-summary {
   max-width: 62ch;
-  margin: 1rem 0 1.25rem;
+  margin-top: 1rem;
+  color: var(--text);
+  line-height: 1.65;
+}
+
+.exp-highlights {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 62ch;
+  margin: 0.9rem 0 1.25rem;
+  list-style: none;
+}
+.exp-highlights li {
+  position: relative;
+  padding-left: 1.15rem;
   color: var(--text-muted);
-  line-height: 1.7;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.exp-highlights li::before {
+  /* short accent rule as the bullet */
+  content: '';
+  position: absolute;
+  top: 0.8em;
+  left: 0;
+  width: 0.55rem;
+  height: 1px;
+  background: var(--accent);
 }
 
 @media (max-width: 768px) {

@@ -24,7 +24,7 @@ const PILLARS = [
 
 // Only claims backed by this page: roles in Experience, credentials in Education.
 const STATS = [
-  { value: 3,  suffix: '+', label: 'Years Experience' },
+  { value: 4,  suffix: '+', label: 'Years Experience' },
   { value: 20, suffix: '+', label: 'Projects Delivered' },
   { value: 4,  suffix: '',  label: 'Companies' },
   { value: 5,  suffix: '',  label: 'Certifications & Awards' },
