@@ -1,15 +1,24 @@
-# Lufria
+# Lufria — Enricko Putra Hartono
 
-Enricko's portfolio, built with React 19 and Vite 8.
+[Website: lufria.tech](https://lufria.tech)
 
-## Setup
+Enricko Putra Hartono's software engineering portfolio, built with React 19 and Vite 8. It includes selected projects, work experience, a downloadable CV, and GitHub activity.
+
+## Features
+
+- GitHub contribution skyline and heatmap, starting with a genuine bundled calendar while current data loads; usable saved data remains available when requests fail.
+- Randomized falling backgrounds, including twelve chibi mascot poses.
+- Responsive layouts and reduced-motion support.
+- A public profile visit total beside the hero social links.
+
+## Run locally
 
 ```sh
 npm ci
 npm run dev -- --host 127.0.0.1 --port 5180
 ```
 
-Run the checks and create a production build with:
+Run the project checks or create the production build with:
 
 ```sh
 npm test
@@ -17,12 +26,14 @@ npm run lint
 npm run build
 ```
 
-## Visit counter
+The static production files are written to `dist/`.
 
-The displayed total is a shared public count from [CountAPI](https://countapi.mileshilliard.com/) using the key `lufria-tech-profile-visits`; it needs no account or API key. Only the production hosts `lufria.tech` and `www.lufria.tech` increment the count, at most once per browser tab session using `sessionStorage`. Localhost and preview builds read the total without incrementing it. The counter starts with deployment and does not import historical visits. It is a best-effort public count, not a count of unique people: network failures, service limits, or blocking can miss visits, and the public counter is not tamper-proof.
+## Profile visit count
 
-The request runs asynchronously with a four-second bound and does not block the page. The UI shows a dash while loading and “Unavailable” if the service fails.
+On `lufria.tech` and `www.lufria.tech`, the shared total normally increments once per browser-tab session. Local and preview hosts only read the total. The counter starts at zero until a production visit is recorded; it has no imported historical data and does not measure unique people. It is a best-effort public count, so a blocked request, network failure, or service limit may miss a visit.
 
-## GitHub activity
+To check the total directly, open the [read-only counter response](https://countapi.mileshilliard.com/api/v1/get/lufria-tech-profile-visits) and read its `value`. “Key not found” means no production visit has been recorded yet; the site displays `0`. No account or API key is needed.
 
-GitHub activity starts with a genuine bundled calendar, uses a six-hour browser cache, and shares one background request with a six-second timeout.
+## Deploy
+
+Build with `npm run build` and publish the contents of `dist/` with a static host. The current root `vercel.json` redirects every path to `https://lufria.tech`. If deploying this site on Vercel at `lufria.tech`, adjust that redirect first to avoid a redirect loop.
