@@ -116,9 +116,11 @@
 }
 .repo-card-head {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 1.1rem;
   color: var(--text-dim);
+  font-size: 0.8rem;
 }
 .repo-arrow { transition: transform 0.25s var(--ease-out), color 0.2s ease; }
 .repo-card:hover .repo-arrow { color: var(--text); transform: translate(2px, -2px); }
@@ -152,11 +154,14 @@
   gap: 0.4rem;
 }
 .lang-dot {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
   border-radius: 50%;
-  background: var(--accent);
+  /* keeps dark language colors (C, C#) visible on the dark card */
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
+.repo-updated { font-variant-numeric: tabular-nums; }
 
 .contributions-cta {
   display: flex;

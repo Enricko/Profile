@@ -8,7 +8,7 @@ const EXPERIENCES = [
     title: 'Software Developer',
     company: 'PT. Binav Maju Sejahtera',
     location: 'Indonesia / Remote',
-    period: 'Aug 2023 — Present',
+    period: 'Aug 2022 — Present',
     current: true,
     description: 'Building AVTS platforms, AI systems, and server maintenance solutions for intelligent automation, streamlined operational workflows, and scalable internal systems.',
     tags: ['AVTS', 'AI System', 'Server Maintenance']

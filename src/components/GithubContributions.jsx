@@ -15,25 +15,28 @@ const WEEKS_IN_GRID = 53;
 // Shown only if the live repo list can't be fetched.
 const FALLBACK_REPOS = [
   {
-    name: 'Realtime Chatting App',
+    name: 'Flutter-Realtime-ChattingApp',
     description: 'A multi-platform real-time messaging application built with Flutter.',
     html_url: 'https://github.com/Enricko/Flutter-Realtime-ChattingApp',
     stargazers_count: 4,
     language: 'Dart',
+    pushed_at: '2023-06-14T00:00:00Z',
   },
   {
-    name: 'Dino Run with Flutter',
+    name: 'Dino-Run-with-Flutter',
     description: 'An endless runner game inspired by the classic Dino Game, built with Flutter Flame.',
     html_url: 'https://github.com/Enricko/Dino-Run-with-Flutter',
     stargazers_count: 4,
     language: 'Dart',
+    pushed_at: '2023-05-30T00:00:00Z',
   },
   {
-    name: 'Saba Jogja',
+    name: 'Saba-Jogja',
     description: 'An interactive app with comprehensive information about Yogyakarta, built with Flutter.',
     html_url: 'https://github.com/Enricko/Saba-Jogja-Lomba-Web-Dev-Competition-Feb-2024',
     stargazers_count: 3,
     language: 'Dart',
+    pushed_at: '2024-03-05T00:00:00Z',
   },
   {
     name: 'Flask-Restx-Template',
@@ -41,8 +44,49 @@ const FALLBACK_REPOS = [
     html_url: 'https://github.com/Enricko/Flask-Restx-Template',
     stargazers_count: 3,
     language: 'Python',
+    pushed_at: '2024-02-27T00:00:00Z',
+  },
+  {
+    name: 'lufria-monitor',
+    description: 'Self-hosted monitoring dashboard for a Linux home server: live stats, power use in kWh and Rupiah, passkey sign-in, browser terminal.',
+    html_url: 'https://github.com/Enricko/lufria-monitor',
+    stargazers_count: 1,
+    language: 'TypeScript',
+    pushed_at: '2026-10-29T00:00:00Z',
   },
 ];
+
+// Profile plumbing, not projects: the profile-README repo and a repo that is
+// public but describes itself as private.
+const HIDDEN_REPOS = new Set([GITHUB_USERNAME, 'hermes-skills']);
+
+// Most repos have no description; a card that says "No description provided"
+// undersells the work, so only described repos are eligible.
+const isShowcaseRepo = (r) => !r.fork && !r.archived && !!r.description?.trim() && !HIDDEN_REPOS.has(r.name);
+
+// GitHub's own language colors, for the dot on each card.
+const LANGUAGE_COLORS = {
+  Dart: '#00B4AB',
+  Python: '#3572A5',
+  TypeScript: '#3178C6',
+  JavaScript: '#F1E05A',
+  Go: '#00ADD8',
+  PHP: '#4F5D95',
+  Blade: '#F7523F',
+  Swift: '#F05138',
+  Rust: '#DEA584',
+  'C++': '#F34B7D',
+  'C#': '#178600',
+  C: '#8B8B94',
+  HTML: '#E34C26',
+  CSS: '#663399',
+  'Jupyter Notebook': '#DA5B0B',
+};
+
+const repoTitle = (name) => name.replace(/[-_]+/g, ' ');
+const pushedTime = (r) => new Date(r.pushed_at || 0).getTime();
+const formatUpdated = (iso) =>
+  iso ? new Date(iso).toLocaleDateString('en', { month: 'short', year: 'numeric' }) : null;
 
 /**
  * Lays the API's day list out as Sunday-first week columns, like GitHub does.
@@ -102,7 +146,8 @@ export default function GithubContributions() {
           repos: profile.public_repos ?? ownedRepos.length,
           stars: ownedRepos.reduce((sum, r) => sum + (r.stargazers_count || 0), 0),
         });
-        if (ownedRepos.length) setRepos(ownedRepos);
+        const showcase = ownedRepos.filter(isShowcaseRepo);
+        if (showcase.length >= 4) setRepos(showcase);
       } catch (err) {
         console.warn('GithubContributions: repo stats unavailable:', err.message);
       }
@@ -129,9 +174,11 @@ export default function GithubContributions() {
   const topRepos = useMemo(() => {
     const sorted = [...repos];
     if (filter === 'starred') {
-      sorted.sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0));
+      // Many repos tie on stars; the more recently active one wins the tie.
+      sorted.sort((a, b) =>
+        (b.stargazers_count || 0) - (a.stargazers_count || 0) || pushedTime(b) - pushedTime(a));
     } else {
-      sorted.sort((a, b) => new Date(b.pushed_at || 0) - new Date(a.pushed_at || 0));
+      sorted.sort((a, b) => pushedTime(b) - pushedTime(a));
     }
     return sorted.slice(0, 4);
   }, [repos, filter]);
@@ -246,14 +293,29 @@ export default function GithubContributions() {
                 className="card card-link repo-card"
               >
                 <div className="repo-card-head">
-                  <FaGithub size={16} className="repo-icon" aria-hidden="true" />
+                  {repo.language ? (
+                    <span className="repo-lang">
+                      <span
+                        className="lang-dot"
+                        style={{ background: LANGUAGE_COLORS[repo.language] || 'var(--text-dim)' }}
+                      />
+                      {repo.language}
+                    </span>
+                  ) : (
+                    <FaGithub size={15} className="repo-icon" aria-hidden="true" />
+                  )}
                   <ArrowUpRight size={16} className="repo-arrow" aria-hidden="true" />
                 </div>
-                <h4 className="repo-name">{repo.name}</h4>
-                <p className="repo-desc">{repo.description || 'No description provided.'}</p>
+                <h4 className="repo-name">{repoTitle(repo.name)}</h4>
+                <p className="repo-desc">{repo.description}</p>
                 <div className="repo-card-footer">
-                  {repo.language && <span className="repo-lang"><span className="lang-dot" /> {repo.language}</span>}
-                  <span className="repo-stars"><Star size={13} aria-hidden="true" /> {repo.stargazers_count ?? 0}</span>
+                  <span className="repo-stars">
+                    <Star size={13} aria-hidden="true" /> {repo.stargazers_count ?? 0}
+                    <span className="sr-only">stars</span>
+                  </span>
+                  {repo.pushed_at && (
+                    <span className="repo-updated">Updated {formatUpdated(repo.pushed_at)}</span>
+                  )}
                 </div>
               </a>
             ))}

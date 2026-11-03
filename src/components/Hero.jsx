@@ -50,7 +50,7 @@ const enricko: SoftwareEngineer = {
     lang: 'Shell',
     icon: <Terminal size={13} />,
     code: `$ uptime
-  architecting systems since 2023 — Yogyakarta, ID
+  architecting systems since 2022 — Yogyakarta, ID
   shipping web, mobile & desktop products
 
 $ echo "Ready to engineer robust digital products."`,
@@ -123,7 +123,7 @@ export default function Hero() {
               View projects <ArrowRight size={17} className="icon-shift" />
             </a>
             <a
-              href="/cv/Enricko-Putra-Hartono-CV.pdf?rev=20260922-avts-ai-server-maintenance"
+              href="/cv/Enricko-Putra-Hartono-CV.pdf?rev=20261103-binav-aug-2022"
               target="_blank"
               rel="noreferrer"
               className="btn btn-secondary"
