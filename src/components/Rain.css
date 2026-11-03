@@ -31,17 +31,8 @@
   to   { transform: translateY(112vh) translateX(var(--sway, 0vw)) rotate(var(--rot, 360deg)); }
 }
 
-/* Let the rain take the stage while active */
-.rain-mode .aurora { opacity: 0.22; }
-.rain-mode .cursor-glow { opacity: 0; }
-
-/* Keep sections trackable against the rain: dim it behind content
-   and draw a border between sections */
-.rain-mode main > section {
-  background: rgba(4, 2, 22, 0.55);
-  border-top: 1px solid rgba(255, 255, 255, 0.09);
-}
-.rain-mode main > section:first-child { border-top: none; }
+/* Keep sections readable against the rain: dim it behind content */
+.rain-mode main > section { background: rgba(9, 9, 11, 0.7); }
 
 /* Lighter shower on small screens */
 @media (max-width: 600px) {

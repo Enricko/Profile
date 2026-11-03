@@ -1,16 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { BookMarked, Star, GitCommitHorizontal, Flame, ExternalLink } from 'lucide-react';
+import { BookMarked, Star, GitCommitHorizontal, CalendarDays, ArrowUpRight } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { useCountUp, useInView } from '../lib/useInteractions';
+import SectionHead from './SectionHead';
 import './GithubContributions.css';
 
 const GITHUB_USERNAME = 'Enricko';
 const GITHUB_URL = `https://github.com/${GITHUB_USERNAME}`;
+// Public, CORS-enabled mirror of the GitHub contribution calendar (GitHub's own
+// endpoint needs an authenticated GraphQL call the browser can't make).
+const CONTRIBUTIONS_URL = `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last`;
 const WEEKS_IN_GRID = 53;
-const STREAK_FLOOR_DAYS = 6;
 
-// Cached fallback so the section still reads well before (or if) the live GitHub fetch resolves.
-const FALLBACK_STATS = { repos: 16, stars: 28, followers: 6, live: false };
+// Shown only if the live repo list can't be fetched.
 const FALLBACK_REPOS = [
   {
     name: 'Realtime Chatting App',
@@ -42,121 +44,43 @@ const FALLBACK_REPOS = [
   },
 ];
 
-// Deterministic PRNG (mulberry32) so the generated activity pattern is stable across renders.
-function mulberry32(seed) {
-  let a = seed;
-  return function random() {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+/**
+ * Lays the API's day list out as Sunday-first week columns, like GitHub does.
+ * Every number shown comes from the real calendar — nothing is generated.
+ */
+function buildCalendar(days) {
+  const cells = [];
+  const firstWeekday = new Date(`${days[0].date}T00:00:00Z`).getUTCDay();
+  for (let i = 0; i < firstWeekday; i++) cells.push({ key: `pad-${i}`, empty: true });
+  days.forEach((d) => cells.push({ key: d.date, date: d.date, count: d.count, level: d.level }));
+  while (cells.length % 7) cells.push({ key: `end-${cells.length}`, empty: true });
+
+  const weeks = [];
+  for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
+
+  return {
+    weeks: weeks.slice(-WEEKS_IN_GRID),
+    total: days.reduce((sum, d) => sum + d.count, 0),
+    activeDays: days.filter((d) => d.count > 0).length,
   };
 }
 
-function levelFromCount(count) {
-  if (count <= 0) return 0;
-  if (count <= 2) return 1;
-  if (count <= 5) return 2;
-  if (count <= 9) return 3;
-  return 4;
-}
-
-/**
- * Builds a GitHub-style 53-week activity grid ending today. Real per-day contribution
- * data requires an authenticated GraphQL call GitHub doesn't allow from the browser, so
- * this renders a seeded, deterministic activity pattern that stays consistent per day
- * while the metric cards above it (repos/stars) reflect live public API data.
- */
-function buildContributionYear() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const gridEnd = new Date(today);
-  gridEnd.setDate(gridEnd.getDate() + (6 - gridEnd.getDay())); // pad forward to Saturday
-  const gridStart = new Date(gridEnd);
-  gridStart.setDate(gridStart.getDate() - (WEEKS_IN_GRID * 7 - 1));
-
-  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-  const random = mulberry32(seed);
-
-  const days = [];
-  for (let i = 0; i < WEEKS_IN_GRID * 7; i++) {
-    const date = new Date(gridStart);
-    date.setDate(date.getDate() + i);
-
-    if (date > today) {
-      days.push({ key: i, date: null, count: 0, level: 0, future: true });
-      continue;
-    }
-
-    const daysFromToday = Math.round((today - date) / 86400000);
-    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-    const activityChance = (daysFromToday < STREAK_FLOOR_DAYS ? 0.95 : 0.68) * (isWeekend ? 0.5 : 1);
-
-    let count = 0;
-    if (random() < activityChance) {
-      const intensity = daysFromToday < STREAK_FLOOR_DAYS ? 0.35 + random() * 0.65 : random();
-      count = Math.max(1, Math.round(intensity * intensity * 12));
-    }
-
-    days.push({
-      key: i,
-      date: date.toISOString().slice(0, 10),
-      count,
-      level: levelFromCount(count),
-      future: false,
-    });
-  }
-
-  const weeks = [];
-  for (let w = 0; w < days.length / 7; w++) weeks.push(days.slice(w * 7, w * 7 + 7));
-
-  const totalContributions = days.reduce((sum, d) => sum + d.count, 0);
-
-  let currentStreak = 0;
-  for (let i = days.length - 1; i >= 0; i--) {
-    const day = days[i];
-    if (day.future) continue;
-    if (day.count > 0) currentStreak++;
-    else break;
-  }
-
-  let longestStreak = 0;
-  let running = 0;
-  days.forEach((day) => {
-    if (day.future) return;
-    if (day.count > 0) {
-      running++;
-      longestStreak = Math.max(longestStreak, running);
-    } else {
-      running = 0;
-    }
-  });
-
-  return { weeks, totalContributions, currentStreak, longestStreak };
-}
-
-function MetricCard({ icon, value, suffix = '', label, accent, active }) {
-  const n = useCountUp(value, active);
+function MetricCard({ icon, value, label, active }) {
+  const n = useCountUp(value ?? 0, active && value != null);
   return (
-    <div className={`glass-card metric-card accent-${accent}`}>
-      <div className="metric-icon">{icon}</div>
-      <div className="metric-body">
-        <span className="metric-value">{n}{suffix}</span>
-        <span className="metric-label">{label}</span>
-      </div>
+    <div className="metric">
+      <span className="metric-label">{icon} {label}</span>
+      <span className="metric-value">{value == null ? '—' : n.toLocaleString()}</span>
     </div>
   );
 }
 
 export default function GithubContributions() {
-  const [stats, setStats] = useState(FALLBACK_STATS);
+  const [stats, setStats] = useState(null);
   const [repos, setRepos] = useState(FALLBACK_REPOS);
+  const [calendar, setCalendar] = useState('loading'); // 'loading' | 'error' | { weeks, total, activeDays }
   const [filter, setFilter] = useState('starred');
   const [metricsRef, metricsInView] = useInView({ threshold: 0.3 });
-
-  const { weeks, totalContributions, currentStreak } = useMemo(buildContributionYear, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -174,21 +98,31 @@ export default function GithubContributions() {
         if (cancelled || !Array.isArray(repoList)) return;
 
         const ownedRepos = repoList.filter((r) => !r.fork);
-        const totalStars = ownedRepos.reduce((sum, r) => sum + (r.stargazers_count || 0), 0);
-
         setStats({
           repos: profile.public_repos ?? ownedRepos.length,
-          stars: totalStars,
-          followers: profile.followers ?? 0,
-          live: true,
+          stars: ownedRepos.reduce((sum, r) => sum + (r.stargazers_count || 0), 0),
         });
-        setRepos(ownedRepos.length ? ownedRepos : FALLBACK_REPOS);
+        if (ownedRepos.length) setRepos(ownedRepos);
       } catch (err) {
-        console.warn('GithubContributions: showing cached stats, live fetch failed:', err.message);
+        console.warn('GithubContributions: repo stats unavailable:', err.message);
+      }
+    }
+
+    async function loadCalendar() {
+      try {
+        const res = await fetch(CONTRIBUTIONS_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!Array.isArray(data.contributions) || !data.contributions.length) throw new Error('empty calendar');
+        if (!cancelled) setCalendar(buildCalendar(data.contributions));
+      } catch (err) {
+        console.warn('GithubContributions: contribution calendar unavailable:', err.message);
+        if (!cancelled) setCalendar('error');
       }
     }
 
     loadGithubData();
+    loadCalendar();
     return () => { cancelled = true; };
   }, []);
 
@@ -202,82 +136,67 @@ export default function GithubContributions() {
     return sorted.slice(0, 4);
   }, [repos, filter]);
 
-  const onMove = (e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
-  };
+  const cal = typeof calendar === 'object' ? calendar : null;
+  const placeholderWeeks = useMemo(
+    () => Array.from({ length: WEEKS_IN_GRID }, (_, w) =>
+      Array.from({ length: 7 }, (_, d) => ({ key: `ph-${w}-${d}`, empty: true }))),
+    []
+  );
 
   return (
     <section id="contributions" className="contributions">
       <div className="container">
-        <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">// open source</span>
-          <h2 className="section-title">GitHub Contributions</h2>
-        </div>
-        <p className="contributions-desc text-muted reveal-on-scroll delay-100">
-          A snapshot of my coding activity and open-source footprint, pulled live from GitHub.
-        </p>
+        <SectionHead
+          index="06"
+          label="Open Source"
+          title={<>Building in the <em>open</em></>}
+        >
+          My public GitHub footprint, pulled live from GitHub when the page loads.
+        </SectionHead>
 
-        <div className="metrics-grid reveal-on-scroll delay-100" ref={metricsRef}>
-          <MetricCard
-            icon={<BookMarked size={22} />}
-            value={stats.repos}
-            label="Total Repositories"
-            accent="cyan"
-            active={metricsInView}
-          />
-          <MetricCard
-            icon={<Star size={22} />}
-            value={stats.stars}
-            label="Stars Earned"
-            accent="pink"
-            active={metricsInView}
-          />
-          <MetricCard
-            icon={<GitCommitHorizontal size={22} />}
-            value={totalContributions}
-            label="Open Source Contributions"
-            accent="violet"
-            active={metricsInView}
-          />
-          <MetricCard
-            icon={<Flame size={22} />}
-            value={currentStreak}
-            suffix=" days"
-            label="Commit Streak"
-            accent="cyan"
-            active={metricsInView}
-          />
+        <div className="metrics reveal-on-scroll delay-100" ref={metricsRef}>
+          <MetricCard icon={<BookMarked size={14} />} value={stats?.repos} label="Public repositories" active={metricsInView} />
+          <MetricCard icon={<Star size={14} />} value={stats?.stars} label="Stars earned" active={metricsInView} />
+          <MetricCard icon={<GitCommitHorizontal size={14} />} value={cal?.total} label="Contributions · last year" active={metricsInView} />
+          <MetricCard icon={<CalendarDays size={14} />} value={cal?.activeDays} label="Active days · last year" active={metricsInView} />
         </div>
 
-        <div className="glass-card heatmap-card reveal-on-scroll delay-200">
+        <div className="card heatmap-card reveal-on-scroll delay-200">
           <div className="heatmap-head">
             <div>
-              <h3>Contribution Activity</h3>
-              <p className="text-muted heatmap-summary">
-                {totalContributions.toLocaleString()} contributions in the last year
+              <h3>Contribution activity</h3>
+              <p className="heatmap-summary">
+                {cal && `${cal.total.toLocaleString()} contributions in the last year`}
+                {calendar === 'loading' && 'Loading contribution calendar…'}
+                {calendar === 'error' && "Couldn't load the contribution calendar right now."}
               </p>
             </div>
-            <span className={`live-badge ${stats.live ? 'is-live' : ''}`}>
-              <span className="live-dot" /> {stats.live ? 'Live from GitHub' : 'Cached snapshot'}
-            </span>
+            {cal ? (
+              <span className="pill pill-accent">
+                <span className="live-dot" aria-hidden="true" /> Live from GitHub
+              </span>
+            ) : (
+              <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="pill heatmap-fallback-link">
+                View on GitHub <ArrowUpRight size={13} />
+              </a>
+            )}
           </div>
 
           <div className="heatmap-scroll">
             <div
-              className="heatmap-grid"
+              className={`heatmap-grid ${cal ? '' : 'is-placeholder'}`}
               role="img"
-              aria-label={`GitHub contribution heatmap: ${totalContributions} contributions in the last year, current streak of ${currentStreak} days`}
+              aria-label={cal
+                ? `GitHub contribution heatmap: ${cal.total} contributions on ${cal.activeDays} days in the last year`
+                : 'GitHub contribution heatmap unavailable'}
             >
-              {weeks.map((week, wi) => (
+              {(cal ? cal.weeks : placeholderWeeks).map((week, wi) => (
                 <div className="heatmap-col" key={wi} aria-hidden="true">
                   {week.map((day) => (
                     <span
                       key={day.key}
-                      className={`heatmap-cell level-${day.level} ${day.future ? 'is-future' : ''}`}
-                      title={day.date ? `${day.count} contributions on ${day.date}` : undefined}
+                      className={`heatmap-cell ${day.empty ? 'is-empty' : `level-${day.level}`}`}
+                      title={day.empty ? undefined : `${day.count} contribution${day.count === 1 ? '' : 's'} on ${day.date}`}
                     />
                   ))}
                 </div>
@@ -294,60 +213,56 @@ export default function GithubContributions() {
           </div>
         </div>
 
-        <div className="repo-highlights reveal-on-scroll delay-300">
+        <div className="repo-highlights reveal-on-scroll delay-200">
           <div className="repo-highlights-head">
-            <h3>Top Repositories</h3>
-            <div className="repo-filter" role="tablist" aria-label="Sort top repositories">
+            <h3>Top repositories</h3>
+            <div className="segmented" role="group" aria-label="Sort top repositories">
               <button
                 type="button"
-                role="tab"
-                aria-selected={filter === 'starred'}
-                className={filter === 'starred' ? 'is-active' : ''}
+                aria-pressed={filter === 'starred'}
+                className={filter === 'starred' ? 'active' : ''}
                 onClick={() => setFilter('starred')}
               >
-                Most Starred
+                Most starred
               </button>
               <button
                 type="button"
-                role="tab"
-                aria-selected={filter === 'recent'}
-                className={filter === 'recent' ? 'is-active' : ''}
+                aria-pressed={filter === 'recent'}
+                className={filter === 'recent' ? 'active' : ''}
                 onClick={() => setFilter('recent')}
               >
-                Recently Active
+                Recently active
               </button>
             </div>
           </div>
 
           <div className="repo-grid">
-            {topRepos.map((repo, idx) => (
+            {topRepos.map((repo) => (
               <a
                 key={repo.name}
                 href={repo.html_url}
                 target="_blank"
                 rel="noreferrer"
-                className="glass-card spotlight repo-card"
-                style={{ transitionDelay: `${(idx % 4) * 80}ms` }}
-                onMouseMove={onMove}
+                className="card card-link repo-card"
               >
                 <div className="repo-card-head">
-                  <span className="repo-icon"><FaGithub size={18} /></span>
-                  <span className="repo-stars"><Star size={13} className="star-icon" /> {repo.stargazers_count ?? 0}</span>
+                  <FaGithub size={16} className="repo-icon" aria-hidden="true" />
+                  <ArrowUpRight size={16} className="repo-arrow" aria-hidden="true" />
                 </div>
                 <h4 className="repo-name">{repo.name}</h4>
-                <p className="repo-desc text-muted">{repo.description || 'No description provided.'}</p>
+                <p className="repo-desc">{repo.description || 'No description provided.'}</p>
                 <div className="repo-card-footer">
                   {repo.language && <span className="repo-lang"><span className="lang-dot" /> {repo.language}</span>}
-                  <span className="repo-open">View <ExternalLink size={13} /></span>
+                  <span className="repo-stars"><Star size={13} aria-hidden="true" /> {repo.stargazers_count ?? 0}</span>
                 </div>
               </a>
             ))}
           </div>
         </div>
 
-        <div className="contributions-cta reveal-on-scroll delay-300">
-          <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="btn btn-primary">
-            <FaGithub size={18} /> Follow on GitHub
+        <div className="contributions-cta reveal-on-scroll">
+          <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="btn btn-secondary">
+            <FaGithub size={17} /> Follow on GitHub
           </a>
         </div>
       </div>

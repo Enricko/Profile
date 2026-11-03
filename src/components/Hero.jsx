@@ -1,21 +1,13 @@
 import React, { useState } from 'react';
-import { ArrowRight, Layers, ChevronDown, FileText, Check, Copy, Terminal, Code2, Database, MapPin } from 'lucide-react';
+import { ArrowRight, FileText, Check, Copy, Terminal, Code2, Braces, MapPin, Globe2, Mail } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { useTilt, useTypewriter } from '../lib/useInteractions';
 import './Hero.css';
-
-const FLOATERS = [
-  { src: '/logos/react.svg',      name: 'React',      cls: 'f1' },
-  { src: '/logos/flutter.svg',    name: 'Flutter',    cls: 'f2' },
-  { src: '/logos/laravel.svg',    name: 'Laravel',    cls: 'f3' },
-  { src: '/logos/typescript.svg', name: 'TypeScript', cls: 'f4' },
-  { src: '/logos/go.svg',         name: 'Go',         cls: 'f5' },
-];
 
 const CODE_TABS = [
   {
     id: 'ts',
     label: 'developer.ts',
+    lang: 'TypeScript',
     icon: <Code2 size={13} />,
     code: `interface SoftwareEngineer {
   name: string;
@@ -36,9 +28,10 @@ const enricko: SoftwareEngineer = {
 };`,
   },
   {
-    id: 'arch',
+    id: 'json',
     label: 'architecture.json',
-    icon: <Database size={13} />,
+    lang: 'JSON',
+    icon: <Braces size={13} />,
     code: `{
   "engineer": "Enricko Putra Hartono",
   "specialization": "Full-Stack & Systems Architecture",
@@ -52,8 +45,9 @@ const enricko: SoftwareEngineer = {
 }`,
   },
   {
-    id: 'bash',
+    id: 'sh',
     label: 'workflow.sh',
+    lang: 'Shell',
     icon: <Terminal size={13} />,
     code: `$ uptime
   architecting systems since 2023 — Yogyakarta, ID
@@ -63,17 +57,37 @@ $ echo "Ready to engineer robust digital products."`,
   },
 ];
 
+// Tiny, dependency-free highlighter for the three static snippets above.
+const TOKEN_RULES = {
+  ts: /(?<str>'[^']*')|\b(?<kw>interface|const|string)\b|(?<type>\b[A-Z]\w+\b)|(?<key>\b\w+\b)(?=\??:)/g,
+  json: /(?<key>"[^"]*")(?=\s*:)|(?<str>"[^"]*")/g,
+  sh: /^(?<prompt>\$)|(?<str>"[^"]*")/g,
+};
+
+function highlightLine(line, lang) {
+  if (lang === 'sh' && !line.startsWith('$')) {
+    return <span className="tok-out">{line}</span>;
+  }
+  const re = new RegExp(TOKEN_RULES[lang]);
+  const parts = [];
+  let last = 0;
+  let m;
+  while ((m = re.exec(line))) {
+    if (m.index > last) parts.push(line.slice(last, m.index));
+    const kind = Object.keys(m.groups).find((k) => m.groups[k] !== undefined);
+    parts.push(<span key={m.index} className={`tok-${kind}`}>{m[0]}</span>);
+    last = m.index + m[0].length;
+  }
+  if (last < line.length) parts.push(line.slice(last));
+  return parts;
+}
+
 export default function Hero() {
-  const { ref: tiltRef, onMouseMove: onTiltMove, onMouseLeave: onTiltLeave } = useTilt(12);
   const [activeTab, setActiveTab] = useState('ts');
   const [copied, setCopied] = useState(false);
 
-  const role = useTypewriter(
-    ['Web Applications', 'Mobile Solutions', 'Desktop Systems', 'Robust APIs'],
-    { typeSpeed: 75, deleteSpeed: 38, pause: 1400 }
-  );
-
   const currentTab = CODE_TABS.find((t) => t.id === activeTab) || CODE_TABS[0];
+  const lines = currentTab.code.split('\n');
 
   const handleCopy = () => {
     navigator.clipboard.writeText(currentTab.code);
@@ -83,110 +97,72 @@ export default function Hero() {
 
   return (
     <section id="home" className="hero">
-      <div className="container hero-container">
+      <div className="container hero-grid">
         <div className="hero-content">
-          <div className="hero-badge animate-up delay-100">
-            <span className="pulse-dot" /> Available for Web, Mobile &amp; Desktop Engineering
-          </div>
+          <a href="#contact" className="pill pill-accent hero-status animate-up delay-100">
+            <span className="live-dot" aria-hidden="true" />
+            Available for Web, Mobile &amp; Desktop engineering
+          </a>
 
           <h1 className="hero-title animate-up delay-200">
-            Enricko <span className="text-gradient">Putra Hartono</span>
+            Enricko Putra <span className="hero-title-last">Hartono</span>
           </h1>
 
-          <p className="hero-role animate-up delay-250">
-            Software Engineer <span className="role-sep" aria-hidden="true">·</span> Lufria
+          <p className="hero-role animate-up delay-200">
+            Software Engineer <span aria-hidden="true">·</span> a.k.a. <span className="hero-alias">Lufria</span>
           </p>
 
-          <div className="hero-typer animate-up delay-300">
-            <span className="typer-label">I engineer</span>
-            <span className="typer-text">{role}</span>
-            <span className="typer-caret" />
-          </div>
-
-          <p className="hero-description animate-up delay-400">
-            Building high-performance systems across Web, Desktop, and Mobile — with a
-            production workflow powered by agentic AI coding tools, model routing, and
-            self-hosted infrastructure.
+          <p className="hero-lead animate-up delay-300">
+            Building high-performance systems across web, desktop, and mobile — with a
+            production workflow powered by <em className="serif">agentic AI</em> coding tools,
+            model routing, and self-hosted infrastructure.
           </p>
 
-          <div className="hero-meta animate-up delay-450">
-            <span className="hero-meta-item">
-              <MapPin size={14} /> Yogyakarta, Indonesia
-            </span>
-            <span className="hero-meta-item">
-              <span className="live-dot-green" aria-hidden="true" /> Open to remote work
-            </span>
-          </div>
-
-          <div className="hero-actions animate-up delay-500">
+          <div className="hero-actions animate-up delay-400">
             <a href="#projects" className="btn btn-primary">
-              View Projects <ArrowRight size={18} />
-            </a>
-            <a href="#contact" className="btn btn-outline">
-              <Layers size={17} /> Contact
+              View projects <ArrowRight size={17} className="icon-shift" />
             </a>
             <a
               href="/cv/Enricko-Putra-Hartono-CV.pdf?rev=20260922-avts-ai-server-maintenance"
               target="_blank"
               rel="noreferrer"
-              className="btn btn-outline"
+              className="btn btn-secondary"
             >
-              <FileText size={17} /> View CV
+              <FileText size={16} /> View CV
+            </a>
+            <a href="#contact" className="btn btn-ghost">
+              <Mail size={16} /> Contact
             </a>
           </div>
 
-          <div className="hero-socials animate-up delay-550" aria-label="Social links">
-            <a
-              href="https://github.com/Enricko"
-              target="_blank"
-              rel="noreferrer"
-              className="hero-social-link"
-              aria-label="GitHub profile"
-            >
-              <FaGithub size={18} aria-hidden="true" /> GitHub
-            </a>
-            <span className="hero-social-sep" aria-hidden="true" />
-            <a
-              href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/"
-              target="_blank"
-              rel="noreferrer"
-              className="hero-social-link"
-              aria-label="LinkedIn profile"
-            >
-              <FaLinkedin size={18} aria-hidden="true" /> LinkedIn
-            </a>
-          </div>
+          <ul className="hero-meta animate-up delay-500">
+            <li><MapPin size={14} aria-hidden="true" /> Yogyakarta, Indonesia</li>
+            <li><Globe2 size={14} aria-hidden="true" /> Open to remote work</li>
+            <li>
+              <a href="https://github.com/Enricko" target="_blank" rel="noreferrer">
+                <FaGithub size={14} aria-hidden="true" /> GitHub
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/" target="_blank" rel="noreferrer">
+                <FaLinkedin size={14} aria-hidden="true" /> LinkedIn
+              </a>
+            </li>
+          </ul>
         </div>
 
-        <div className="hero-visual animate-up delay-400">
-          {FLOATERS.map((f) => (
-            <div key={f.cls} className={`floater ${f.cls}`} title={f.name}>
-              <img src={f.src} alt={f.name} aria-hidden="true" width="28" height="28" />
-            </div>
-          ))}
-
-          <div
-            ref={tiltRef}
-            className="glass-card visual-card"
-            onMouseMove={onTiltMove}
-            onMouseLeave={onTiltLeave}
-          >
-            <div className="card-glare" />
-
+        <div className="hero-visual animate-up delay-300">
+          <div className="code-window">
             <div className="code-header">
-              <div className="window-dots">
-                <span className="dot red" />
-                <span className="dot yellow" />
-                <span className="dot green" />
-              </div>
-
-              <div className="code-tabs">
+              <div className="code-tabs" role="tablist" aria-label="Code samples">
                 {CODE_TABS.map((tab) => (
                   <button
                     key={tab.id}
                     className={`code-tab ${activeTab === tab.id ? 'active' : ''}`}
                     onClick={() => setActiveTab(tab.id)}
                     type="button"
+                    role="tab"
+                    aria-selected={activeTab === tab.id}
                   >
                     {tab.icon}
                     <span>{tab.label}</span>
@@ -205,25 +181,25 @@ export default function Hero() {
               </button>
             </div>
 
-            <div className="code-container">
-              <pre className="code-body">
-                <code>{currentTab.code}</code>
-              </pre>
-            </div>
+            <pre className="code-body" role="tabpanel">
+              <code>
+                {lines.map((line, i) => (
+                  <span className="code-line" key={`${activeTab}-${i}`}>
+                    <span className="code-text">{highlightLine(line, currentTab.id)}</span>
+                    {'\n'}
+                  </span>
+                ))}
+              </code>
+            </pre>
 
             <div className="code-status-bar">
-              <span className="status-item"><span className="status-online-dot" /> UTF-8</span>
-              <span className="status-item">TypeScript / JSON / Shell</span>
-              <span className="status-item">AI-Assisted · Human-Reviewed</span>
+              <span><span className="live-dot" aria-hidden="true" /> {currentTab.lang}</span>
+              <span>UTF-8</span>
+              <span className="status-right">AI-assisted · human-reviewed</span>
             </div>
           </div>
         </div>
       </div>
-
-      <a href="#about" className="scroll-cue" aria-label="Scroll to About section">
-        <span>Explore</span>
-        <ChevronDown size={18} />
-      </a>
     </section>
   );
 }

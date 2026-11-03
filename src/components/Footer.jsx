@@ -1,7 +1,22 @@
 import React from 'react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { Coffee, ArrowUp, Heart } from 'lucide-react';
+import { Coffee, ArrowUp } from 'lucide-react';
 import './Footer.css';
+
+const NAV = [
+  { href: '#about', label: 'About' },
+  { href: '#experience', label: 'Experience' },
+  { href: '#projects', label: 'Projects' },
+  { href: '#skills', label: 'Stack' },
+  { href: '#education', label: 'Education' },
+  { href: '#contact', label: 'Contact' },
+];
+
+const SOCIALS = [
+  { href: 'https://github.com/Enricko', label: 'GitHub', icon: <FaGithub size={15} /> },
+  { href: 'https://www.linkedin.com/in/enricko-putra-hartono-744646233/', label: 'LinkedIn', icon: <FaLinkedin size={15} /> },
+  { href: 'https://saweria.co/Lufria', label: 'Saweria', icon: <Coffee size={15} /> },
+];
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -10,90 +25,41 @@ export default function Footer() {
 
   return (
     <footer className="footer">
-      <div className="container footer-inner">
+      <div className="container">
         <div className="footer-top">
           <div className="footer-brand">
-            <div className="logo-brand">
-              <div className="logo-mark">
-                <img src="/favicon.svg" alt="Lufria Logo" className="logo-img" width="20" height="20" />
-              </div>
-              <span className="logo-text text-gradient">
-                Enricko<span className="logo-dot">.</span>
+            <a href="#home" className="brand">
+              <span className="brand-mark" aria-hidden="true">EP</span>
+              <span className="brand-text">
+                Enricko<span className="brand-sub">/lufria</span>
               </span>
-            </div>
-            <p className="footer-tagline text-muted">
+            </a>
+            <p className="footer-tagline">
               Software Engineer crafting resilient, human-centered systems across Web, Mobile, and Desktop.
             </p>
           </div>
 
-          <div className="footer-links-group">
-            <span className="footer-group-title">Navigation</span>
-            <div className="footer-nav-links">
-              <a href="#about">About</a>
-              <a href="#skills">Skills</a>
-              <a href="#projects">Projects</a>
-              <a href="#experience">Experience</a>
-              <a href="#education">Education</a>
-              <a href="#contact">Contact</a>
-            </div>
-          </div>
+          <nav className="footer-col" aria-label="Footer">
+            <span className="footer-col-title">Navigate</span>
+            {NAV.map((l) => (
+              <a key={l.href} href={l.href}>{l.label}</a>
+            ))}
+          </nav>
 
-          <div className="footer-socials-group">
-            <span className="footer-group-title">Connect</span>
-            <div className="footer-socials">
-              <a
-                href="https://github.com/Enricko"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="GitHub Profile"
-                className="footer-social-btn"
-              >
-                <FaGithub size={18} />
-                <span>GitHub</span>
+          <div className="footer-col">
+            <span className="footer-col-title">Connect</span>
+            {SOCIALS.map((s) => (
+              <a key={s.label} href={s.href} target="_blank" rel="noreferrer">
+                {s.icon} {s.label}
               </a>
-              <a
-                href="https://www.linkedin.com/in/enricko-putra-hartono-744646233/"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn Profile"
-                className="footer-social-btn"
-              >
-                <FaLinkedin size={18} />
-                <span>LinkedIn</span>
-              </a>
-              <a
-                href="https://saweria.co/Lufria"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Saweria Support"
-                className="footer-social-btn coffee"
-              >
-                <Coffee size={18} />
-                <span>Saweria</span>
-              </a>
-            </div>
+            ))}
           </div>
         </div>
 
         <div className="footer-bottom">
-          <p className="footer-copy">
-            © {new Date().getFullYear()} Enricko Putra Hartono (Lufria). Built with React 19 &amp; Vite.
-          </p>
-
-          <div className="footer-standards">
-            <span className="standard-chip">Anti-AI-Slop Standard</span>
-            <span className="standard-chip">Tabular Numbers</span>
-            <span className="standard-chip">Human Crafted</span>
-          </div>
-
-          <button
-            type="button"
-            className="footer-back-to-top"
-            onClick={scrollToTop}
-            aria-label="Scroll back to top"
-          >
-            <span>Back to top</span>
-            <ArrowUp size={14} />
+          <p>© {new Date().getFullYear()} Enricko Putra Hartono (Lufria). Built with React 19 &amp; Vite.</p>
+          <button type="button" className="footer-top-btn" onClick={scrollToTop}>
+            Back to top <ArrowUp size={14} />
           </button>
         </div>
       </div>

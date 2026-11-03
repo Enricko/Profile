@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { GraduationCap, Award, Calendar, BadgeCheck, ExternalLink, X, ZoomIn } from 'lucide-react';
+import { GraduationCap, Award, ArrowUpRight, X, ZoomIn } from 'lucide-react';
+import SectionHead from './SectionHead';
 import './Education.css';
 
 const EDUCATION = [
@@ -70,13 +71,6 @@ const CERTIFICATIONS = [
 export default function Education() {
   const [selectedCert, setSelectedCert] = useState(null);
 
-  const onMove = (e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
-  };
-
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') setSelectedCert(null);
@@ -96,34 +90,26 @@ export default function Education() {
   return (
     <section id="education" className="education">
       <div className="container">
-        <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">// credentials</span>
-          <h2 className="section-title">Education &amp; Certifications</h2>
-        </div>
+        <SectionHead
+          index="05"
+          label="Education"
+          title={<>Education &amp; <em>credentials</em></>}
+        />
 
-        {/* Education Timeline */}
         <div className="edu-grid">
           {EDUCATION.map((edu, idx) => (
             <div
-              key={idx}
-              className="glass-card spotlight edu-card reveal-on-scroll"
-              style={{ transitionDelay: `${(idx % 2) * 100}ms` }}
-              onMouseMove={onMove}
+              key={edu.school}
+              className={`card edu-card reveal-on-scroll ${idx ? 'delay-100' : ''}`}
             >
-              <div className="edu-icon">
-                <GraduationCap size={24} />
-              </div>
+              <span className="icon-box"><GraduationCap size={19} /></span>
               <div className="edu-body">
+                <span className="edu-period">{edu.period}</span>
                 <h3>{edu.school}</h3>
-                <p className="edu-degree text-muted">{edu.degree}</p>
-                <div className="edu-period">
-                  <Calendar size={13} /> {edu.period}
-                </div>
-                <div className="edu-tags">
-                  {edu.tags.map((tag, tIdx) => (
-                    <span key={tIdx} className="badge">
-                      {tag}
-                    </span>
+                <p className="edu-degree">{edu.degree}</p>
+                <div className="tag-list">
+                  {edu.tags.map((tag) => (
+                    <span key={tag} className="tag">{tag}</span>
                   ))}
                 </div>
               </div>
@@ -131,87 +117,75 @@ export default function Education() {
           ))}
         </div>
 
-        {/* Certifications Subheading */}
-        <div className="cert-section-head reveal-on-scroll">
+        <div className="cert-head reveal-on-scroll">
           <h3 className="cert-subtitle">
-            <Award size={22} /> Professional Certifications &amp; Awards
+            <Award size={18} aria-hidden="true" /> Certifications &amp; awards
           </h3>
-          <span className="cert-count-pill">{CERTIFICATIONS.length} verified credentials</span>
+          <span className="cert-count">{CERTIFICATIONS.length} credentials</span>
         </div>
 
-        {/* Certifications Grid */}
         <div className="cert-grid">
           {CERTIFICATIONS.map((cert, idx) => (
-            <div
-              key={cert.id || idx}
-              className="glass-card spotlight cert-card reveal-on-scroll"
-              style={{ transitionDelay: `${(idx % 3) * 90}ms` }}
-              onMouseMove={onMove}
+            <article
+              key={cert.id}
+              className={`card cert-card reveal-on-scroll delay-${(idx % 3) * 100}`}
             >
-              <div className="cert-card-top">
-                <div className="cert-icon">
-                  <BadgeCheck size={20} />
-                </div>
-                <div className="cert-issued">
-                  <Calendar size={13} /> {cert.issued}
-                </div>
-              </div>
-
-              <h4>{cert.title}</h4>
-              <p className="cert-issuer text-muted">{cert.issuer}</p>
-
-              {cert.credentialId && (
-                <p className="cert-credential">ID: {cert.credentialId}</p>
-              )}
-
-              {cert.image && (
+              {cert.image ? (
                 <button
                   type="button"
-                  className="cert-thumbnail-btn"
+                  className="cert-thumb"
                   onClick={() => setSelectedCert(cert)}
                   aria-label={`View full certificate for ${cert.title}`}
                 >
                   <img
                     src={cert.image}
-                    alt={`${cert.title} certificate`}
+                    alt=""
                     loading="lazy"
-                    className="cert-thumb-img"
+                    width={cert.imageSize?.[0]}
+                    height={cert.imageSize?.[1]}
                   />
-                  <span className="cert-zoom-overlay">
-                    <ZoomIn size={16} /> Inspect Certificate
+                  <span className="cert-zoom">
+                    <ZoomIn size={14} /> View
                   </span>
                 </button>
+              ) : (
+                <div className="cert-thumb is-empty" aria-hidden="true">
+                  <Award size={28} strokeWidth={1.5} />
+                </div>
               )}
 
-              <div className="cert-footer">
-                {cert.tags && (
-                  <div className="cert-tags">
-                    {cert.tags.map((tag, tIdx) => (
-                      <span key={tIdx} className="cert-tag">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+              <div className="cert-body">
+                <span className="cert-date">{cert.issued}</span>
+                <h4>{cert.title}</h4>
+                <p className="cert-issuer">{cert.issuer}</p>
+                {cert.credentialId && (
+                  <p className="cert-credential">ID {cert.credentialId}</p>
                 )}
 
-                {cert.credentialUrl && (
-                  <a
-                    href={cert.credentialUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="cert-link"
-                    aria-label={`Verify credential for ${cert.title}`}
-                  >
-                    Verify <ExternalLink size={12} />
-                  </a>
-                )}
+                <div className="cert-footer">
+                  <div className="tag-list">
+                    {cert.tags.map((tag) => (
+                      <span key={tag} className="tag">{tag}</span>
+                    ))}
+                  </div>
+                  {cert.credentialUrl && (
+                    <a
+                      href={cert.credentialUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="cert-link"
+                      aria-label={`Verify credential for ${cert.title}`}
+                    >
+                      Verify <ArrowUpRight size={13} />
+                    </a>
+                  )}
+                </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>
 
-      {/* Lightbox Modal for Certificate Inspection */}
       {selectedCert && (
         <div
           className="cert-modal-overlay"
@@ -220,49 +194,45 @@ export default function Education() {
           aria-modal="true"
           aria-label={selectedCert.title}
         >
-          <div
-            className="cert-modal-card glass-card"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="cert-modal" onClick={(e) => e.stopPropagation()}>
             <div className="cert-modal-header">
               <div>
                 <h3 className="cert-modal-title">{selectedCert.title}</h3>
-                <p className="cert-modal-subtitle text-muted">
-                  Issued by {selectedCert.issuer} • {selectedCert.issued}
+                <p className="cert-modal-subtitle">
+                  Issued by {selectedCert.issuer} · {selectedCert.issued}
                 </p>
               </div>
               <button
                 className="cert-modal-close"
                 onClick={() => setSelectedCert(null)}
                 aria-label="Close certificate preview"
+                autoFocus
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
             <div className="cert-modal-body">
-              <img
-                src={selectedCert.image}
-                alt={selectedCert.title}
-                className="cert-modal-img"
-              />
+              <img src={selectedCert.image} alt={selectedCert.title} />
             </div>
 
-            <div className="cert-modal-footer">
-              {selectedCert.credentialId && (
-                <span className="cert-modal-id">Credential ID: {selectedCert.credentialId}</span>
-              )}
-              {selectedCert.credentialUrl && (
-                <a
-                  href={selectedCert.credentialUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn btn-primary btn-sm"
-                >
-                  Verify on Official Issuer <ExternalLink size={14} />
-                </a>
-              )}
-            </div>
+            {(selectedCert.credentialId || selectedCert.credentialUrl) && (
+              <div className="cert-modal-footer">
+                {selectedCert.credentialId && (
+                  <span className="cert-modal-id">Credential ID: {selectedCert.credentialId}</span>
+                )}
+                {selectedCert.credentialUrl && (
+                  <a
+                    href={selectedCert.credentialUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-primary"
+                  >
+                    Verify with issuer <ArrowUpRight size={15} />
+                  </a>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ExternalLink, LockKeyhole, Radio, ShieldCheck, LayoutGrid, List, Layers, CheckCircle2 } from 'lucide-react';
+import { ArrowUpRight, LockKeyhole, ShieldCheck, LayoutGrid, List, PowerOff } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
+import SectionHead from './SectionHead';
 import './Projects.css';
 
 const PROJECTS = [
@@ -10,10 +11,12 @@ const PROJECTS = [
     category: 'Public Platform',
     categoryType: 'public',
     description: 'Universal real-time price & deal aggregator for groceries, tech, and essentials with official platform deep links and WAF-resilient catalog indexing.',
-    href: 'https://hematcuy.lufria.tech',
+    // hematcuy.lufria.tech has no tunnel route after the server migration (404) —
+    // switch back to status 'public' + href once it is redeployed.
+    href: null,
     tags: ['FastAPI', 'React', 'Redis', 'Tailwind'],
-    status: 'public',
-    statusLabel: 'Live Public App',
+    status: 'offline',
+    statusLabel: 'Currently Offline',
     featured: true,
   },
   {
@@ -60,7 +63,7 @@ const PROJECTS = [
     name: 'Lufria.tech Portfolio',
     category: 'Design System',
     categoryType: 'public',
-    description: 'Modern cyberpunk deep-space portfolio engineered with React 19, custom CSS tokens, physics-driven particle effects, and strict anti-AI-slop standards.',
+    description: 'This site — a dark, editorial portfolio built with React 19, Vite, and plain-CSS design tokens, with live data from the GitHub API.',
     href: 'https://lufria.tech',
     tags: ['React 19', 'Vite', 'Design Tokens', 'CSS3'],
     status: 'public',
@@ -69,16 +72,36 @@ const PROJECTS = [
   },
 ];
 
+const FILTERS = [
+  { id: 'all', label: 'All' },
+  { id: 'public', label: 'Public apps' },
+  { id: 'enterprise', label: 'Enterprise & systems' },
+];
+
+function StatusPill({ project }) {
+  if (project.status === 'public') {
+    return (
+      <span className="pill pill-accent project-status">
+        <span className="live-dot" aria-hidden="true" /> {project.statusLabel}
+      </span>
+    );
+  }
+  return (
+    <span className="pill project-status">
+      {project.status === 'offline'
+        ? <PowerOff size={12} aria-hidden="true" />
+        : <LockKeyhole size={12} aria-hidden="true" />}
+      {project.statusLabel}
+    </span>
+  );
+}
+
 export default function Projects() {
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'table'
   const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'public' | 'enterprise'
 
-  const onMove = (e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
-  };
+  const countFor = (id) =>
+    id === 'all' ? PROJECTS.length : PROJECTS.filter((p) => p.categoryType === id).length;
 
   const filteredProjects = PROJECTS.filter((p) => {
     if (activeFilter === 'all') return true;
@@ -88,117 +111,78 @@ export default function Projects() {
   return (
     <section id="projects" className="projects">
       <div className="container">
-        <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">// engineered systems</span>
-          <h2 className="section-title">Featured Projects</h2>
-        </div>
+        <SectionHead
+          index="03"
+          label="Projects"
+          title={<>Selected <em>work</em></>}
+        >
+          Public products and production systems, alongside private enterprise architectures
+          maintained for operational rigor.
+        </SectionHead>
 
-        <p className="projects-desc text-muted reveal-on-scroll delay-100">
-          A collection of public digital products and production systems, accompanied by private enterprise
-          architectures maintained for operational rigor.
-        </p>
-
-        {/* Toolbar: Filters & Dual-View Toggle */}
-        <div className="projects-toolbar reveal-on-scroll delay-200">
-          <div className="filter-chips">
-            <button
-              className={`filter-chip ${activeFilter === 'all' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('all')}
-              type="button"
-            >
-              All Projects ({PROJECTS.length})
-            </button>
-            <button
-              className={`filter-chip ${activeFilter === 'public' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('public')}
-              type="button"
-            >
-              <Radio size={13} className="chip-icon public" /> Public Apps ({PROJECTS.filter((project) => project.categoryType === 'public').length})
-            </button>
-            <button
-              className={`filter-chip ${activeFilter === 'enterprise' ? 'active' : ''}`}
-              onClick={() => setActiveFilter('enterprise')}
-              type="button"
-            >
-              <LockKeyhole size={13} className="chip-icon private" /> Enterprise &amp; Systems ({PROJECTS.filter((project) => project.categoryType === 'enterprise').length})
-            </button>
+        <div className="projects-toolbar reveal-on-scroll delay-100">
+          <div className="segmented" role="group" aria-label="Filter projects">
+            {FILTERS.map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                className={activeFilter === f.id ? 'active' : ''}
+                aria-pressed={activeFilter === f.id}
+                onClick={() => setActiveFilter(f.id)}
+              >
+                {f.label} <span className="count">{countFor(f.id)}</span>
+              </button>
+            ))}
           </div>
 
-          <div className="view-mode-switch">
+          <div className="segmented" role="group" aria-label="Layout">
             <button
-              className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              type="button"
+              className={viewMode === 'grid' ? 'active' : ''}
+              aria-pressed={viewMode === 'grid'}
               onClick={() => setViewMode('grid')}
-              aria-label="Switch to Grid View"
-              title="Grid View"
-              type="button"
+              title="Grid view"
             >
-              <LayoutGrid size={17} />
-              <span className="view-label">Grid</span>
+              <LayoutGrid size={15} /> <span className="view-label">Grid</span>
             </button>
             <button
-              className={`view-btn ${viewMode === 'table' ? 'active' : ''}`}
-              onClick={() => setViewMode('table')}
-              aria-label="Switch to Dense List View"
-              title="Dense List View"
               type="button"
+              className={viewMode === 'table' ? 'active' : ''}
+              aria-pressed={viewMode === 'table'}
+              onClick={() => setViewMode('table')}
+              title="Table view"
             >
-              <List size={17} />
-              <span className="view-label">Table</span>
+              <List size={15} /> <span className="view-label">Table</span>
             </button>
           </div>
         </div>
 
-        {/* Grid View Mode */}
         {viewMode === 'grid' ? (
           <div className="projects-grid">
-            {filteredProjects.map((project, idx) => {
+            {filteredProjects.map((project) => {
               const isPublic = project.status === 'public';
               const cardContent = (
                 <>
-                  <div className="project-header">
-                    <span className={`project-folder ${project.status}`}>
-                      {isPublic ? <Layers size={22} /> : <LockKeyhole size={20} />}
-                    </span>
-                    <div className="project-meta-pill">
-                      <span className={`project-status ${project.status}`}>
-                        {isPublic ? <Radio size={13} /> : <LockKeyhole size={13} />}
-                        {project.statusLabel}
-                      </span>
-                    </div>
+                  <div className="project-top">
+                    <StatusPill project={project} />
+                    {isPublic && <ArrowUpRight size={18} className="project-arrow" aria-hidden="true" />}
                   </div>
 
-                  <div className="project-title-row">
-                    <h3 className="project-title">{project.name}</h3>
-                    <span className="project-category-tag">{project.category}</span>
-                  </div>
-
-                  <p className="project-desc text-muted">{project.description}</p>
+                  <span className="project-category">{project.category}</span>
+                  <h3 className="project-title">{project.name}</h3>
+                  <p className="project-desc">{project.description}</p>
 
                   {project.note && (
-                    <div className="project-note">
-                      <ShieldCheck size={14} />
+                    <p className="project-note">
+                      <ShieldCheck size={14} aria-hidden="true" />
                       <span>{project.note}</span>
-                    </div>
+                    </p>
                   )}
 
-                  <div className="project-footer">
-                    <div className="project-tags">
-                      {project.tags.map((tag) => (
-                        <span key={tag} className="project-tag">{tag}</span>
-                      ))}
-                    </div>
-
-                    <div className="project-action-wrapper">
-                      {isPublic ? (
-                        <span className="project-open public">
-                          Visit System <ExternalLink size={14} />
-                        </span>
-                      ) : (
-                        <span className="project-open private">
-                          Restricted <LockKeyhole size={14} />
-                        </span>
-                      )}
-                    </div>
+                  <div className="tag-list project-tags">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="tag">{tag}</span>
+                    ))}
                   </div>
                 </>
               );
@@ -209,104 +193,89 @@ export default function Projects() {
                   href={project.href}
                   target="_blank"
                   rel="noreferrer"
-                  className={`glass-card spotlight project-card ${project.status}`}
-                  style={{ transitionDelay: `${(idx % 4) * 80}ms` }}
-                  onMouseMove={onMove}
+                  className="card card-link project-card"
+                  aria-label={`${project.name} — open ${project.href}`}
                 >
                   {cardContent}
                 </a>
               ) : (
-                <article
-                  key={project.id}
-                  className={`glass-card project-card ${project.status}`}
-                  style={{ transitionDelay: `${(idx % 4) * 80}ms` }}
-                >
+                <article key={project.id} className="card project-card is-private">
                   {cardContent}
                 </article>
               );
             })}
+
+            <a
+              href="https://github.com/Enricko"
+              target="_blank"
+              rel="noreferrer"
+              className="card card-link project-card project-more"
+            >
+              <FaGithub size={22} aria-hidden="true" />
+              <h3 className="project-title">More on GitHub</h3>
+              <p className="project-desc">
+                Open repositories — Flutter apps, games, API templates, and experiments.
+              </p>
+              <span className="project-more-link">
+                github.com/Enricko <ArrowUpRight size={15} />
+              </span>
+            </a>
           </div>
         ) : (
-          /* Dense Table / List View Mode */
-          <div className="projects-table-container glass-card">
-            <div className="table-responsive">
-              <table className="projects-table">
-                <thead>
-                  <tr>
-                    <th>Project</th>
-                    <th>Category</th>
-                    <th>Architecture &amp; Stack</th>
-                    <th>Access State</th>
-                    <th className="text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredProjects.map((project) => {
-                    const isPublic = project.status === 'public';
-                    return (
-                      <tr key={project.id} className={`table-row ${project.status}`}>
-                        <td className="project-cell-name">
-                          <div className="cell-name-lockup">
-                            <span className={`cell-icon ${project.status}`}>
-                              {isPublic ? <Layers size={16} /> : <LockKeyhole size={16} />}
-                            </span>
-                            <div>
-                              <strong className="cell-title">{project.name}</strong>
-                              <p className="cell-desc-mobile text-muted">{project.description}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="project-cell-category">
-                          <span className="table-category-badge">{project.category}</span>
-                        </td>
-                        <td className="project-cell-tags">
-                          <div className="table-tags-group">
-                            {project.tags.map((tag) => (
-                              <span key={tag} className="table-tag">{tag}</span>
-                            ))}
-                          </div>
-                        </td>
-                        <td className="project-cell-status">
-                          <span className={`table-status-pill ${project.status}`}>
-                            {isPublic ? <CheckCircle2 size={13} /> : <LockKeyhole size={13} />}
-                            {project.statusLabel}
+          <div className="projects-table-wrap card">
+            <table className="projects-table">
+              <thead>
+                <tr>
+                  <th scope="col">Project</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Stack</th>
+                  <th scope="col">Access</th>
+                  <th scope="col" className="text-right">
+                    <span className="sr-only">Action</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProjects.map((project) => {
+                  const isPublic = project.status === 'public';
+                  return (
+                    <tr key={project.id}>
+                      <td className="cell-name">
+                        <strong>{project.name}</strong>
+                        <span className="cell-desc">{project.description}</span>
+                      </td>
+                      <td className="cell-category">{project.category}</td>
+                      <td>
+                        <div className="tag-list">
+                          {project.tags.map((tag) => (
+                            <span key={tag} className="tag">{tag}</span>
+                          ))}
+                        </div>
+                      </td>
+                      <td><StatusPill project={project} /></td>
+                      <td className="text-right">
+                        {isPublic ? (
+                          <a href={project.href} target="_blank" rel="noreferrer" className="table-action">
+                            Open <ArrowUpRight size={14} />
+                          </a>
+                        ) : project.status === 'offline' ? (
+                          <span className="table-action is-locked">
+                            <PowerOff size={13} /> Offline
                           </span>
-                        </td>
-                        <td className="project-cell-action text-right">
-                          {isPublic ? (
-                            <a
-                              href={project.href}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="table-action-link"
-                            >
-                              Launch <ExternalLink size={13} />
-                            </a>
-                          ) : (
-                            <span className="table-action-locked" title={project.note}>
-                              Private
-                            </span>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                        ) : (
+                          <span className="table-action is-locked" title={project.note}>
+                            <LockKeyhole size={13} /> Private
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
 
-        <div className="projects-cta reveal-on-scroll delay-300">
-          <a
-            href="https://github.com/Enricko"
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-outline"
-          >
-            <FaGithub size={18} /> View Open Repositories on GitHub <ExternalLink size={15} />
-          </a>
-        </div>
       </div>
     </section>
   );

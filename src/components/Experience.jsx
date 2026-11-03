@@ -1,5 +1,6 @@
 import React from 'react';
-import { Briefcase, Calendar, MapPin, CheckCircle2 } from 'lucide-react';
+import { MapPin } from 'lucide-react';
+import SectionHead from './SectionHead';
 import './Experience.css';
 
 const EXPERIENCES = [
@@ -42,71 +43,50 @@ const EXPERIENCES = [
 ];
 
 export default function Experience() {
-  const onMove = (e) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
-  };
-
   return (
     <section id="experience" className="experience">
       <div className="container">
-        <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">// track record</span>
-          <h2 className="section-title">Professional Experience</h2>
-        </div>
+        <SectionHead
+          index="02"
+          label="Experience"
+          title={<>Where I've been <em>shipping</em></>}
+        >
+          Production work across platform engineering, mobile field apps, and analytics — most recent first.
+        </SectionHead>
 
-        <div className="timeline">
-          {EXPERIENCES.map((exp, idx) => (
-            <div
-              key={idx}
-              className={`timeline-item reveal-on-scroll ${exp.current ? 'is-current' : ''}`}
-              style={{ transitionDelay: `${(idx % 4) * 90}ms` }}
+        <ol className="exp-list">
+          {EXPERIENCES.map((exp) => (
+            <li
+              key={`${exp.company}-${exp.period}`}
+              className={`exp-item reveal-on-scroll ${exp.current ? 'is-current' : ''}`}
             >
-              <div className="timeline-dot">
-                <span />
+              <div className="exp-aside">
+                <span className="exp-period">{exp.period}</span>
+                {exp.current && (
+                  <span className="pill pill-accent exp-current">
+                    <span className="live-dot" aria-hidden="true" /> Current role
+                  </span>
+                )}
               </div>
 
-              <div className="glass-card spotlight timeline-content" onMouseMove={onMove}>
-                <div className="timeline-header">
-                  <div>
-                    <div className="timeline-role-row">
-                      <h3 className="timeline-role">{exp.title}</h3>
-                      {exp.current && (
-                        <span className="current-badge">
-                          <span className="current-pulse-dot" /> Active Role
-                        </span>
-                      )}
-                    </div>
-                    <div className="timeline-company-row">
-                      <span className="timeline-company">
-                        <Briefcase size={14} /> {exp.company}
-                      </span>
-                      <span className="timeline-location">
-                        <MapPin size={13} /> {exp.location}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="timeline-period">
-                    <Calendar size={13} /> {exp.period}
-                  </div>
-                </div>
-
-                <p className="timeline-desc text-muted">{exp.description}</p>
-
-                <div className="timeline-tags">
-                  {exp.tags.map((tag, tIdx) => (
-                    <span key={tIdx} className="badge">
-                      {tag}
-                    </span>
+              <div className="exp-main">
+                <h3 className="exp-role">{exp.title}</h3>
+                <p className="exp-company">
+                  <span className="exp-company-name">{exp.company}</span>
+                  <span className="exp-location">
+                    <MapPin size={13} aria-hidden="true" /> {exp.location}
+                  </span>
+                </p>
+                <p className="exp-desc">{exp.description}</p>
+                <div className="tag-list">
+                  {exp.tags.map((tag) => (
+                    <span key={tag} className="tag">{tag}</span>
                   ))}
                 </div>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );

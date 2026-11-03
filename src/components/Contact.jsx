@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Send, Check, Copy, Coffee, ExternalLink } from 'lucide-react';
+import { Mail, MapPin, Send, Check, Copy, Coffee, ArrowUpRight } from 'lucide-react';
+import SectionHead from './SectionHead';
 import './Contact.css';
 
 export default function Contact() {
@@ -31,120 +32,109 @@ export default function Contact() {
   return (
     <section id="contact" className="contact">
       <div className="container">
-        <div className="section-head reveal-on-scroll">
-          <span className="eyebrow">// collaborate</span>
-          <h2 className="section-title">Get In Touch</h2>
-        </div>
-
-        <p className="contact-desc text-muted reveal-on-scroll delay-100">
+        <SectionHead
+          index="07"
+          label="Contact"
+          title={<>Have something in mind? <em>Let's talk.</em></>}
+        >
           Have an engineering challenge, an interesting product to build, or a technical inquiry?
           Drop me a line and let's craft something remarkable.
-        </p>
+        </SectionHead>
 
-        <div className="contact-container">
-          <div className="contact-info reveal-on-scroll delay-200">
-            {/* Direct Email Card */}
-            <div className="glass-card info-card">
-              <div className="info-icon-wrapper">
-                <Mail className="info-icon" size={26} />
+        <div className="contact-grid">
+          <ul className="contact-info reveal-on-scroll delay-100">
+            <li className="contact-row">
+              <span className="icon-box"><Mail size={18} /></span>
+              <div className="contact-row-body">
+                <span className="contact-label">Email</span>
+                <div className="email-row">
+                  <a href={`mailto:${emailAddress}`} className="contact-value">{emailAddress}</a>
+                  <button
+                    type="button"
+                    className="copy-btn"
+                    onClick={handleCopyEmail}
+                    aria-label="Copy email address"
+                    title="Copy email to clipboard"
+                  >
+                    {copied ? <Check size={14} className="copied" /> : <Copy size={14} />}
+                  </button>
+                </div>
               </div>
-              <h4>Direct Email</h4>
-              <p className="text-muted mb-2">Fast response time for opportunities and inquiries.</p>
-              <div className="email-action-row">
-                <a href={`mailto:${emailAddress}`} className="contact-link text-gradient">
-                  {emailAddress}
+            </li>
+
+            <li className="contact-row">
+              <span className="icon-box"><MapPin size={18} /></span>
+              <div className="contact-row-body">
+                <span className="contact-label">Location</span>
+                <span className="contact-value">Yogyakarta, Indonesia</span>
+                <span className="pill pill-accent contact-remote">
+                  <span className="live-dot" aria-hidden="true" /> Open to remote work worldwide
+                </span>
+              </div>
+            </li>
+
+            <li className="contact-row">
+              <span className="icon-box"><Coffee size={18} /></span>
+              <div className="contact-row-body">
+                <span className="contact-label">Support my work</span>
+                <p className="contact-note">Appreciate open-source tools and projects? Buy me a coffee on Saweria.</p>
+                <a href="https://saweria.co/Lufria" target="_blank" rel="noreferrer" className="contact-value contact-link">
+                  saweria.co/Lufria <ArrowUpRight size={15} />
                 </a>
-                <button
-                  type="button"
-                  className="copy-email-btn"
-                  onClick={handleCopyEmail}
-                  aria-label="Copy email address"
-                  title="Copy email to clipboard"
-                >
-                  {copied ? <Check size={14} className="copied" /> : <Copy size={14} />}
-                </button>
+              </div>
+            </li>
+          </ul>
+
+          <form className="card contact-form reveal-on-scroll delay-200" onSubmit={handleSubmit}>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="contact-name">Your name</label>
+                <input
+                  type="text"
+                  id="contact-name"
+                  name="name"
+                  placeholder="John Doe"
+                  required
+                  autoComplete="name"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="contact-email">Email address</label>
+                <input
+                  type="email"
+                  id="contact-email"
+                  name="email"
+                  placeholder="john@example.com"
+                  required
+                  autoComplete="email"
+                />
               </div>
             </div>
 
-            {/* Location & Remote Availability */}
-            <div className="glass-card info-card">
-              <div className="info-icon-wrapper">
-                <MapPin className="info-icon" size={26} />
-              </div>
-              <h4>Location &amp; Remote</h4>
-              <p className="text-muted mb-2">Based in Yogyakarta, Indonesia.</p>
-              <span className="contact-status-tag">
-                <span className="live-dot-green" /> Open to Remote Work Worldwide
-              </span>
-            </div>
-
-            {/* Saweria Supporter Card */}
-            <div className="glass-card info-card saweria-card">
-              <div className="info-icon-wrapper coffee">
-                <Coffee className="info-icon coffee-icon" size={26} />
-              </div>
-              <h4>Support My Work</h4>
-              <p className="text-muted mb-2">Appreciate open-source tools and projects? Buy me a coffee on Saweria.</p>
-              <a
-                href="https://saweria.co/Lufria"
-                target="_blank"
-                rel="noreferrer"
-                className="saweria-btn"
-              >
-                <span>saweria.co/Lufria</span>
-                <ExternalLink size={14} />
-              </a>
-            </div>
-          </div>
-
-          {/* Form */}
-          <form className="glass-card contact-form reveal-on-scroll delay-300" onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="contact-name">Your Name</label>
-              <input
-                type="text"
-                id="contact-name"
-                name="name"
-                placeholder="John Doe"
-                required
-                autoComplete="name"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="contact-email">Email Address</label>
-              <input
-                type="email"
-                id="contact-email"
-                name="email"
-                placeholder="john@example.com"
-                required
-                autoComplete="email"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="contact-message">Message / Project Scope</label>
+              <label htmlFor="contact-message">Message / project scope</label>
               <textarea
                 id="contact-message"
                 name="message"
-                rows="5"
+                rows="6"
                 placeholder="Tell me about your product, timeline, and engineering needs..."
                 required
               ></textarea>
             </div>
 
-            <button type="submit" className={`btn btn-primary submit-btn ${sent ? 'sent' : ''}`}>
+            <button type="submit" className="btn btn-primary submit-btn">
               {sent ? (
                 <>
-                  Opening Mail Client… <Check size={18} />
+                  Opening mail client… <Check size={17} />
                 </>
               ) : (
                 <>
-                  Send Message <Send size={18} />
+                  Send message <Send size={16} className="icon-shift" />
                 </>
               )}
             </button>
+            <p className="form-hint">Opens your email app with the message pre-filled.</p>
           </form>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import './Rain.css';
 
 /* --- Neon paws (solid, glowing) ------------------------------------- */
-const NEON_COLORS = ['#00f2fe', '#4facfe', '#f093fb', '#7c5cff'];
+const NEON_COLORS = ['#4ade80', '#86efac', '#7dd3fc', '#c4b5fd'];
 
 /* --- Calico paws: light fur, orange/black patches, pink beans -------- */
 const FUR_BASES = ['#fbf3e6', '#f7ede0', '#d8d2de'];
