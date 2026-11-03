@@ -30,6 +30,12 @@ const SKILL_LOGOS = [
   '/logos/electron.svg',
 ];
 
+/* --- Chibi mascot: 12 poses cut from the sticker sheet (/public/rain) - */
+const CHIBI_SPRITES = Array.from(
+  { length: 12 },
+  (_, i) => `/rain/chibi-${String(i + 1).padStart(2, '0')}.webp`,
+);
+
 /* Toe positions shared by the silhouette, the clip and the beans */
 const TOES = [
   { cx: 12, cy: 17, rot: -22 },
@@ -239,6 +245,10 @@ function buildItems() {
     delay: `${(-prng() * 15).toFixed(1)}s`,
     sway: `${rand(-6, 6).toFixed(1)}vw`,
     rot: `${prng() < 0.5 ? '' : '-'}${180 + Math.floor(prng() * 360)}deg`,
+    // Derived from the index, not the PRNG, so the other modes keep their exact layout.
+    // Every pose appears equally often, drifting down with a gentle tilt instead of spinning.
+    chibi: CHIBI_SPRITES[i % CHIBI_SPRITES.length],
+    chibiTilt: `${i % 2 ? '' : '-'}${12 + ((i * 7) % 18)}deg`,
   }));
 }
 
@@ -248,6 +258,7 @@ export default function Rain({ mode }) {
   const items = useMemo(() => STATIC_ITEMS, []);
 
   if (mode === 'none') return null;
+  const chibi = mode === 'chibi';
 
   return (
     <div className={`paw-rain mode-${mode}`} aria-hidden="true">
@@ -257,13 +268,14 @@ export default function Rain({ mode }) {
           className="paw"
           style={{
             left: p.left,
-            width: p.size,
-            height: p.size,
+            // Characters need more room than a paw to read as a pose
+            width: chibi ? p.size * 1.7 : p.size,
+            height: chibi ? p.size * 1.7 : p.size,
             opacity: p.opacity,
             animationDuration: p.duration,
             animationDelay: p.delay,
             '--sway': p.sway,
-            '--rot': p.rot,
+            '--rot': chibi ? p.chibiTilt : p.rot,
           }}
         >
           {mode === 'neon' && <SolidPaw color={p.neon} dog={p.dog} />}
@@ -288,6 +300,7 @@ export default function Rain({ mode }) {
             />
           )}
           {mode === 'skills' && <img src={p.logo} alt="" loading="lazy" />}
+          {chibi && <img src={p.chibi} alt="" loading="lazy" decoding="async" />}
         </span>
       ))}
     </div>

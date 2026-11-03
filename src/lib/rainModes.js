@@ -4,6 +4,7 @@ const MODES = [
   ['calico', 1],
   ['faces', 1],
   ['skills', 2],
+  ['chibi', 1],
 ];
 
 export function rollRainMode(exclude) {

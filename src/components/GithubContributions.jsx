@@ -2,14 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { BookMarked, Star, GitCommitHorizontal, CalendarDays, ArrowUpRight } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { useCountUp, useInView } from '../lib/useInteractions';
+import { GITHUB_USERNAME, GITHUB_URL } from '../lib/contributions';
+import { useContributions } from '../lib/useContributions';
 import SectionHead from './SectionHead';
 import './GithubContributions.css';
 
-const GITHUB_USERNAME = 'Enricko';
-const GITHUB_URL = `https://github.com/${GITHUB_USERNAME}`;
-// Public, CORS-enabled mirror of the GitHub contribution calendar (GitHub's own
-// endpoint needs an authenticated GraphQL call the browser can't make).
-const CONTRIBUTIONS_URL = `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last`;
 const WEEKS_IN_GRID = 53;
 
 // Shown only if the live repo list can't be fetched.
@@ -87,6 +84,7 @@ const repoTitle = (name) => name.replace(/[-_]+/g, ' ');
 const pushedTime = (r) => new Date(r.pushed_at || 0).getTime();
 const formatUpdated = (iso) =>
   iso ? new Date(iso).toLocaleDateString('en', { month: 'short', year: 'numeric' }) : null;
+const formatDay = (ms) => new Date(ms).toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric' });
 
 /**
  * Lays the API's day list out as Sunday-first week columns, like GitHub does.
@@ -110,11 +108,16 @@ function buildCalendar(days) {
 }
 
 function MetricCard({ icon, value, label, active }) {
-  const n = useCountUp(value ?? 0, active && value != null);
+  // Counts up once, to the value showing when the card scrolls into view; a
+  // later refresh (saved activity replaced by live) then shows as-is.
+  const [countTo, setCountTo] = useState(null);
+  if (countTo == null && active && value != null) setCountTo(value);
+  const n = useCountUp(countTo ?? 0, countTo != null);
+  const shown = countTo != null && n === countTo ? value : n;
   return (
     <div className="metric">
       <span className="metric-label">{icon} {label}</span>
-      <span className="metric-value">{value == null ? '—' : n.toLocaleString()}</span>
+      <span className="metric-value">{value == null ? '—' : shown.toLocaleString()}</span>
     </div>
   );
 }
@@ -122,7 +125,7 @@ function MetricCard({ icon, value, label, active }) {
 export default function GithubContributions() {
   const [stats, setStats] = useState(null);
   const [repos, setRepos] = useState(FALLBACK_REPOS);
-  const [calendar, setCalendar] = useState('loading'); // 'loading' | 'error' | { weeks, total, activeDays }
+  const { days, source, updatedAt } = useContributions();
   const [filter, setFilter] = useState('starred');
   const [metricsRef, metricsInView] = useInView({ threshold: 0.3 });
 
@@ -153,21 +156,7 @@ export default function GithubContributions() {
       }
     }
 
-    async function loadCalendar() {
-      try {
-        const res = await fetch(CONTRIBUTIONS_URL);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        if (!Array.isArray(data.contributions) || !data.contributions.length) throw new Error('empty calendar');
-        if (!cancelled) setCalendar(buildCalendar(data.contributions));
-      } catch (err) {
-        console.warn('GithubContributions: contribution calendar unavailable:', err.message);
-        if (!cancelled) setCalendar('error');
-      }
-    }
-
     loadGithubData();
-    loadCalendar();
     return () => { cancelled = true; };
   }, []);
 
@@ -183,7 +172,9 @@ export default function GithubContributions() {
     return sorted.slice(0, 4);
   }, [repos, filter]);
 
-  const cal = typeof calendar === 'object' ? calendar : null;
+  const cal = useMemo(() => (days.length ? buildCalendar(days) : null), [days]);
+  const isLive = source === 'live';
+  const savedOn = updatedAt ? formatDay(updatedAt) : null;
   const placeholderWeeks = useMemo(
     () => Array.from({ length: WEEKS_IN_GRID }, (_, w) =>
       Array.from({ length: 7 }, (_, d) => ({ key: `ph-${w}-${d}`, empty: true }))),
@@ -198,7 +189,7 @@ export default function GithubContributions() {
           label="Open Source"
           title={<>Building in the <em>open</em></>}
         >
-          My public GitHub footprint, pulled live from GitHub when the page loads.
+          My public GitHub footprint, kept up to date from GitHub.
         </SectionHead>
 
         <div className="metrics reveal-on-scroll delay-100" ref={metricsRef}>
@@ -213,18 +204,24 @@ export default function GithubContributions() {
             <div>
               <h3>Contribution activity</h3>
               <p className="heatmap-summary">
-                {cal && `${cal.total.toLocaleString()} contributions in the last year`}
-                {calendar === 'loading' && 'Loading contribution calendar…'}
-                {calendar === 'error' && "Couldn't load the contribution calendar right now."}
+                {cal && isLive && `${cal.total.toLocaleString()} contributions in the last year`}
+                {cal && !isLive && `${cal.total.toLocaleString()} contributions in the year to ${savedOn}`}
+                {!cal && "Couldn't load the contribution calendar right now."}
               </p>
             </div>
-            {cal ? (
+            {cal && isLive ? (
               <span className="pill pill-accent">
                 <span className="live-dot" aria-hidden="true" /> Live from GitHub
               </span>
             ) : (
-              <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="pill heatmap-fallback-link">
-                View on GitHub <ArrowUpRight size={13} />
+              <a
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="pill heatmap-fallback-link"
+                title={cal ? `Saved from GitHub on ${savedOn}` : undefined}
+              >
+                {cal ? 'Saved GitHub activity' : 'View on GitHub'} <ArrowUpRight size={13} aria-hidden="true" />
               </a>
             )}
           </div>
@@ -234,7 +231,7 @@ export default function GithubContributions() {
               className={`heatmap-grid ${cal ? '' : 'is-placeholder'}`}
               role="img"
               aria-label={cal
-                ? `GitHub contribution heatmap: ${cal.total} contributions on ${cal.activeDays} days in the last year`
+                ? `GitHub contribution heatmap: ${cal.total} contributions on ${cal.activeDays} days in the ${isLive ? 'last year' : `year to ${savedOn}`}`
                 : 'GitHub contribution heatmap unavailable'}
             >
               {(cal ? cal.weeks : placeholderWeeks).map((week, wi) => (

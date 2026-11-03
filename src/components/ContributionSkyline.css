@@ -1,0 +1,78 @@
+.skyline {
+  position: relative;
+  margin: 0;
+  padding: 3rem 0 0;
+}
+
+.skyline-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Bar faces: lit top, mid left, shaded right. Opaque so nearer bars hide farther ones. */
+.sky-bar polygon { transition: fill 0.2s ease; }
+.sky-top { stroke: rgba(9, 9, 11, 0.35); stroke-width: 0.35; stroke-linejoin: round; }
+
+.sky-bar.l0 .sky-top   { fill: #232328; }
+.sky-bar.l0 .sky-left  { fill: #19191d; }
+.sky-bar.l0 .sky-right { fill: #131316; }
+.sky-bar.l1 .sky-top   { fill: #1f6b3a; }
+.sky-bar.l1 .sky-left  { fill: #174f2c; }
+.sky-bar.l1 .sky-right { fill: #113b21; }
+.sky-bar.l2 .sky-top   { fill: #2f9e56; }
+.sky-bar.l2 .sky-left  { fill: #237a43; }
+.sky-bar.l2 .sky-right { fill: #1b5f34; }
+.sky-bar.l3 .sky-top   { fill: #45c46f; }
+.sky-bar.l3 .sky-left  { fill: #33a058; }
+.sky-bar.l3 .sky-right { fill: #287e46; }
+.sky-bar.l4 .sky-top   { fill: #86efac; }
+.sky-bar.l4 .sky-left  { fill: var(--accent); }
+.sky-bar.l4 .sky-right { fill: #38b864; }
+
+.has-data .sky-bar:hover .sky-top   { fill: #f4f4f5; }
+.has-data .sky-bar:hover .sky-left  { fill: #d4d4d8; }
+.has-data .sky-bar:hover .sky-right { fill: #a1a1aa; }
+
+.skyline-source {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.skyline-source:hover { color: var(--text); }
+.skyline-source.pill-accent:hover { background: rgba(74, 222, 128, 0.16); color: var(--accent); }
+
+/* Sits in the empty lower-left corner of the isometric grid */
+.skyline-caption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: grid;
+  gap: 0.35rem;
+  pointer-events: none;
+}
+.skyline-total {
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.skyline-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1024px) {
+  .skyline { max-width: 620px; margin: 0 auto; }
+}
+
+@media (max-width: 560px) {
+  .skyline { padding-top: 2.75rem; }
+  .skyline-total { font-size: 2rem; }
+  .skyline-label { font-size: 0.82rem; }
+}

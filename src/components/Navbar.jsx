@@ -22,6 +22,7 @@ const MODE_NAMES = {
   calico: 'Calico Paws',
   faces: 'Cat & Dog Pets',
   skills: 'Tech Logos',
+  chibi: 'Chibi Mascot',
 };
 
 function Brand() {

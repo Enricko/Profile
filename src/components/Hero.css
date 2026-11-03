@@ -78,142 +78,23 @@
 }
 .hero-meta a:hover { color: var(--text); }
 
-/* Code window ------------------------------------------------------------ */
+/* Visual: contribution skyline ------------------------------------------ */
 .hero-visual { position: relative; min-width: 0; }
 .hero-visual::before {
-  /* soft accent bloom behind the window */
+  /* soft accent bloom under the skyline */
   content: '';
   position: absolute;
-  inset: 12% 8% -6% 8%;
+  inset: 20% 6% 0 6%;
   z-index: -1;
   border-radius: 50%;
   background: radial-gradient(closest-side, rgba(74, 222, 128, 0.12), transparent);
   filter: blur(30px);
 }
 
-.code-window {
-  overflow: hidden;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, #121215, #0d0d10);
-  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
-
-.code-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem;
-  border-bottom: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.015);
-}
-.code-tabs {
-  display: flex;
-  gap: 0.15rem;
-  flex: 1;
-  min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.code-tabs::-webkit-scrollbar { display: none; }
-.code-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 32px;
-  padding: 0.35rem 0.55rem;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-dim);
-  font-family: var(--font-mono);
-  font-size: 0.73rem;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-.code-tab:hover { color: var(--text); }
-.code-tab.active {
-  border-color: var(--border);
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text);
-}
-
-.code-copy-btn {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-dim);
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-.code-copy-btn:hover { color: var(--text); border-color: var(--border-strong); }
-.code-copy-btn .copied { color: var(--accent); }
-
-.code-body {
-  min-height: 27rem;
-  margin: 0;
-  padding: 1.1rem 0;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  line-height: 1.75;
-  color: #d4d4d8;
-  counter-reset: line;
-  tab-size: 2;
-}
-/* Lines soft-wrap with a hanging indent instead of scrolling sideways */
-.code-line {
-  display: grid;
-  grid-template-columns: 2.75rem minmax(0, 1fr);
-  padding-right: 1.25rem;
-}
-.code-line::before {
-  counter-increment: line;
-  content: counter(line);
-  padding-right: 1rem;
-  text-align: right;
-  color: rgba(255, 255, 255, 0.18);
-  user-select: none;
-}
-.code-text {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  padding-left: 2ch;
-  text-indent: -2ch;
-}
-
-.tok-kw     { color: #c4b5fd; }
-.tok-type   { color: #7dd3fc; }
-.tok-key    { color: #e4e4e7; }
-.tok-str    { color: #86efac; }
-.tok-prompt { color: var(--accent); font-weight: 500; }
-.tok-out    { color: var(--text-dim); }
-
-.code-status-bar {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  padding: 0.55rem 1rem;
-  border-top: 1px solid var(--border);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--text-dim);
-}
-.code-status-bar span { display: inline-flex; align-items: center; gap: 0.45rem; }
-.code-status-bar .live-dot { width: 6px; height: 6px; }
-.code-status-bar .live-dot::after { display: none; }
-.status-right { margin-left: auto; }
-
 /* Responsive ------------------------------------------------------------- */
 @media (max-width: 1024px) {
   .hero-grid { grid-template-columns: 1fr; gap: 3.5rem; }
   .hero { min-height: 0; }
-  .code-body { min-height: 0; }
 }
 
 @media (max-width: 560px) {
@@ -221,10 +102,4 @@
   .hero-status { white-space: normal; }
   .hero-actions .btn { flex: 1 1 auto; }
   .hero-actions .btn-ghost { flex-basis: 100%; }
-  .code-body { font-size: 0.74rem; }
-  .code-tab svg, .code-copy-btn { display: none; }
-  .code-tab { font-size: 0.7rem; padding: 0.35rem 0.5rem; }
-  .code-line { grid-template-columns: 2.1rem minmax(0, 1fr); padding-right: 0.9rem; }
-  .code-line::before { padding-right: 0.75rem; }
-  .status-right { display: none; }
 }
