@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowRight, FileText, MapPin, Globe2, Mail } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import ContributionSkyline from './ContributionSkyline';
+import ProfileVisits from './ProfileVisits';
 import './Hero.css';
 
 export default function Hero() {
@@ -58,6 +59,7 @@ export default function Hero() {
                 <FaLinkedin size={14} aria-hidden="true" /> LinkedIn
               </a>
             </li>
+            <li><ProfileVisits /></li>
           </ul>
         </div>
 

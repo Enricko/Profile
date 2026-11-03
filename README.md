@@ -1,16 +1,28 @@
-# React + Vite
+# Lufria
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Enricko's portfolio, built with React 19 and Vite 8.
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```sh
+npm ci
+npm run dev -- --host 127.0.0.1 --port 5180
+```
 
-## React Compiler
+Run the checks and create a production build with:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```sh
+npm test
+npm run lint
+npm run build
+```
 
-## Expanding the ESLint configuration
+## Visit counter
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The displayed total is a shared public count from [CountAPI](https://countapi.mileshilliard.com/) using the key `lufria-tech-profile-visits`; it needs no account or API key. Only the production hosts `lufria.tech` and `www.lufria.tech` increment the count, at most once per browser tab session using `sessionStorage`. Localhost and preview builds read the total without incrementing it. The counter starts with deployment and does not import historical visits. It is a best-effort public count, not a count of unique people: network failures, service limits, or blocking can miss visits, and the public counter is not tamper-proof.
+
+The request runs asynchronously with a four-second bound and does not block the page. The UI shows a dash while loading and “Unavailable” if the service fails.
+
+## GitHub activity
+
+GitHub activity starts with a genuine bundled calendar, uses a six-hour browser cache, and shares one background request with a six-second timeout.

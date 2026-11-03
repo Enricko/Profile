@@ -1,0 +1,36 @@
+/* Sits in the hero meta row, so it borrows that row's 14px muted type and gaps. */
+.profile-visits {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 32px; /* the row height the meta links set */
+  white-space: nowrap; /* wraps as one unit on narrow screens */
+}
+.profile-visits svg { flex: none; }
+
+.profile-visits-value {
+  /* Room for "Unavailable" (and counts up to the millions) in every state, so
+     the dash swapping to the result never resizes the item or rewraps the row.
+     In em, not ch: ch follows the weight, which differs between states. */
+  min-width: 6.5em;
+  color: var(--accent);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.2s ease;
+}
+.profile-visits-value.is-loading,
+.profile-visits-value.is-error { color: var(--text-muted); font-weight: 400; }
+.profile-visits-value.is-error { cursor: help; }
+
+.profile-visits-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-visits-value { transition: none; }
+}
