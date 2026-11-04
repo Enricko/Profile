@@ -16,11 +16,11 @@ const EXPERIENCES = [
     summary:
       "AVTS is Binav's vessel tracking system: it shows ships' live positions on a map. I build it, plus the AI tools and servers behind the company's internal systems.",
     highlights: [
-      'Built the AVTS app in Flutter, streaming live vessel positions over WebSocket onto an interactive map with KML overlays',
+      'Built the AVTS app, streaming live vessel positions over WebSocket onto an interactive map with KML overlays',
       'Build AI systems that automate internal operational workflows',
       'Maintain the servers that keep these internal systems running',
     ],
-    tags: ['Vessel Tracking', 'Flutter', 'WebSocket', 'AI Systems', 'Server Maintenance'],
+    tags: ['Vessel Tracking', 'WebSocket', 'AI Systems', 'Server Maintenance'],
   },
   {
     title: 'Mobile Application Developer',

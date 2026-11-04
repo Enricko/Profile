@@ -34,7 +34,7 @@ export default function Hero() {
               View projects <ArrowRight size={17} className="icon-shift" />
             </a>
             <a
-              href="/cv/Enricko-Putra-Hartono-CV.pdf?rev=20261103-experience-rewrite"
+              href="/cv/Enricko-Putra-Hartono-CV.pdf?rev=20261104-binav-framework-neutral"
               target="_blank"
               rel="noreferrer"
               className="btn btn-secondary"
