@@ -6,6 +6,8 @@ import './Experience.css';
 // summary:    one plain sentence on what the work is.
 // highlights: what was built or achieved. Only facts from the CV, the old
 //             copy and public repos (binav_avts); no invented metrics.
+// engagement: 'freelance' marks a remote freelance collaboration, not staff
+//             employment; shown as a pill next to the period.
 const EXPERIENCES = [
   {
     title: 'Software Developer',
@@ -28,6 +30,7 @@ const EXPERIENCES = [
     location: 'Jakarta / Remote',
     period: 'Dec 2024 — Jan 2026',
     current: false,
+    engagement: 'freelance',
     summary: "Field app for Cetaphil's merchandising team, covering outlet visits, location checks and photo reports.",
     highlights: [
       'Geofenced GPS tracking that confirms staff are at the outlet they report from',
@@ -42,6 +45,7 @@ const EXPERIENCES = [
     location: 'Yogyakarta / Hybrid',
     period: 'Oct 2024 — Dec 2024',
     current: false,
+    engagement: 'freelance',
     summary: 'Sales coverage reporting: which outlets are covered, and how each region is doing against its targets.',
     highlights: [
       'Outlet coverage tracking modules for the mobile app',
@@ -85,6 +89,9 @@ export default function Experience() {
             >
               <div className="exp-aside">
                 <span className="exp-period">{exp.period}</span>
+                {exp.engagement === 'freelance' && (
+                  <span className="pill exp-engagement">Freelance</span>
+                )}
                 {exp.current && (
                   <span className="pill pill-accent exp-current">
                     <span className="live-dot" aria-hidden="true" /> Current role
